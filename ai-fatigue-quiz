@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>PB AI Fatigue Quiz</title>
+  <link href="https://fonts.googleapis.com/css?family=Comic+Sans+MS:400,700&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Comic Sans MS', Comic Sans, cursive, sans-serif;
+      background: linear-gradient(90deg, #cdffd8 0%, #94b9ff 100%);
+      margin: 0;
+      padding: 0;
+      min-height: 100vh;
+    }
+    .container {
+      max-width: 600px;
+      margin: 48px auto;
+      background: #fff;
+      border-radius: 20px;
+      box-shadow: 0 8px 32px 0 rgba(61, 78, 161, 0.08);
+      padding: 32px 28px 36px 28px;
+    }
+    h1 {
+      text-align: center;
+      font-size: 2.1rem;
+      color: #004aad;
+      letter-spacing: 1px;
+      margin-bottom: 12px;
+    }
+    .pb-logo {
+      width: 60px;
+      margin: 0 auto 10px auto;
+      display: block;
+    }
+    .question {
+      font-size: 1.18rem;
+      color: #333b;
+      margin: 30px 0 18px 0;
+      font-weight: bold;
+      text-align: left;
+    }
+    .options {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+    .option-btn {
+      font-family: inherit;
+      background: linear-gradient(90deg, #004aad 0%, #cb6ce6 100%);
+      color: #fff;
+      border: none;
+      border-radius: 9px;
+      font-size: 1rem;
+      padding: 18px 18px;
+      cursor: pointer;
+      transition: background 0.2s, transform 0.1s;
+      box-shadow: 0 2px 8px rgba(61, 78, 161, 0.06);
+    }
+    .option-btn:hover, .option-btn:focus {
+      background: linear-gradient(90deg, #cb6ce6 0%, #004aad 100%);
+      transform: translateY(-2px) scale(1.03);
+      outline: none;
+    }
+    .quiz-footer {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 30px;
+      font-size: 1rem;
+    }
+    .result {
+      margin: 34px 0 12px 0;
+      padding: 28px 22px;
+      border-radius: 14px;
+      background: linear-gradient(90deg, #cdffd8 0%, #94b9ff 100%);
+      box-shadow: 0 3px 12px 0 rgba(61, 78, 161, 0.10);
+      color: #29223e;
+      font-size: 1.16rem;
+      text-align: center;
+      font-weight: 500;
+      min-height: 110px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .retake-btn {
+      background: #fff;
+      color: #004aad;
+      border: 2px solid #004aad;
+      border-radius: 8px;
+      padding: 12px 30px;
+      font-size: 1.1rem;
+      cursor: pointer;
+      margin: 20px auto 0 auto;
+      display: block;
+      transition: background 0.2s, color 0.2s;
+    }
+    .retake-btn:hover, .retake-btn:focus {
+      background: #004aad;
+      color: #fff;
+      outline: none;
+    }
+    @media (max-width: 650px) {
+      .container { max-width: 98vw; padding: 18px 3vw 24px 3vw;}
+      h1 { font-size: 1.22rem; }
+      .result { font-size: 1.07rem;}
+    }
+  </style>
+</head>
+<body>
+  <!-- Optionally drop in your PB logo here -->
+  <div class="container">
+    <img class="pb-logo" src="https://images.spr.so/cdn-cgi/imagedelivery/j42No7y-dcokJuNgXeA0ig/6d7c016b-8307-4fbe-8200-ecef8144c00b/PB_Logo_Circle/w=96,quality=90,fit=scale-down" alt="Practically Beta logo" />
+    <h1>PB AI Fatigue Quiz</h1>
+    <div id="quiz"></div>
+    <div id="result" class="result" style="display:none;"></div>
+    <button id="retake" class="retake-btn" style="display:none;">Retake Quiz</button>
+  </div>
+  <script>
+    const quizData = [
+      {
+        question: "Every time I see a story about Artificial Intelligence (AI) on social media or the news, I get…",
+        options: [
+          { text: "Instantly exhausted—can’t they talk about anything else?", value: 1 },
+          { text: "It’s just background noise at this point—I barely react.", value: 3 },
+          { text: "Curious and energized—I usually want to click and learn more.", value: 4 },
+          { text: "A little worn out—I roll my eyes and keep scrolling.", value: 2 }
+        ]
+      },
+      {
+        question: "My company has made using AI mandatory and will attach its use to my performance plan. This makes me feel…",
+        options: [
+          { text: "Okay, I’ll adapt, but it’s just another checkbox for me.", value: 3 },
+          { text: "Excited! I’m ready to get ahead of the curve and master the new tools.", value: 4 },
+          { text: "Utterly drained. Can I just do my job without another tech push?", value: 1 },
+          { text: "Here we go again—one more thing to keep up with. I’m not thrilled.", value: 2 }
+        ]
+      },
+      {
+        question: "I open my email, and there is a new AI tool to help draft messages. The first thing I do is…",
+        options: [
+          { text: "Delete the email—I don’t have the bandwidth for another AI experiment.", value: 1 },
+          { text: "Sigh and wonder if I really need another tool in my workflow.", value: 2 },
+          { text: "Dive in—I love testing out new AI tools and seeing what’s possible.", value: 4 },
+          { text: "Glance at it, maybe try it if I have time.", value: 3 }
+        ]
+      },
+      {
+        question: "When I think of a future with AI embedded in society, the first thing that comes to mind is…",
+        options: [
+          { text: "It’s inevitable—AI will be part of life, just like the internet.", value: 3 },
+          { text: "Dread. It feels overwhelming and I wish we could slow it all down.", value: 1 },
+          { text: "Opportunity—so much potential for new ideas and ways of living.", value: 4 },
+          { text: "Uncertainty—I’m not sure what to expect, and it worries me a little.", value: 2 }
+        ]
+      },
+      {
+        question: "I use one of the most popular large language models weekly (e.g. ChatGPT, Copilot, Gemini, Claude, Grok, Mistral).",
+        options: [
+          { text: "Yes, and I genuinely enjoy it—it makes my work/life better.", value: 4 },
+          { text: "Rarely. I’m trying to keep up, but it’s starting to feel like a chore.", value: 2 },
+          { text: "No, I avoid them as much as possible. I’m over it.", value: 1 },
+          { text: "Sometimes, if I need it—just another tool in the box.", value: 3 }
+        ]
+      }
+    ];
+
+    const results = [
+      {
+        range: [17, 20],
+        title: "AI Energized",
+        blurb: "You’re charged up by AI—curious, optimistic, and ready for whatever’s next. You don’t just keep up; you want to shape what comes next. PB is your playground."
+      },
+      {
+        range: [13, 16],
+        title: "AI Coasting",
+        blurb: "You’re along for the ride—AI’s part of the background, not a big energy drain, not a wild inspiration. When you find something useful, you’ll use it; otherwise, you’re not stressing. PB’s here to nudge you when you want to level up."
+      },
+      {
+        range: [9, 12],
+        title: "AI Tired",
+        blurb: "You’re starting to feel the weight—there’s so much hype, it’s a little exhausting. You’ll use what works, but all the noise has your patience wearing thin. PB can help cut through the buzz and make it feel practical again."
+      },
+      {
+        range: [5, 8],
+        title: "AI Burned Out",
+        blurb: "Enough already! You’re done with the constant AI chatter—if you could unsubscribe from the hype, you would. Maybe what you really need is space, quiet, and someone to sort the signal from the noise. (That’s where PB comes in—no pressure, just real help when you’re ready.)"
+      }
+    ];
+
+    // Quiz logic
+    let currentQuestion = 0;
+    let totalScore = 0;
+
+    const quizDiv = document.getElementById("quiz");
+    const resultDiv = document.getElementById("result");
+    const retakeBtn = document.getElementById("retake");
+
+    function showQuestion() {
+      if (currentQuestion >= quizData.length) {
+        showResult();
+        return;
+      }
+      const q = quizData[currentQuestion];
+      quizDiv.innerHTML = `
+        <div class="question">${q.question}</div>
+        <div class="options">
+          ${q.options.map((opt, idx) => `<button class="option-btn" onclick="selectOption(${opt.value})">${opt.text}</button>`).join("")}
+        </div>
+        <div class="quiz-footer">
+          <span>Question ${currentQuestion + 1} of ${quizData.length}</span>
+        </div>
+      `;
+    }
+
+    window.selectOption = function(points) {
+      totalScore += points;
+      currentQuestion++;
+      showQuestion();
+    }
+
+    function showResult() {
+      quizDiv.innerHTML = "";
+      let resultObj = results.find(r => totalScore >= r.range[0] && totalScore <= r.range[1]);
+      if (!resultObj) resultObj = results[results.length - 1]; // fallback
+
+      resultDiv.style.display = "block";
+      resultDiv.innerHTML = `<h2 style="color:#004aad;margin:0 0 8px;">${resultObj.title}</h2><div>${resultObj.blurb}</div>`;
+      retakeBtn.style.display = "block";
+    }
+
+    retakeBtn.onclick = function() {
+      currentQuestion = 0;
+      totalScore = 0;
+      resultDiv.style.display = "none";
+      retakeBtn.style.display = "none";
+      showQuestion();
+    }
+
+    // Start
+    showQuestion();
+  </script>
+</body>
+</html>
