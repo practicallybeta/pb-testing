@@ -12,6 +12,7 @@
       padding: 0;
       min-height: 100vh;
     }
+
     .container {
       max-width: 600px;
       margin: 48px auto;
@@ -20,153 +21,146 @@
       box-shadow: 0 8px 32px 0 rgba(61, 78, 161, 0.08);
       padding: 32px 28px 36px 28px;
     }
+
     h1 {
       text-align: center;
-      font-size: 2.1rem;
+      font-size: 2rem;
       color: #004aad;
       letter-spacing: 1px;
-      margin-bottom: 12px;
+      margin-bottom: 28px;
     }
-    .pb-logo {
-      width: 60px;
-      margin: 0 auto 10px auto;
-      display: block;
-    }
+
     .question {
-      font-size: 1.18rem;
-      color: #333b;
-      margin: 30px 0 18px 0;
+      margin-bottom: 24px;
+    }
+
+    .question p {
       font-weight: bold;
-      text-align: left;
+      margin-bottom: 10px;
     }
-    .options {
-      display: flex;
-      flex-direction: column;
-      gap: 16px;
-    }
-    .option-btn {
-      font-family: inherit;
-      background: linear-gradient(90deg, #004aad 0%, #cb6ce6 100%);
-      color: #fff;
-      border: none;
-      border-radius: 9px;
-      font-size: 1rem;
-      padding: 18px 18px;
-      cursor: pointer;
-      transition: background 0.2s, transform 0.1s;
-      box-shadow: 0 2px 8px rgba(61, 78, 161, 0.06);
-    }
-    .option-btn:hover, .option-btn:focus {
-      background: linear-gradient(90deg, #cb6ce6 0%, #004aad 100%);
-      transform: translateY(-2px) scale(1.03);
-      outline: none;
-    }
-    .quiz-footer {
-      display: flex;
-      justify-content: space-between;
-      margin-top: 30px;
-      font-size: 1rem;
-    }
-    .result {
-      margin: 34px 0 12px 0;
-      padding: 28px 22px;
-      border-radius: 14px;
-      background: linear-gradient(90deg, #cdffd8 0%, #94b9ff 100%);
-      box-shadow: 0 3px 12px 0 rgba(61, 78, 161, 0.10);
-      color: #29223e;
-      font-size: 1.16rem;
-      text-align: center;
-      font-weight: 500;
-      min-height: 110px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-    .retake-btn {
-      background: #fff;
-      color: #004aad;
-      border: 2px solid #004aad;
-      border-radius: 8px;
-      padding: 12px 30px;
-      font-size: 1.1rem;
-      cursor: pointer;
-      margin: 20px auto 0 auto;
+
+    button {
       display: block;
-      transition: background 0.2s, color 0.2s;
+      width: 100%;
+      margin: 6px 0;
+      padding: 10px;
+      font-size: 1rem;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      background-color: #e7ecff;
+      transition: background-color 0.3s ease;
     }
-    .retake-btn:hover, .retake-btn:focus {
-      background: #004aad;
-      color: #fff;
-      outline: none;
+
+    button:hover {
+      background-color: #c8d4ff;
     }
-    @media (max-width: 650px) {
-      .container { max-width: 98vw; padding: 18px 3vw 24px 3vw;}
-      h1 { font-size: 1.22rem; }
-      .result { font-size: 1.07rem;}
+
+    #result {
+      display: none;
+      text-align: center;
+      margin-top: 36px;
+    }
+
+    #result h2 {
+      font-size: 1.6rem;
+      color: #1a1a1a;
+    }
+
+    #result p {
+      font-size: 1rem;
+      color: #333;
+    }
+
+    .hidden {
+      display: none;
+    }
+
+    #resetBtn {
+      margin-top: 20px;
+      background-color: #f0f0f0;
+    }
+
+    @media screen and (max-width: 600px) {
+      .container {
+        margin: 24px;
+        padding: 20px;
+      }
     }
   </style>
 </head>
 <body>
   <div class="container">
-    <img class="pb-logo" src="https://images.spr.so/cdn-cgi/imagedelivery/j42No7y-dcokJuNgXeA0ig/6d7c016b-8307-4fbe-8200-ecef8144c00b/PB_Logo_Circle/w=96,quality=90,fit=scale-down" alt="Practically Beta logo" />
     <h1>PB AI Fatigue Quiz</h1>
-    <div id="quiz"></div>
-    <div id="result" class="result" style="display:none;"></div>
-    <button id="retake" class="retake-btn" style="display:none;">Retake Quiz</button>
+    <div id="quiz">
+      <div class="question" data-points="3">
+        <p>1. When someone mentions ChatGPT or AI tools, your first thought is:</p>
+        <button onclick="answerQuestion(3)">"Let's go!" 🔥</button>
+        <button onclick="answerQuestion(2)">"Cool, but I'm pacing myself."</button>
+        <button onclick="answerQuestion(1)">"Ugh... again?"</button>
+      </div>
+
+      <div class="question hidden" data-points="3">
+        <p>2. How do you feel about using AI in your daily workflow?</p>
+        <button onclick="answerQuestion(3)">It's essential—I'm thriving with it!</button>
+        <button onclick="answerQuestion(2)">It's helpful, but I need breaks.</button>
+        <button onclick="answerQuestion(1)">It's exhausting. Can we go back?</button>
+      </div>
+
+      <div class="question hidden" data-points="3">
+        <p>3. You see another “AI for HR” webinar. Your reaction?</p>
+        <button onclick="answerQuestion(3)">Register immediately.</button>
+        <button onclick="answerQuestion(2)">Skim the topic, might join.</button>
+        <button onclick="answerQuestion(1)">*closes tab aggressively*</button>
+      </div>
+    </div>
+
+    <div id="result">
+      <h2>Your AI Fatigue Score:</h2>
+      <p id="scoreText"></p>
+      <button id="resetBtn" onclick="resetQuiz()">Take it again</button>
+    </div>
   </div>
+
   <script>
-    const quizData = [/* same as before */];
-    const results = [/* same as before */];
-
     let currentQuestion = 0;
-    let totalScore = 0;
+    let score = 0;
+    const questions = document.querySelectorAll('.question');
 
-    const quizDiv = document.getElementById("quiz");
-    const resultDiv = document.getElementById("result");
-    const retakeBtn = document.getElementById("retake");
-
-    function showQuestion() {
-      if (currentQuestion >= quizData.length) {
-        showResult();
-        return;
-      }
-      const q = quizData[currentQuestion];
-      quizDiv.innerHTML = `
-        <div class="question">${q.question}</div>
-        <div class="options">
-          ${q.options.map((opt) => `<button class="option-btn" onclick="selectOption(${opt.value})">${opt.text}</button>`).join("")}
-        </div>
-        <div class="quiz-footer">
-          <span>Question ${currentQuestion + 1} of ${quizData.length}</span>
-        </div>
-      `;
-    }
-
-    window.selectOption = function(points) {
-      totalScore += points;
+    function answerQuestion(points) {
+      score += points;
+      questions[currentQuestion].classList.add('hidden');
       currentQuestion++;
-      showQuestion();
+      if (currentQuestion < questions.length) {
+        questions[currentQuestion].classList.remove('hidden');
+      } else {
+        showResult();
+      }
     }
 
     function showResult() {
-      quizDiv.innerHTML = "";
-      let resultObj = results.find(r => totalScore >= r.range[0] && totalScore <= r.range[1]);
-      if (!resultObj) resultObj = results[results.length - 1];
+      let resultText = '';
+      if (score >= 8) {
+        resultText = "You're fired up! 🚀 Keep channeling that energy—but don’t forget to rest!";
+      } else if (score >= 5) {
+        resultText = "You're managing it. ✨ A little AI-savvy, a little tired. Perfectly human.";
+      } else {
+        resultText = "You're fatigued. 💤 It’s okay to unplug—permission granted.";
+      }
 
-      resultDiv.style.display = "block";
-      resultDiv.innerHTML = `<h2 style="color:#004aad;margin:0 0 8px;">${resultObj.title}</h2><div>${resultObj.blurb}</div>`;
-      retakeBtn.style.display = "block";
+      document.getElementById('scoreText').innerText = resultText;
+      document.getElementById('quiz').classList.add('hidden');
+      document.getElementById('result').style.display = 'block';
     }
 
-    retakeBtn.onclick = function() {
+    function resetQuiz() {
+      score = 0;
       currentQuestion = 0;
-      totalScore = 0;
-      resultDiv.style.display = "none";
-      retakeBtn.style.display = "none";
-      showQuestion();
+      questions.forEach(q => q.classList.add('hidden'));
+      questions[0].classList.remove('hidden');
+      document.getElementById('result').style.display = 'none';
+      document.getElementById('quiz').classList.remove('hidden');
     }
-
-    showQuestion();
   </script>
 </body>
 </html>
