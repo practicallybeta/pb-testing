@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>So You Think You Know AI?</title>
+  <style>
+    body {
+      font-family: Verdana, Geneva, sans-serif;
+      background: linear-gradient(90deg, #cdffd8 0%, #94b9ff 100%);
+      margin: 0;
+      padding: 0;
+      min-height: 100vh;
+    }
+
+    .container {
+      max-width: 600px;
+      margin: 48px auto;
+      background: #fff;
+      border-radius: 20px;
+      box-shadow: 0 8px 32px 0 rgba(61, 78, 161, 0.08);
+      padding: 32px 28px 36px 28px;
+    }
+    h1 {
+      text-align: center;
+      font-size: 2.1rem;
+      color: #004aad;
+      letter-spacing: 1px;
+      margin-bottom: 12px;
+    }
+    .pb-logo {
+      width: 60px;
+      margin: 0 auto 10px auto;
+      display: block;
+    }
+    .question {
+      font-size: 1.18rem;
+      color: #333;
+      margin: 30px 0 18px 0;
+      font-weight: bold;
+      text-align: left;
+    }
+    .options {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+    .option-btn {
+      font-family: inherit;
+      background: linear-gradient(90deg, #004aad 0%, #cb6ce6 100%);
+      color: #fff;
+      border: none;
+      border-radius: 9px;
+      font-size: 1rem;
+      padding: 18px 18px;
+      cursor: pointer;
+      transition: background 0.2s, transform 0.1s;
+      box-shadow: 0 2px 8px rgba(61, 78, 161, 0.06);
+      text-align: left;
+    }
+    .option-btn:hover, .option-btn:focus {
+      background: linear-gradient(90deg, #cb6ce6 0%, #004aad 100%);
+      transform: translateY(-2px) scale(1.03);
+      outline: none;
+    }
+    .quiz-footer {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 30px;
+      font-size: 1rem;
+    }
+    .result {
+      margin: 34px 0 12px 0;
+      padding: 28px 22px;
+      border-radius: 14px;
+      background: linear-gradient(90deg, #cdffd8 0%, #94b9ff 100%);
+      box-shadow: 0 3px 12px 0 rgba(61, 78, 161, 0.10);
+      color: #29223e;
+      font-size: 1.16rem;
+      text-align: center;
+      font-weight: 500;
+      min-height: 110px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+    .result h2 {
+      color: #004aad;
+      margin: 0 0 12px;
+      font-size: 1.5rem;
+    }
+    .retake-btn {
+      background: #fff;
+      color: #004aad;
+      border: 2px solid #004aad;
+      border-radius: 8px;
+      padding: 12px 30px;
+      font-size: 1.1rem;
+      cursor: pointer;
+      margin: 20px auto 0 auto;
+      display: block;
+      transition: background 0.2s, color 0.2s;
+    }
+    .retake-btn:hover, .retake-btn:focus {
+      background: #004aad;
+      color: #fff;
+      outline: none;
+    }
+    @media (max-width: 650px) {
+      .container { max-width: 98vw; padding: 18px 3vw 24px 3vw;}
+      h1 { font-size: 1.22rem; }
+      .result { font-size: 1.07rem;}
+      .result h2 { font-size: 1.3rem; }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <img class="pb-logo" src="https://images.spr.so/cdn-cgi/imagedelivery/j42No7y-dcokJuNgXeA0ig/6d7c016b-8307-4fbe-8200-ecef8144c00b/PB_Logo_Circle/w=96,quality=90,fit=scale-down" alt="Practically Beta logo" />
+    <h1>So You Think You Know AI?</h1>
+    <div id="quiz"></div>
+    <div id="result" class="result" style="display:none;"></div>
+    <button id="retake" class="retake-btn" style="display:none;">Retake Quiz</button>
+  </div>
+  <script>
+    const quizData = [
+      {
+        question: "What is the primary goal of Artificial Intelligence (AI)?",
+        options: [
+          { text: "To generate random outputs", correct: false },
+          { text: "To perform tasks that typically require human intelligence", correct: true },
+          { text: "To replace human workers", correct: false },
+          { text: "To create emotional machines", correct: false }
+        ]
+      },
+      {
+        question: "Which type of AI is most commonly used today?",
+        options: [
+          { text: "Artificial Narrow Intelligence (ANI)", correct: true },
+          { text: "Artificial Emotional Intelligence (AEI)", correct: false },
+          { text: "Artificial General Intelligence (AGI)", correct: false },
+          { text: "Artificial SuperIntelligence (ASI)", correct: false }
+        ]
+      },
+      {
+        question: "True or False: AI and Machine Learning are the same thing.",
+        options: [
+          { text: "False", correct: true },
+          { text: "True", correct: false }
+        ]
+      },
+      {
+        question: "Which of the following is NOT a myth about AI mentioned in the module?",
+        options: [
+          { text: "AI will replace all jobs", correct: false },
+          { text: "AI is only for tech experts", correct: false },
+          { text: "AI is always emotionally aware", correct: true },
+          { text: "AI is difficult to use", correct: false }
+        ]
+      },
+      {
+        question: "Which everyday tool uses AI?",
+        options: [
+          { text: "A paper calendar", correct: false },
+          { text: "A mechanical keyboard", correct: false },
+          { text: "Email autocorrect", correct: true },
+          { text: "A traditional calculator", correct: false }
+        ]
+      },
+      {
+        question: "What does the phrase 'Garbage In, Garbage Out' mean in AI?",
+        options: [
+          { text: "AI deletes irrelevant information", correct: false },
+          { text: "Poor or biased input leads to flawed output", correct: true },
+          { text: "AI ignores bad data", correct: false },
+          { text: "AI can clean up messy data", correct: false }
+        ]
+      },
+      {
+        question: "True or False: You need to be highly tech-savvy to use AI tools.",
+        options: [
+          { text: "True", correct: false },
+          { text: "False", correct: true }
+        ]
+      },
+      {
+        question: "What is one major ethical concern with AI?",
+        options: [
+          { text: "AI doesn't use personal data", correct: false },
+          { text: "AI is always transparent", correct: false },
+          { text: "AI can reinforce existing bias", correct: true },
+          { text: "AI is too slow", correct: false }
+        ]
+      },
+      {
+        question: "What is a key limitation of AI systems?",
+        options: [
+          { text: "They lack emotional nuance and situational awareness", correct: true },
+          { text: "They require constant human supervision", correct: false },
+          { text: "They can't process large data sets", correct: false },
+          { text: "They work too slowly", correct: false }
+        ]
+      },
+      {
+        question: "What is the basic process of how AI works?",
+        options: [
+          { text: "Data → Storage → Deletion", correct: false },
+          { text: "Output → Feedback → Input", correct: false },
+          { text: "Input → Algorithm → Output", correct: true },
+          { text: "Prompt → Emotion → Response", correct: false }
+        ]
+      }
+    ];
+
+    const results = [
+      {
+        minPercent: 90,
+        emoji: "🚀",
+        title: "PB-Ready",
+        description: "You're ready to use AI intentionally, ethically, and creatively. Welcome to the Practically Beta mindset. Let's build."
+      },
+      {
+        minPercent: 60,
+        emoji: "🌱",
+        title: "Getting There",
+        description: "You've got a solid grasp of the basics. A few more reps and you'll be confidently navigating AI with purpose."
+      },
+      {
+        minPercent: 0,
+        emoji: "🐣",
+        title: "Curious Newbie",
+        description: "You're just starting your AI journey—and that's powerful. Curiosity is your superpower. Keep exploring."
+      }
+    ];
+
+    // Quiz logic
+    let currentQuestion = 0;
+    let correctAnswers = 0;
+    const totalQuestions = quizData.length;
+
+    const quizDiv = document.getElementById("quiz");
+    const resultDiv = document.getElementById("result");
+    const retakeBtn = document.getElementById("retake");
+
+    function showQuestion() {
+      if (currentQuestion >= quizData.length) {
+        showResult();
+        return;
+      }
+      const q = quizData[currentQuestion];
+      quizDiv.innerHTML = `
+        <div class="question">${q.question}</div>
+        <div class="options">
+          ${q.options.map((opt, idx) => `<button class="option-btn" onclick="selectOption(${idx})">${opt.text}</button>`).join("")}
+        </div>
+        <div class="quiz-footer">
+          <span>Question ${currentQuestion + 1} of ${quizData.length}</span>
+        </div>
+      `;
+    }
+
+    window.selectOption = function(optionIndex) {
+      const q = quizData[currentQuestion];
+      if (q.options[optionIndex].correct) {
+        correctAnswers++;
+      }
+      currentQuestion++;
+      showQuestion();
+    }
+
+    function showResult() {
+      quizDiv.innerHTML = "";
+      const percentage = Math.round((correctAnswers / totalQuestions) * 100);
+      
+      // Find the appropriate result tier
+      let resultObj = results.find(r => percentage >= r.minPercent);
+      if (!resultObj) resultObj = results[results.length - 1]; // fallback
+
+      resultDiv.style.display = "block";
+      resultDiv.innerHTML = `
+        <div style="font-size:3rem;margin-bottom:8px;">${resultObj.emoji}</div>
+        <h2>${resultObj.title}</h2>
+        <div style="margin-bottom:12px;">You scored ${percentage}% (${correctAnswers} out of ${totalQuestions} correct)</div>
+        <div>${resultObj.description}</div>
+      `;
+      retakeBtn.style.display = "block";
+    }
+
+    retakeBtn.onclick = function() {
+      currentQuestion = 0;
+      correctAnswers = 0;
+      resultDiv.style.display = "none";
+      retakeBtn.style.display = "none";
+      showQuestion();
+    }
+
+    // Start
+    showQuestion();
+  </script>
+</body>
+</html>
