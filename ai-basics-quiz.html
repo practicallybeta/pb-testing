@@ -132,7 +132,8 @@
           { text: "To perform tasks that typically require human intelligence", correct: true },
           { text: "To replace human workers", correct: false },
           { text: "To create emotional machines", correct: false }
-        ]
+        ],
+        rationale: "AI mimics human intelligence to perform tasks like learning and decision-making."
       },
       {
         question: "Which type of AI is most commonly used today?",
@@ -141,23 +142,26 @@
           { text: "Artificial Emotional Intelligence (AEI)", correct: false },
           { text: "Artificial General Intelligence (AGI)", correct: false },
           { text: "Artificial SuperIntelligence (ASI)", correct: false }
-        ]
+        ],
+        rationale: "ANI is the most common form of AI today, used in tools like Siri and Alexa."
       },
       {
         question: "True or False: AI and Machine Learning are the same thing.",
         options: [
           { text: "False", correct: true },
           { text: "True", correct: false }
-        ]
+        ],
+        rationale: "Machine learning is a branch of AI, not the whole field."
       },
       {
-        question: "Which of the following is NOT a myth about AI mentioned in the module?",
+        question: "Which of the following is NOT a myth about AI?",
         options: [
           { text: "AI will replace all jobs", correct: false },
           { text: "AI is only for tech experts", correct: false },
-          { text: "AI is always emotionally aware", correct: true },
+          { text: "AI outputs cannot be predicted", correct: true },
           { text: "AI is difficult to use", correct: false }
-        ]
+        ],
+        rationale: "AI outputs cannot always be predicted - it's a real characteristic of generative AI models, which can produce unexpected results, hallucinations, or biased outputs."
       },
       {
         question: "Which everyday tool uses AI?",
@@ -166,7 +170,8 @@
           { text: "A mechanical keyboard", correct: false },
           { text: "Email autocorrect", correct: true },
           { text: "A traditional calculator", correct: false }
-        ]
+        ],
+        rationale: "Email autocorrect uses AI to predict and correct text."
       },
       {
         question: "What does the phrase 'Garbage In, Garbage Out' mean in AI?",
@@ -175,14 +180,16 @@
           { text: "Poor or biased input leads to flawed output", correct: true },
           { text: "AI ignores bad data", correct: false },
           { text: "AI can clean up messy data", correct: false }
-        ]
+        ],
+        rationale: "AI reflects the quality of its input—biased data leads to biased results."
       },
       {
         question: "True or False: You need to be highly tech-savvy to use AI tools.",
         options: [
           { text: "True", correct: false },
           { text: "False", correct: true }
-        ]
+        ],
+        rationale: "AI tools are designed for everyday users, not just tech experts."
       },
       {
         question: "What is one major ethical concern with AI?",
@@ -191,7 +198,8 @@
           { text: "AI is always transparent", correct: false },
           { text: "AI can reinforce existing bias", correct: true },
           { text: "AI is too slow", correct: false }
-        ]
+        ],
+        rationale: "AI can unintentionally reinforce bias if not carefully managed."
       },
       {
         question: "What is a key limitation of AI systems?",
@@ -200,7 +208,8 @@
           { text: "They require constant human supervision", correct: false },
           { text: "They can't process large data sets", correct: false },
           { text: "They work too slowly", correct: false }
-        ]
+        ],
+        rationale: "AI lacks emotional and contextual understanding, a key limitation."
       },
       {
         question: "What is the basic process of how AI works?",
@@ -209,7 +218,8 @@
           { text: "Output → Feedback → Input", correct: false },
           { text: "Input → Algorithm → Output", correct: true },
           { text: "Prompt → Emotion → Response", correct: false }
-        ]
+        ],
+        rationale: "AI processes input through algorithms to generate output."
       }
     ];
 
@@ -237,6 +247,7 @@
     // Quiz logic
     let currentQuestion = 0;
     let correctAnswers = 0;
+    let incorrectAnswers = [];
     const totalQuestions = quizData.length;
 
     const quizDiv = document.getElementById("quiz");
@@ -264,6 +275,15 @@
       const q = quizData[currentQuestion];
       if (q.options[optionIndex].correct) {
         correctAnswers++;
+      } else {
+        // Track incorrect answers with question details
+        incorrectAnswers.push({
+          questionNumber: currentQuestion + 1,
+          question: q.question,
+          selectedAnswer: q.options[optionIndex].text,
+          correctAnswer: q.options.find(opt => opt.correct).text,
+          rationale: q.rationale
+        });
       }
       currentQuestion++;
       showQuestion();
@@ -272,24 +292,48 @@
     function showResult() {
       quizDiv.innerHTML = "";
       const percentage = Math.round((correctAnswers / totalQuestions) * 100);
-      
+
       // Find the appropriate result tier
       let resultObj = results.find(r => percentage >= r.minPercent);
       if (!resultObj) resultObj = results[results.length - 1]; // fallback
 
-      resultDiv.style.display = "block";
-      resultDiv.innerHTML = `
+      let resultHTML = `
         <div style="font-size:3rem;margin-bottom:8px;">${resultObj.emoji}</div>
         <h2>${resultObj.title}</h2>
         <div style="margin-bottom:12px;">You scored ${percentage}% (${correctAnswers} out of ${totalQuestions} correct)</div>
         <div>${resultObj.description}</div>
       `;
+
+      // Add explanations for incorrect answers
+      if (incorrectAnswers.length > 0) {
+        resultHTML += `
+          <div style="margin-top:24px;text-align:left;border-top:2px solid #004aad;padding-top:20px;">
+            <h3 style="color:#004aad;font-size:1.3rem;margin-bottom:16px;">Review Your Answers</h3>
+        `;
+
+        incorrectAnswers.forEach(item => {
+          resultHTML += `
+            <div style="margin-bottom:20px;padding:16px;background:#fff;border-radius:8px;box-shadow:0 2px 8px rgba(0,0,0,0.05);">
+              <div style="font-weight:bold;color:#004aad;margin-bottom:8px;">Question ${item.questionNumber}: ${item.question}</div>
+              <div style="margin-bottom:6px;color:#d32f2f;"><strong>Your answer:</strong> ${item.selectedAnswer}</div>
+              <div style="margin-bottom:8px;color:#2e7d32;"><strong>Correct answer:</strong> ${item.correctAnswer}</div>
+              <div style="color:#555;font-style:italic;"><strong>Why:</strong> ${item.rationale}</div>
+            </div>
+          `;
+        });
+
+        resultHTML += `</div>`;
+      }
+
+      resultDiv.style.display = "block";
+      resultDiv.innerHTML = resultHTML;
       retakeBtn.style.display = "block";
     }
 
     retakeBtn.onclick = function() {
       currentQuestion = 0;
       correctAnswers = 0;
+      incorrectAnswers = [];
       resultDiv.style.display = "none";
       retakeBtn.style.display = "none";
       showQuestion();
