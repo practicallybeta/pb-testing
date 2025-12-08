@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>So You Think You Know Prompts?</title>
+  <style>
+    body {
+      font-family: Verdana, Geneva, sans-serif;
+      background: linear-gradient(90deg, #cdffd8 0%, #94b9ff 100%);
+      margin: 0;
+      padding: 0;
+      min-height: 100vh;
+    }
+
+    .container {
+      max-width: 600px;
+      margin: 48px auto;
+      background: #fff;
+      border-radius: 20px;
+      box-shadow: 0 8px 32px 0 rgba(61, 78, 161, 0.08);
+      padding: 32px 28px 36px 28px;
+    }
+    h1 {
+      text-align: center;
+      font-size: 2.1rem;
+      color: #004aad;
+      letter-spacing: 1px;
+      margin-bottom: 12px;
+    }
+    .pb-logo {
+      width: 60px;
+      margin: 0 auto 10px auto;
+      display: block;
+    }
+    .question {
+      font-size: 1.18rem;
+      color: #333;
+      margin: 30px 0 18px 0;
+      font-weight: bold;
+      text-align: left;
+    }
+    .options {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+    .option-btn {
+      font-family: inherit;
+      background: linear-gradient(90deg, #004aad 0%, #cb6ce6 100%);
+      color: #fff;
+      border: none;
+      border-radius: 9px;
+      font-size: 1rem;
+      padding: 18px 18px;
+      cursor: pointer;
+      transition: background 0.2s, transform 0.1s;
+      box-shadow: 0 2px 8px rgba(61, 78, 161, 0.06);
+      text-align: left;
+    }
+    .option-btn:hover, .option-btn:focus {
+      background: linear-gradient(90deg, #cb6ce6 0%, #004aad 100%);
+      transform: translateY(-2px) scale(1.03);
+      outline: none;
+    }
+    .quiz-footer {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 30px;
+      font-size: 1rem;
+    }
+    .result {
+      margin: 34px 0 12px 0;
+      padding: 28px 22px;
+      border-radius: 14px;
+      background: linear-gradient(90deg, #cdffd8 0%, #94b9ff 100%);
+      box-shadow: 0 3px 12px 0 rgba(61, 78, 161, 0.10);
+      color: #29223e;
+      font-size: 1.16rem;
+      text-align: center;
+      font-weight: 500;
+      min-height: 110px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+    .result h2 {
+      color: #004aad;
+      margin: 0 0 12px;
+      font-size: 1.5rem;
+    }
+    .retake-btn {
+      background: #fff;
+      color: #004aad;
+      border: 2px solid #004aad;
+      border-radius: 8px;
+      padding: 12px 30px;
+      font-size: 1.1rem;
+      cursor: pointer;
+      margin: 20px auto 0 auto;
+      display: block;
+      transition: background 0.2s, color 0.2s;
+    }
+    .retake-btn:hover, .retake-btn:focus {
+      background: #004aad;
+      color: #fff;
+      outline: none;
+    }
+    @media (max-width: 650px) {
+      .container { max-width: 98vw; padding: 18px 3vw 24px 3vw;}
+      h1 { font-size: 1.22rem; }
+      .result { font-size: 1.07rem;}
+      .result h2 { font-size: 1.3rem; }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <img class="pb-logo" src="https://images.spr.so/cdn-cgi/imagedelivery/j42No7y-dcokJuNgXeA0ig/6d7c016b-8307-4fbe-8200-ecef8144c00b/PB_Logo_Circle/w=96,quality=90,fit=scale-down" alt="Practically Beta logo" />
+    <h1>So You Think You Know Prompts?</h1>
+    <div id="quiz"></div>
+    <div id="result" class="result" style="display:none;"></div>
+    <button id="retake" class="retake-btn" style="display:none;">Retake Quiz</button>
+  </div>
+  <script>
+    const quizData = [
+      {
+        question: "What is a prompt in AI?",
+        options: [
+          { text: "A random phrase used to test the system", correct: false },
+          { text: "An instruction or question that guides AI's response", correct: true },
+          { text: "A technical error message", correct: false },
+          { text: "A pre-written script for AI to follow", correct: false }
+        ],
+        rationale: "Prompts are instructions or questions that guide AI's behavior and output."
+      },
+      {
+        question: "Why do prompts matter when using AI?",
+        options: [
+          { text: "They help AI store data", correct: false },
+          { text: "They shape the quality, relevance, and accuracy of AI's output", correct: true },
+          { text: "They prevent hallucinations", correct: false },
+          { text: "They make AI respond faster", correct: false }
+        ],
+        rationale: "Prompts directly shape the quality and relevance of AI responses."
+      },
+      {
+        question: "Which of the following is a weak prompt?",
+        options: [
+          { text: "\"Tips for time management\"", correct: true },
+          { text: "\"As a working parent, how can I manage time better?\"", correct: false },
+          { text: "\"Create a story about someone learning time management\"", correct: false },
+          { text: "\"Compare time management strategies across roles\"", correct: false }
+        ],
+        rationale: "Vague prompts like \"Tips for time management\" lead to generic answers."
+      },
+      {
+        question: "True or False: Role-based prompting assigns a persona to the AI.",
+        options: [
+          { text: "True", correct: true },
+          { text: "False", correct: false }
+        ],
+        rationale: "Role-based prompting assigns a persona or role to the AI."
+      },
+      {
+        question: "Which of these is NOT a basic prompt type?",
+        options: [
+          { text: "Direct question", correct: false },
+          { text: "Creative", correct: false },
+          { text: "Emotional validation", correct: true },
+          { text: "Zero-shot", correct: false }
+        ],
+        rationale: "Emotional validation is not a standard prompt type."
+      },
+      {
+        question: "What does \"Chain-of-Thought\" prompting encourage AI to do?",
+        options: [
+          { text: "Generate poetic responses", correct: false },
+          { text: "Explain its reasoning step-by-step", correct: true },
+          { text: "Repeat previous answers", correct: false },
+          { text: "Ask clarifying questions", correct: false }
+        ],
+        rationale: "Chain-of-Thought prompting guides AI to explain its reasoning step-by-step."
+      },
+      {
+        question: "Which prompt is most likely to produce a targeted, useful response?",
+        options: [
+          { text: "\"How to start a garden?\"", correct: false },
+          { text: "\"I'm in Phoenix with rocky soil, zero gardening experience, and $50 budget. How do I start a container garden?\"", correct: true },
+          { text: "\"Gardening tips please\"", correct: false },
+          { text: "\"Tell me about plants\"", correct: false }
+        ],
+        rationale: "Specific, contextual prompts produce more targeted and useful results."
+      },
+      {
+        question: "True or False: Zero-shot prompting includes examples to guide the AI.",
+        options: [
+          { text: "False", correct: true },
+          { text: "True", correct: false }
+        ],
+        rationale: "Zero-shot prompting does NOT include examples—it gives the task directly."
+      },
+      {
+        question: "What's the risk of using vague prompts?",
+        options: [
+          { text: "AI might crash", correct: false },
+          { text: "AI will ignore the prompt", correct: false },
+          { text: "AI will give generic or irrelevant answers", correct: true },
+          { text: "AI will ask for payment", correct: false }
+        ],
+        rationale: "Vague prompts lead to generic or irrelevant AI output."
+      },
+      {
+        question: "What's the best way to improve your prompt results?",
+        options: [
+          { text: "Use emojis", correct: false },
+          { text: "Keep prompts as short as possible", correct: false },
+          { text: "Add context, clarity, and specificity", correct: true },
+          { text: "Ask the same question multiple times", correct: false }
+        ],
+        rationale: "Specificity and context improve prompt effectiveness."
+      }
+    ];
+
+    const results = [
+      {
+        minPercent: 90,
+        emoji: "🚀",
+        title: "PB-Ready",
+        description: "You're ready to prompt with precision, creativity, and emotional clarity. Welcome to the Practically Beta mindset."
+      },
+      {
+        minPercent: 60,
+        emoji: "🌱",
+        title: "Prompt Builder",
+        description: "You're learning how to shape AI with intention. Keep refining your technique."
+      },
+      {
+        minPercent: 0,
+        emoji: "🐣",
+        title: "Prompt Curious",
+        description: "You're just starting your prompt journey. Keep experimenting—curiosity builds skill."
+      }
+    ];
+
+    // Quiz logic
+    let currentQuestion = 0;
+    let correctAnswers = 0;
+    let incorrectAnswers = [];
+    const totalQuestions = quizData.length;
+
+    const quizDiv = document.getElementById("quiz");
+    const resultDiv = document.getElementById("result");
+    const retakeBtn = document.getElementById("retake");
+
+    function showQuestion() {
+      if (currentQuestion >= quizData.length) {
+        showResult();
+        return;
+      }
+      const q = quizData[currentQuestion];
+      quizDiv.innerHTML = `
+        <div class="question">${q.question}</div>
+        <div class="options">
+          ${q.options.map((opt, idx) => `<button class="option-btn" onclick="selectOption(${idx})">${opt.text}</button>`).join("")}
+        </div>
+        <div class="quiz-footer">
+          <span>Question ${currentQuestion + 1} of ${quizData.length}</span>
+        </div>
+      `;
+    }
+
+    window.selectOption = function(optionIndex) {
+      const q = quizData[currentQuestion];
+      if (q.options[optionIndex].correct) {
+        correctAnswers++;
+      } else {
+        // Track incorrect answers with question details
+        incorrectAnswers.push({
+          questionNumber: currentQuestion + 1,
+          question: q.question,
+          selectedAnswer: q.options[optionIndex].text,
+          correctAnswer: q.options.find(opt => opt.correct).text,
+          rationale: q.rationale
+        });
+      }
+      currentQuestion++;
+      showQuestion();
+    }
+
+    function showResult() {
+      quizDiv.innerHTML = "";
+      const percentage = Math.round((correctAnswers / totalQuestions) * 100);
+
+      // Find the appropriate result tier
+      let resultObj = results.find(r => percentage >= r.minPercent);
+      if (!resultObj) resultObj = results[results.length - 1]; // fallback
+
+      let resultHTML = `
+        <div style="font-size:3rem;margin-bottom:8px;">${resultObj.emoji}</div>
+        <h2>${resultObj.title}</h2>
+        <div style="margin-bottom:12px;">You scored ${percentage}% (${correctAnswers} out of ${totalQuestions} correct)</div>
+        <div>${resultObj.description}</div>
+      `;
+
+      // Add explanations for incorrect answers
+      if (incorrectAnswers.length > 0) {
+        resultHTML += `
+          <div style="margin-top:24px;text-align:left;border-top:2px solid #004aad;padding-top:20px;">
+            <h3 style="color:#004aad;font-size:1.3rem;margin-bottom:16px;">Review Your Answers</h3>
+        `;
+
+        incorrectAnswers.forEach(item => {
+          resultHTML += `
+            <div style="margin-bottom:20px;padding:16px;background:#fff;border-radius:8px;box-shadow:0 2px 8px rgba(0,0,0,0.05);">
+              <div style="font-weight:bold;color:#004aad;margin-bottom:8px;">Question ${item.questionNumber}: ${item.question}</div>
+              <div style="margin-bottom:6px;color:#d32f2f;"><strong>Your answer:</strong> ${item.selectedAnswer}</div>
+              <div style="margin-bottom:8px;color:#2e7d32;"><strong>Correct answer:</strong> ${item.correctAnswer}</div>
+              <div style="color:#555;font-style:italic;"><strong>Why:</strong> ${item.rationale}</div>
+            </div>
+          `;
+        });
+
+        resultHTML += `</div>`;
+      }
+
+      resultDiv.style.display = "block";
+      resultDiv.innerHTML = resultHTML;
+      retakeBtn.style.display = "block";
+    }
+
+    retakeBtn.onclick = function() {
+      currentQuestion = 0;
+      correctAnswers = 0;
+      incorrectAnswers = [];
+      resultDiv.style.display = "none";
+      retakeBtn.style.display = "none";
+      showQuestion();
+    }
+
+    // Start
+    showQuestion();
+  </script>
+</body>
+</html>
