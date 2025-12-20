@@ -1,0 +1,548 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Before & After: Prompt Explorer</title>
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+    
+    body {
+      font-family: Verdana, Geneva, sans-serif;
+      background: linear-gradient(135deg, #cdffd8 0%, #94b9ff 50%, #e0c3fc 100%);
+      margin: 0;
+      padding: 0;
+      min-height: 100vh;
+    }
+
+    .container {
+      max-width: 720px;
+      margin: 48px auto;
+      background: #fff;
+      border-radius: 24px;
+      box-shadow: 0 12px 40px 0 rgba(61, 78, 161, 0.12);
+      padding: 40px 36px 44px 36px;
+    }
+    
+    .pb-logo {
+      width: 60px;
+      margin: 0 auto 10px auto;
+      display: block;
+    }
+    
+    h1 {
+      text-align: center;
+      font-size: 1.9rem;
+      color: #004aad;
+      letter-spacing: 0.5px;
+      margin-bottom: 24px;
+    }
+    
+    .scenario-box {
+      background: linear-gradient(90deg, #f0f4ff 0%, #f8f9ff 100%);
+      border-left: 4px solid #004aad;
+      border-radius: 12px;
+      padding: 20px 24px;
+      margin-bottom: 24px;
+    }
+    
+    .scenario-label {
+      font-size: 0.8rem;
+      font-weight: bold;
+      color: #004aad;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 6px;
+    }
+    
+    .scenario-text {
+      font-size: 1.1rem;
+      color: #333;
+      font-weight: 500;
+    }
+    
+    .explainer-box {
+      background: #fafafa;
+      border-radius: 12px;
+      padding: 18px 22px;
+      margin-bottom: 28px;
+      font-size: 0.92rem;
+      line-height: 1.7;
+      color: #555;
+    }
+    
+    .explainer-box p {
+      margin: 0 0 10px 0;
+    }
+    
+    .explainer-box p:last-child {
+      margin-bottom: 0;
+    }
+    
+    .explainer-box strong {
+      color: #004aad;
+    }
+    
+    .section-label {
+      font-size: 0.85rem;
+      font-weight: bold;
+      color: #333;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 14px;
+    }
+    
+    .combo-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      margin-bottom: 24px;
+    }
+    
+    .combo-card {
+      background: #fff;
+      border: 2px solid #e0e0e0;
+      border-radius: 14px;
+      padding: 20px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      text-align: center;
+    }
+    
+    .combo-card:hover {
+      border-color: #004aad;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 16px rgba(0, 74, 173, 0.15);
+    }
+    
+    .combo-card.selected {
+      border-color: #004aad;
+      background: linear-gradient(135deg, #f0f4ff 0%, #e8f0ff 100%);
+      box-shadow: 0 4px 16px rgba(0, 74, 173, 0.2);
+    }
+    
+    .combo-card .generation {
+      font-size: 1.1rem;
+      font-weight: bold;
+      color: #004aad;
+      margin-bottom: 4px;
+    }
+    
+    .combo-card .details {
+      font-size: 0.9rem;
+      color: #666;
+    }
+    
+    .combo-card .format-tag {
+      display: inline-block;
+      background: linear-gradient(90deg, #004aad 0%, #cb6ce6 100%);
+      color: #fff;
+      font-size: 0.75rem;
+      font-weight: bold;
+      padding: 5px 12px;
+      border-radius: 12px;
+      margin-top: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    
+    .toggle-container {
+      display: flex;
+      justify-content: center;
+      gap: 0;
+      margin-bottom: 28px;
+    }
+    
+    .toggle-btn {
+      font-family: inherit;
+      font-size: 1rem;
+      font-weight: 600;
+      padding: 14px 32px;
+      border: 2px solid #004aad;
+      background: #fff;
+      color: #004aad;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+    
+    .toggle-btn:first-child {
+      border-radius: 10px 0 0 10px;
+      border-right: 1px solid #004aad;
+    }
+    
+    .toggle-btn:last-child {
+      border-radius: 0 10px 10px 0;
+      border-left: 1px solid #004aad;
+    }
+    
+    .toggle-btn:hover {
+      background: #f0f4ff;
+    }
+    
+    .toggle-btn.active {
+      background: linear-gradient(90deg, #004aad 0%, #cb6ce6 100%);
+      color: #fff;
+      border-color: #004aad;
+    }
+    
+    .generate-btn {
+      display: block;
+      width: 100%;
+      font-family: inherit;
+      font-size: 1.1rem;
+      font-weight: bold;
+      padding: 18px 24px;
+      background: linear-gradient(90deg, #004aad 0%, #cb6ce6 100%);
+      color: #fff;
+      border: none;
+      border-radius: 14px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      box-shadow: 0 4px 16px rgba(0, 74, 173, 0.25);
+      margin-bottom: 28px;
+    }
+    
+    .generate-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 24px rgba(0, 74, 173, 0.35);
+      background: linear-gradient(90deg, #cb6ce6 0%, #004aad 100%);
+    }
+    
+    .generate-btn:active {
+      transform: translateY(0);
+    }
+    
+    .generate-btn:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+      transform: none;
+    }
+    
+    .output-container {
+      display: none;
+      animation: fadeIn 0.4s ease;
+    }
+    
+    .output-container.visible {
+      display: block;
+    }
+    
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    
+    .output-section {
+      background: linear-gradient(135deg, #f8f9ff 0%, #f0f4ff 100%);
+      border-radius: 16px;
+      padding: 24px;
+      margin-bottom: 20px;
+      border-left: 4px solid #004aad;
+    }
+    
+    .output-section.prompt-section {
+      border-left-color: #cb6ce6;
+    }
+    
+    .output-label {
+      font-size: 0.8rem;
+      font-weight: bold;
+      color: #004aad;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    
+    .output-label.prompt-label {
+      color: #9b4dca;
+    }
+    
+    .output-label .icon {
+      font-size: 1.1rem;
+    }
+    
+    .output-text {
+      font-size: 1.05rem;
+      line-height: 1.7;
+      color: #333;
+    }
+    
+    .annotation-section {
+      background: linear-gradient(90deg, #fff9e6 0%, #fff5d6 100%);
+      border-radius: 16px;
+      padding: 20px 24px;
+      margin-top: 24px;
+      border: 1px dashed #e6c200;
+    }
+    
+    .annotation-label {
+      font-size: 0.8rem;
+      font-weight: bold;
+      color: #b38f00;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 10px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    
+    .annotation-text {
+      font-size: 0.95rem;
+      line-height: 1.6;
+      color: #5c4d00;
+      font-style: italic;
+    }
+    
+    .reset-btn {
+      display: block;
+      margin: 24px auto 0 auto;
+      font-family: inherit;
+      font-size: 0.95rem;
+      padding: 12px 28px;
+      background: #fff;
+      color: #004aad;
+      border: 2px solid #004aad;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+    
+    .reset-btn:hover {
+      background: #004aad;
+      color: #fff;
+    }
+    
+    .select-prompt {
+      text-align: center;
+      color: #888;
+      font-size: 0.95rem;
+      padding: 20px;
+    }
+    
+    @media (max-width: 600px) {
+      .container {
+        margin: 24px 12px;
+        padding: 28px 20px;
+      }
+      
+      h1 {
+        font-size: 1.5rem;
+      }
+      
+      .combo-grid {
+        grid-template-columns: 1fr;
+        gap: 12px;
+      }
+      
+      .toggle-btn {
+        padding: 12px 20px;
+        font-size: 0.9rem;
+      }
+      
+      .output-section {
+        padding: 18px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <img class="pb-logo" src="https://images.spr.so/cdn-cgi/imagedelivery/j42No7y-dcokJuNgXeA0ig/6d7c016b-8307-4fbe-8200-ecef8144c00b/PB_Logo_Circle/w=96,quality=90,fit=scale-down" alt="Practically Beta logo" />
+    <h1>Before & After: Prompt Explorer</h1>
+    
+    <div class="scenario-box">
+      <div class="scenario-label">Scenario</div>
+      <div class="scenario-text">Setting Boundaries Around Workload to Manager</div>
+    </div>
+    
+    <div class="explainer-box">
+      <p><strong>Natural Prompt</strong> will demonstrate how this persona would instinctively ask the AI for help, which may not result in specific outputs.</p>
+      <p><strong>Refined Prompt</strong> will demonstrate a revised prompt that is structured to generate more specific outputs.</p>
+    </div>
+    
+    <div class="section-label">Pick a Combination</div>
+    <div class="combo-grid">
+      <div class="combo-card" data-combo="genz-avoidance-slack" onclick="selectCombo(this)">
+        <div class="generation">Gen Z</div>
+        <div class="details">Avoidance Tone</div>
+        <div class="format-tag">Slack</div>
+      </div>
+      <div class="combo-card" data-combo="boomer-aggressor-slack" onclick="selectCombo(this)">
+        <div class="generation">Baby Boomer</div>
+        <div class="details">Aggressor Tone</div>
+        <div class="format-tag">Slack</div>
+      </div>
+      <div class="combo-card" data-combo="genz-aggressor-email" onclick="selectCombo(this)">
+        <div class="generation">Gen Z</div>
+        <div class="details">Aggressor Tone</div>
+        <div class="format-tag">Email</div>
+      </div>
+      <div class="combo-card" data-combo="boomer-avoidance-email" onclick="selectCombo(this)">
+        <div class="generation">Baby Boomer</div>
+        <div class="details">Avoidance Tone</div>
+        <div class="format-tag">Email</div>
+      </div>
+    </div>
+    
+    <div class="section-label">Select Prompt Type</div>
+    <div class="toggle-container">
+      <button class="toggle-btn active" data-type="Natural" onclick="selectPromptType(this)">Natural</button>
+      <button class="toggle-btn" data-type="Refined" onclick="selectPromptType(this)">Refined</button>
+    </div>
+    
+    <button class="generate-btn" onclick="generateOutput()" id="generateBtn">✨ Generate Output</button>
+    
+    <div id="outputContainer" class="output-container">
+      <div class="output-section prompt-section">
+        <div class="output-label prompt-label"><span class="icon">💬</span> The Prompt</div>
+        <div id="promptText" class="output-text"></div>
+      </div>
+      
+      <div class="output-section">
+        <div class="output-label"><span class="icon">🤖</span> AI Output</div>
+        <div id="outputText" class="output-text"></div>
+      </div>
+      
+      <div id="annotationSection" class="annotation-section" style="display: none;">
+        <div class="annotation-label"><span class="icon">💡</span> Why This Works</div>
+        <div id="annotationText" class="annotation-text"></div>
+      </div>
+      
+      <button class="reset-btn" onclick="resetTool()">🔄 Try Another Combination</button>
+    </div>
+    
+    <div id="selectPrompt" class="select-prompt">
+      Select a combination above, then click Generate Output
+    </div>
+  </div>
+
+  <script>
+    const data = {
+      "genz-avoidance-slack": {
+        "Natural": {
+          prompt: "Ugh I'm drowning. Can you like…say something to my manager?",
+          output: "Hey, just wanted to say I'm kinda overwhelmed lately. Not sure if it's okay to mention but yeah, it's been a lot. Just FYI I guess.",
+          annotation: ""
+        },
+        "Refined": {
+          prompt: "Write a Slack message in a Gen Z voice that gently sets boundaries around workload. It should sound casual but clear, and avoid sounding dramatic or confrontational.",
+          output: "Hey! I've been feeling a bit stretched lately and wanted to flag it before it snowballs. Just wanna make sure I'm staying effective without burning out…open to chatting if needed.",
+          annotation: "Preserves Gen Z Avoidance tone through emotionally coded language and optional dialogue. Translates overwhelm into gentle assertion, maintaining async culture and voice integrity."
+        }
+      },
+      "boomer-aggressor-slack": {
+        "Natural": {
+          prompt: "I need to tell my manager I'm not a machine. Draft something firm.",
+          output: "This pace is unsustainable. I'm doing the work of multiple people and it's not acceptable. Something needs to change.",
+          annotation: ""
+        },
+        "Refined": {
+          prompt: "Write a Slack message that channels frustration into a firm boundary. It should sound direct and unapologetic, without being hostile. Hard stop.",
+          output: "I'm hitting a wall with the current workload. I'm not willing to keep pushing past capacity—it's not sustainable. We need to reassess what's realistic and make adjustments. Let's talk.",
+          annotation: "Preserves Aggressor tone through direct, unapologetic language. Translates frustration into a firm boundary while inviting resolution through conversation—aligned with Boomer relational norms."
+        }
+      },
+      "genz-aggressor-email": {
+        "Natural": {
+          prompt: "This is ridiculous. I'm not doing three people's jobs. Help me say that in a short email.",
+          output: "I'm overwhelmed, and this workload is not okay. I shouldn't be doing the work of three people. Something needs to change.",
+          annotation: ""
+        },
+        "Refined": {
+          prompt: "Write a short email in a Gen Z voice that channels frustration into a clear boundary. It should be direct, emotionally honest, and avoid corporate jargon.",
+          output: "Hi [Manager's Name], This workload isn't sustainable—I'm stretched across too many roles and it's not working. Flagging this so we can reassess what's realistic moving forward.",
+          annotation: "Preserves Gen Z Aggressor tone through emotionally honest, jargon-free language. Translates burnout into a clear boundary while respecting async norms and autonomy."
+        }
+      },
+      "boomer-avoidance-email": {
+        "Natural": {
+          prompt: "I don't want to cause trouble, but I'm overwhelmed. Can you help me say that in a short email?",
+          output: "Hi, I've been feeling a bit overwhelmed lately. I'm not sure if it's just me, but I wanted to mention it. Hope that's okay.",
+          annotation: ""
+        },
+        "Refined": {
+          prompt: "Write a short email that gently communicates overwhelm without sounding like a complaint. It should preserve harmony while inviting support. Tone should be warm, professional, and non-confrontational.",
+          output: "Hi [Manager's Name], I've been noticing a steady increase in workload, and it's starting to feel unsustainable. I'm committed to doing my best, but I wanted to flag this before it affects quality. Open to discussing how we might rebalance things.",
+          annotation: "Preserves Avoidance tone through warm, professional phrasing. Translates overwhelm into proactive signal while maintaining harmony and inviting collaborative support."
+        }
+      }
+    };
+
+    let selectedCombo = null;
+    let selectedPromptType = "Natural";
+
+    function selectCombo(card) {
+      // Remove selected from all cards
+      document.querySelectorAll('.combo-card').forEach(c => c.classList.remove('selected'));
+      // Add selected to clicked card
+      card.classList.add('selected');
+      selectedCombo = card.dataset.combo;
+      
+      // Hide any existing output
+      document.getElementById('outputContainer').classList.remove('visible');
+      document.getElementById('selectPrompt').style.display = 'block';
+    }
+
+    function selectPromptType(btn) {
+      // Remove active from all toggle buttons
+      document.querySelectorAll('.toggle-btn').forEach(b => b.classList.remove('active'));
+      // Add active to clicked button
+      btn.classList.add('active');
+      selectedPromptType = btn.dataset.type;
+      
+      // Hide any existing output
+      document.getElementById('outputContainer').classList.remove('visible');
+      document.getElementById('selectPrompt').style.display = 'block';
+    }
+
+    function generateOutput() {
+      if (!selectedCombo) {
+        alert('Please select a combination first!');
+        return;
+      }
+      
+      const comboData = data[selectedCombo][selectedPromptType];
+      
+      document.getElementById('promptText').textContent = comboData.prompt;
+      document.getElementById('outputText').textContent = comboData.output;
+      
+      const annotationSection = document.getElementById('annotationSection');
+      if (comboData.annotation) {
+        document.getElementById('annotationText').textContent = comboData.annotation;
+        annotationSection.style.display = 'block';
+      } else {
+        annotationSection.style.display = 'none';
+      }
+      
+      document.getElementById('selectPrompt').style.display = 'none';
+      document.getElementById('outputContainer').classList.add('visible');
+      
+      // Smooth scroll to output
+      document.getElementById('outputContainer').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+    
+    function resetTool() {
+      // Deselect combo
+      document.querySelectorAll('.combo-card').forEach(c => c.classList.remove('selected'));
+      selectedCombo = null;
+      
+      // Reset to Natural
+      document.querySelectorAll('.toggle-btn').forEach(b => b.classList.remove('active'));
+      document.querySelector('.toggle-btn[data-type="Natural"]').classList.add('active');
+      selectedPromptType = "Natural";
+      
+      // Hide output
+      document.getElementById('outputContainer').classList.remove('visible');
+      document.getElementById('selectPrompt').style.display = 'block';
+      
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+  </script>
+</body>
+</html>

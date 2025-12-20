@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>So You Think You Know Personas?</title>
+  <style>
+    body {
+      font-family: Verdana, Geneva, sans-serif;
+      background: linear-gradient(90deg, #cdffd8 0%, #94b9ff 100%);
+      margin: 0;
+      padding: 0;
+      min-height: 100vh;
+    }
+
+    .container {
+      max-width: 600px;
+      margin: 48px auto;
+      background: #fff;
+      border-radius: 20px;
+      box-shadow: 0 8px 32px 0 rgba(61, 78, 161, 0.08);
+      padding: 32px 28px 36px 28px;
+    }
+    h1 {
+      text-align: center;
+      font-size: 2.1rem;
+      color: #004aad;
+      letter-spacing: 1px;
+      margin-bottom: 12px;
+    }
+    .pb-logo {
+      width: 60px;
+      margin: 0 auto 10px auto;
+      display: block;
+    }
+    .question {
+      font-size: 1.18rem;
+      color: #333;
+      margin: 30px 0 18px 0;
+      font-weight: bold;
+      text-align: left;
+    }
+    .options {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+    .option-btn {
+      font-family: inherit;
+      background: linear-gradient(90deg, #004aad 0%, #cb6ce6 100%);
+      color: #fff;
+      border: none;
+      border-radius: 9px;
+      font-size: 1rem;
+      padding: 18px 18px;
+      cursor: pointer;
+      transition: background 0.2s, transform 0.1s;
+      box-shadow: 0 2px 8px rgba(61, 78, 161, 0.06);
+      text-align: left;
+    }
+    .option-btn:hover, .option-btn:focus {
+      background: linear-gradient(90deg, #cb6ce6 0%, #004aad 100%);
+      transform: translateY(-2px) scale(1.03);
+      outline: none;
+    }
+    .quiz-footer {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 30px;
+      font-size: 1rem;
+    }
+    .result {
+      margin: 34px 0 12px 0;
+      padding: 28px 22px;
+      border-radius: 14px;
+      background: linear-gradient(90deg, #cdffd8 0%, #94b9ff 100%);
+      box-shadow: 0 3px 12px 0 rgba(61, 78, 161, 0.10);
+      color: #29223e;
+      font-size: 1.16rem;
+      text-align: center;
+      font-weight: 500;
+      min-height: 110px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+    .result h2 {
+      color: #004aad;
+      margin: 0 0 12px;
+      font-size: 1.5rem;
+    }
+    .retake-btn {
+      background: #fff;
+      color: #004aad;
+      border: 2px solid #004aad;
+      border-radius: 8px;
+      padding: 12px 30px;
+      font-size: 1.1rem;
+      cursor: pointer;
+      margin: 20px auto 0 auto;
+      display: block;
+      transition: background 0.2s, color 0.2s;
+    }
+    .retake-btn:hover, .retake-btn:focus {
+      background: #004aad;
+      color: #fff;
+      outline: none;
+    }
+    @media (max-width: 650px) {
+      .container { max-width: 98vw; padding: 18px 3vw 24px 3vw;}
+      h1 { font-size: 1.22rem; }
+      .result { font-size: 1.07rem;}
+      .result h2 { font-size: 1.3rem; }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <img class="pb-logo" src="https://images.spr.so/cdn-cgi/imagedelivery/j42No7y-dcokJuNgXeA0ig/6d7c016b-8307-4fbe-8200-ecef8144c00b/PB_Logo_Circle/w=96,quality=90,fit=scale-down" alt="Practically Beta logo" />
+    <h1>So You Think You Know Personas?</h1>
+    <div id="quiz"></div>
+    <div id="result" class="result" style="display:none;"></div>
+    <button id="retake" class="retake-btn" style="display:none;">Retake Quiz</button>
+  </div>
+  <script>
+    const quizData = [
+      {
+        question: "What is a persona in AI prompting?",
+        options: [
+          { text: "A random character name for the AI", correct: false },
+          { text: "A specific role, identity, or expertise you assign to the AI to shape its responses", correct: true },
+          { text: "The AI's default personality setting", correct: false },
+          { text: "A technical term for the AI's memory", correct: false }
+        ],
+        rationale: "A persona is a specific role or identity assigned to AI to shape its responses."
+      },
+      {
+        question: "Why does assigning a persona improve AI output?",
+        options: [
+          { text: "It makes the AI respond faster", correct: false },
+          { text: "It unlocks hidden AI features", correct: false },
+          { text: "It forces the AI to be specific and focused instead of giving generic answers", correct: true },
+          { text: "It reduces the cost of using AI", correct: false }
+        ],
+        rationale: "Personas force the AI to be specific and focused rather than giving generic answers."
+      },
+      {
+        question: "Which of the following is a WEAK persona prompt?",
+        options: [
+          { text: "\"Act as a certified retirement planning specialist with 20 years of experience\"", correct: false },
+          { text: "\"Act as a financial advisor\"", correct: true },
+          { text: "\"Act as a 3rd-grade teacher using friendly, encouraging language\"", correct: false },
+          { text: "\"Act as a marketing copywriter limited to 100 words with no jargon\"", correct: false }
+        ],
+        rationale: "\"Financial advisor\" is too vague—specific personas include experience level, specialization, and audience."
+      },
+      {
+        question: "True or False: A persona only affects WHAT the AI says, not HOW it says it.",
+        options: [
+          { text: "True", correct: false },
+          { text: "False", correct: true }
+        ],
+        rationale: "A persona affects both WHAT the AI says and HOW it says it—including tone, style, vocabulary, and format."
+      },
+      {
+        question: "What does defining a persona help you do?",
+        options: [
+          { text: "Delete the AI's previous responses", correct: false },
+          { text: "Predict and verify the quality of the output more easily", correct: true },
+          { text: "Access premium AI features", correct: false },
+          { text: "Speed up the AI's processing time", correct: false }
+        ],
+        rationale: "When you clearly define a role, you have a better idea of what the answer should look like, making it easier to verify quality."
+      },
+      {
+        question: "Which element should you ALWAYS include when defining a persona?",
+        options: [
+          { text: "The AI's name", correct: false },
+          { text: "The intended audience for the output", correct: true },
+          { text: "A list of topics to avoid", correct: false },
+          { text: "The AI's emotional state", correct: false }
+        ],
+        rationale: "Always define the audience so the AI uses appropriate language and framing for the intended reader."
+      },
+      {
+        question: "In the mechanic example, why did the Gen Z and Gen X personas produce different responses?",
+        options: [
+          { text: "They used different AI models", correct: false },
+          { text: "The prompts were written at different times", correct: false },
+          { text: "The persona shaped the tone, style, and vocabulary of each response", correct: true },
+          { text: "One prompt was longer than the other", correct: false }
+        ],
+        rationale: "The different personas (Gen Z vs Gen X) shaped the tone, vocabulary, and style of each response."
+      },
+      {
+        question: "What is the best approach if your first persona prompt doesn't produce the right output?",
+        options: [
+          { text: "Delete everything and start over", correct: false },
+          { text: "Switch to a different AI tool", correct: false },
+          { text: "Refine the persona in your next prompt (e.g., \"make the tone more friendly\")", correct: true },
+          { text: "Remove the persona entirely", correct: false }
+        ],
+        rationale: "Refine and iterate—don't delete. Build on what you have by adjusting the persona in follow-up prompts."
+      },
+      {
+        question: "True or False: Using a persona is only useful for creative writing tasks.",
+        options: [
+          { text: "True", correct: false },
+          { text: "False", correct: true }
+        ],
+        rationale: "Personas are useful across all tasks—emails, reports, learning scenarios, technical documentation, and more."
+      },
+      {
+        question: "Which prompt demonstrates the BEST use of persona?",
+        options: [
+          { text: "\"Write me an email to my boss\"", correct: false },
+          { text: "\"Help me with a work email\"", correct: false },
+          { text: "\"Act as an email writer and write something professional\"", correct: false },
+          { text: "\"Act as a direct, experienced HR manager. Write a 3-sentence email to my supervisor requesting Friday off, emphasizing my completed deliverables.\"", correct: true }
+        ],
+        rationale: "This prompt includes a specific persona (HR manager), tone (direct), constraints (3 sentences), audience (supervisor), and context (completed deliverables)."
+      }
+    ];
+
+    const results = [
+      {
+        minPercent: 90,
+        emoji: "🚀",
+        title: "PB-Ready",
+        description: "You're ready to design personas with precision and intention. Welcome to the Practically Beta mindset."
+      },
+      {
+        minPercent: 60,
+        emoji: "🌱",
+        title: "Persona Builder",
+        description: "You understand the power of personas. Keep refining your prompts to unlock even more targeted results."
+      },
+      {
+        minPercent: 0,
+        emoji: "🐣",
+        title: "Persona Curious",
+        description: "You're just starting to explore how personas shape AI. Keep experimenting—every role you try teaches you something new."
+      }
+    ];
+
+    // Quiz logic
+    let currentQuestion = 0;
+    let correctAnswers = 0;
+    let incorrectAnswers = [];
+    const totalQuestions = quizData.length;
+
+    const quizDiv = document.getElementById("quiz");
+    const resultDiv = document.getElementById("result");
+    const retakeBtn = document.getElementById("retake");
+
+    function showQuestion() {
+      if (currentQuestion >= quizData.length) {
+        showResult();
+        return;
+      }
+      const q = quizData[currentQuestion];
+      quizDiv.innerHTML = `
+        <div class="question">${q.question}</div>
+        <div class="options">
+          ${q.options.map((opt, idx) => `<button class="option-btn" onclick="selectOption(${idx})">${opt.text}</button>`).join("")}
+        </div>
+        <div class="quiz-footer">
+          <span>Question ${currentQuestion + 1} of ${quizData.length}</span>
+        </div>
+      `;
+    }
+
+    window.selectOption = function(optionIndex) {
+      const q = quizData[currentQuestion];
+      if (q.options[optionIndex].correct) {
+        correctAnswers++;
+      } else {
+        // Track incorrect answers with question details
+        incorrectAnswers.push({
+          questionNumber: currentQuestion + 1,
+          question: q.question,
+          selectedAnswer: q.options[optionIndex].text,
+          correctAnswer: q.options.find(opt => opt.correct).text,
+          rationale: q.rationale
+        });
+      }
+      currentQuestion++;
+      showQuestion();
+    }
+
+    function showResult() {
+      quizDiv.innerHTML = "";
+      const percentage = Math.round((correctAnswers / totalQuestions) * 100);
+
+      // Find the appropriate result tier
+      let resultObj = results.find(r => percentage >= r.minPercent);
+      if (!resultObj) resultObj = results[results.length - 1]; // fallback
+
+      let resultHTML = `
+        <div style="font-size:3rem;margin-bottom:8px;">${resultObj.emoji}</div>
+        <h2>${resultObj.title}</h2>
+        <div style="margin-bottom:12px;">You scored ${percentage}% (${correctAnswers} out of ${totalQuestions} correct)</div>
+        <div>${resultObj.description}</div>
+      `;
+
+      // Add explanations for incorrect answers
+      if (incorrectAnswers.length > 0) {
+        resultHTML += `
+          <div style="margin-top:24px;text-align:left;border-top:2px solid #004aad;padding-top:20px;">
+            <h3 style="color:#004aad;font-size:1.3rem;margin-bottom:16px;">Review Your Answers</h3>
+        `;
+
+        incorrectAnswers.forEach(item => {
+          resultHTML += `
+            <div style="margin-bottom:20px;padding:16px;background:#fff;border-radius:8px;box-shadow:0 2px 8px rgba(0,0,0,0.05);">
+              <div style="font-weight:bold;color:#004aad;margin-bottom:8px;">Question ${item.questionNumber}: ${item.question}</div>
+              <div style="margin-bottom:6px;color:#d32f2f;"><strong>Your answer:</strong> ${item.selectedAnswer}</div>
+              <div style="margin-bottom:8px;color:#2e7d32;"><strong>Correct answer:</strong> ${item.correctAnswer}</div>
+              <div style="color:#555;font-style:italic;"><strong>Why:</strong> ${item.rationale}</div>
+            </div>
+          `;
+        });
+
+        resultHTML += `</div>`;
+      }
+
+      resultDiv.style.display = "block";
+      resultDiv.innerHTML = resultHTML;
+      retakeBtn.style.display = "block";
+    }
+
+    retakeBtn.onclick = function() {
+      currentQuestion = 0;
+      correctAnswers = 0;
+      incorrectAnswers = [];
+      resultDiv.style.display = "none";
+      retakeBtn.style.display = "none";
+      showQuestion();
+    }
+
+    // Start
+    showQuestion();
+  </script>
+</body>
+</html>
