@@ -90,15 +90,15 @@
 
     .connection-line {
       stroke: url(#connectionGradient);
-      stroke-width: 1.5;
+      stroke-width: 2.5;
       fill: none;
-      opacity: 0.4;
+      opacity: 0.5;
       transition: opacity 0.3s ease;
     }
 
     .connection-line.highlight {
-      opacity: 0.8;
-      stroke-width: 2;
+      opacity: 1;
+      stroke-width: 4;
     }
 
     /* Brain Nodes */
@@ -168,14 +168,14 @@
       color: #e9d5ff;
     }
 
-    /* Sub-nodes (smaller) */
+    /* Sub-nodes - now same size as main nodes */
     .brain-node.sub-node .brain-icon {
-      font-size: 2rem;
+      font-size: inherit;
     }
 
     .brain-node.sub-node .brain-label {
-      font-size: 0.75rem;
-      max-width: 100px;
+      font-size: inherit;
+      max-width: inherit;
     }
 
     /* Expanded Content */
@@ -185,15 +185,14 @@
       left: 50%;
       transform: translateX(-50%);
       width: 320px;
-      background: linear-gradient(135deg, rgba(30, 20, 50, 0.95) 0%, rgba(20, 30, 60, 0.95) 100%);
-      border: 1px solid rgba(167, 139, 250, 0.3);
+      background: linear-gradient(135deg, #1e1432 0%, #141e3c 100%);
+      border: 1px solid rgba(167, 139, 250, 0.4);
       border-radius: 16px;
       padding: 20px;
       opacity: 0;
       visibility: hidden;
       transition: all 0.3s ease;
-      backdrop-filter: blur(10px);
-      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.6);
       z-index: 100;
     }
 
@@ -279,12 +278,12 @@
       </defs>
     </svg>
 
-    <!-- Brain Nodes -->
+    <!-- Brain Nodes - All uniform size, tighter layout -->
     <!-- Node 1: Compensation -->
-    <div class="brain-node" data-id="compensation" style="left: 15%; top: 20%;">
+    <div class="brain-node" data-id="compensation" style="left: 8%; top: 15%;">
       <div class="brain-visual">
-        <div class="brain-glow" style="width: 100px; height: 100px; --glow-color: #a78bfa;"></div>
-        <span class="brain-icon" style="--brain-size: 3.5rem; --glow-color: #a78bfa; --float-speed: 5s;">🧠</span>
+        <div class="brain-glow" style="width: 140px; height: 140px; --glow-color: #a78bfa;"></div>
+        <span class="brain-icon" style="--brain-size: 6rem; --glow-color: #a78bfa; --float-speed: 5s;">🧠</span>
       </div>
       <span class="brain-label">"If I stay, will my pay go up?"</span>
       <div class="insight-content">
@@ -295,10 +294,10 @@
     </div>
 
     <!-- Node 2: Job Market -->
-    <div class="brain-node" data-id="jobmarket" style="left: 50%; top: 10%;">
+    <div class="brain-node" data-id="jobmarket" style="left: 38%; top: 5%;">
       <div class="brain-visual">
-        <div class="brain-glow" style="width: 120px; height: 120px; --glow-color: #60a5fa;"></div>
-        <span class="brain-icon" style="--brain-size: 4rem; --glow-color: #60a5fa; --float-speed: 7s;">🧠</span>
+        <div class="brain-glow" style="width: 140px; height: 140px; --glow-color: #60a5fa;"></div>
+        <span class="brain-icon" style="--brain-size: 6rem; --glow-color: #60a5fa; --float-speed: 7s;">🧠</span>
       </div>
       <span class="brain-label">The Real Job Market</span>
       <div class="insight-content">
@@ -309,10 +308,10 @@
     </div>
 
     <!-- Node 3: AI - Main Node -->
-    <div class="brain-node" data-id="ai-main" style="left: 82%; top: 18%;">
+    <div class="brain-node" data-id="ai-main" style="left: 72%; top: 10%;">
       <div class="brain-visual">
-        <div class="brain-glow" style="width: 110px; height: 110px; --glow-color: #f9a8d4;"></div>
-        <span class="brain-icon" style="--brain-size: 3.8rem; --glow-color: #f9a8d4; --float-speed: 6s;">🧠</span>
+        <div class="brain-glow" style="width: 140px; height: 140px; --glow-color: #f9a8d4;"></div>
+        <span class="brain-icon" style="--brain-size: 6rem; --glow-color: #f9a8d4; --float-speed: 6s;">🧠</span>
       </div>
       <span class="brain-label">AI & Work</span>
       <div class="insight-content">
@@ -323,13 +322,13 @@
     </div>
 
     <!-- Node 4: AI Sub-node 1 -->
-    <div class="brain-node sub-node" data-id="ai-skills" style="left: 92%; top: 35%;">
+    <div class="brain-node" data-id="ai-skills" style="left: 85%; top: 32%;">
       <div class="brain-visual">
-        <div class="brain-glow" style="width: 60px; height: 60px; --glow-color: #f9a8d4;"></div>
-        <span class="brain-icon" style="--brain-size: 2rem; --glow-color: #f9a8d4; --float-speed: 5s;">🧠</span>
+        <div class="brain-glow" style="width: 140px; height: 140px; --glow-color: #f9a8d4;"></div>
+        <span class="brain-icon" style="--brain-size: 6rem; --glow-color: #f9a8d4; --float-speed: 5s;">🧠</span>
       </div>
       <span class="brain-label">AI Fluency Gap</span>
-      <div class="insight-content" style="width: 280px;">
+      <div class="insight-content">
         <button class="insight-close" onclick="closeInsight(event)">×</button>
         <h3>The Skills Divide</h3>
         <p>Those who learn to work WITH AI will accelerate. Those who resist will find themselves competing against augmented colleagues.</p>
@@ -337,13 +336,13 @@
     </div>
 
     <!-- Node 5: AI Sub-node 2 -->
-    <div class="brain-node sub-node" data-id="ai-ethics" style="left: 75%; top: 40%;">
+    <div class="brain-node" data-id="ai-ethics" style="left: 60%; top: 35%;">
       <div class="brain-visual">
-        <div class="brain-glow" style="width: 60px; height: 60px; --glow-color: #c4b5fd;"></div>
-        <span class="brain-icon" style="--brain-size: 2rem; --glow-color: #c4b5fd; --float-speed: 4s;">🧠</span>
+        <div class="brain-glow" style="width: 140px; height: 140px; --glow-color: #c4b5fd;"></div>
+        <span class="brain-icon" style="--brain-size: 6rem; --glow-color: #c4b5fd; --float-speed: 4s;">🧠</span>
       </div>
       <span class="brain-label">AI Ethics & Safety</span>
-      <div class="insight-content" style="width: 280px;">
+      <div class="insight-content">
         <button class="insight-close" onclick="closeInsight(event)">×</button>
         <h3>The Responsibility Layer</h3>
         <p>As AI scales, the gap between capability and governance widens. Organizations that invest in ethical frameworks now will have competitive advantage later.</p>
@@ -351,10 +350,10 @@
     </div>
 
     <!-- Node 6: Federal Workforce -->
-    <div class="brain-node" data-id="federal" style="left: 25%; top: 45%;">
+    <div class="brain-node" data-id="federal" style="left: 20%; top: 38%;">
       <div class="brain-visual">
-        <div class="brain-glow" style="width: 100px; height: 100px; --glow-color: #60a5fa;"></div>
-        <span class="brain-icon" style="--brain-size: 3.2rem; --glow-color: #60a5fa; --float-speed: 6.5s;">🧠</span>
+        <div class="brain-glow" style="width: 140px; height: 140px; --glow-color: #60a5fa;"></div>
+        <span class="brain-icon" style="--brain-size: 6rem; --glow-color: #60a5fa; --float-speed: 6.5s;">🧠</span>
       </div>
       <span class="brain-label">Federal Workforce</span>
       <div class="insight-content">
@@ -365,10 +364,10 @@
     </div>
 
     <!-- Node 7: Economic Reality -->
-    <div class="brain-node" data-id="economy" style="left: 55%; top: 50%;">
+    <div class="brain-node" data-id="economy" style="left: 42%; top: 42%;">
       <div class="brain-visual">
-        <div class="brain-glow" style="width: 115px; height: 115px; --glow-color: #fbbf24;"></div>
-        <span class="brain-icon" style="--brain-size: 3.8rem; --glow-color: #fbbf24; --float-speed: 7.5s;">🧠</span>
+        <div class="brain-glow" style="width: 140px; height: 140px; --glow-color: #fbbf24;"></div>
+        <span class="brain-icon" style="--brain-size: 6rem; --glow-color: #fbbf24; --float-speed: 7.5s;">🧠</span>
       </div>
       <span class="brain-label">Economic Indicators</span>
       <div class="insight-content">
@@ -379,10 +378,10 @@
     </div>
 
     <!-- Node 8: Talent Strategy -->
-    <div class="brain-node" data-id="talent" style="left: 10%; top: 65%;">
+    <div class="brain-node" data-id="talent" style="left: 5%; top: 58%;">
       <div class="brain-visual">
-        <div class="brain-glow" style="width: 105px; height: 105px; --glow-color: #34d399;"></div>
-        <span class="brain-icon" style="--brain-size: 3.5rem; --glow-color: #34d399; --float-speed: 5.5s;">🧠</span>
+        <div class="brain-glow" style="width: 140px; height: 140px; --glow-color: #34d399;"></div>
+        <span class="brain-icon" style="--brain-size: 6rem; --glow-color: #34d399; --float-speed: 5.5s;">🧠</span>
       </div>
       <span class="brain-label">Talent Strategy</span>
       <div class="insight-content">
@@ -393,10 +392,10 @@
     </div>
 
     <!-- Node 9: Learning & Development -->
-    <div class="brain-node" data-id="learning" style="left: 40%; top: 72%;">
+    <div class="brain-node" data-id="learning" style="left: 30%; top: 65%;">
       <div class="brain-visual">
-        <div class="brain-glow" style="width: 95px; height: 95px; --glow-color: #a78bfa;"></div>
-        <span class="brain-icon" style="--brain-size: 3.2rem; --glow-color: #a78bfa; --float-speed: 6s;">🧠</span>
+        <div class="brain-glow" style="width: 140px; height: 140px; --glow-color: #a78bfa;"></div>
+        <span class="brain-icon" style="--brain-size: 6rem; --glow-color: #a78bfa; --float-speed: 6s;">🧠</span>
       </div>
       <span class="brain-label">Learning Evolution</span>
       <div class="insight-content">
@@ -407,10 +406,10 @@
     </div>
 
     <!-- Node 10: Competencies -->
-    <div class="brain-node" data-id="competencies" style="left: 70%; top: 68%;">
+    <div class="brain-node" data-id="competencies" style="left: 58%; top: 62%;">
       <div class="brain-visual">
-        <div class="brain-glow" style="width: 100px; height: 100px; --glow-color: #f472b6;"></div>
-        <span class="brain-icon" style="--brain-size: 3.4rem; --glow-color: #f472b6; --float-speed: 5s;">🧠</span>
+        <div class="brain-glow" style="width: 140px; height: 140px; --glow-color: #f472b6;"></div>
+        <span class="brain-icon" style="--brain-size: 6rem; --glow-color: #f472b6; --float-speed: 5s;">🧠</span>
       </div>
       <span class="brain-label">Competency Shift</span>
       <div class="insight-content">
@@ -430,7 +429,7 @@
     // Generate stars
     function createStars() {
       const starsContainer = document.getElementById('stars');
-      const starCount = 150;
+      const starCount = 350;
 
       for (let i = 0; i < starCount; i++) {
         const star = document.createElement('div');
@@ -452,22 +451,41 @@
       const container = document.getElementById('neural-container');
       const containerRect = container.getBoundingClientRect();
 
-      // Define connections (which nodes connect to which)
+      // Define connections (dense web - everything interconnected)
       const connections = [
+        // Top row connections
         ['compensation', 'jobmarket'],
         ['jobmarket', 'ai-main'],
-        ['jobmarket', 'economy'],
+        ['compensation', 'ai-main'],
+        // AI cluster
         ['ai-main', 'ai-skills'],
         ['ai-main', 'ai-ethics'],
-        ['ai-main', 'competencies'],
+        ['ai-skills', 'ai-ethics'],
+        // Middle connections
+        ['jobmarket', 'economy'],
+        ['jobmarket', 'federal'],
+        ['jobmarket', 'ai-ethics'],
+        ['compensation', 'federal'],
+        ['compensation', 'economy'],
         ['federal', 'economy'],
+        ['economy', 'ai-ethics'],
+        ['ai-ethics', 'competencies'],
+        ['ai-skills', 'competencies'],
+        // Bottom connections
         ['federal', 'talent'],
-        ['economy', 'compensation'],
         ['talent', 'learning'],
         ['learning', 'competencies'],
+        ['learning', 'economy'],
+        ['talent', 'economy'],
+        ['talent', 'compensation'],
         ['learning', 'ai-skills'],
-        ['competencies', 'ai-ethics'],
-        ['federal', 'jobmarket']
+        ['competencies', 'ai-main'],
+        ['federal', 'learning'],
+        // Cross connections for density
+        ['compensation', 'talent'],
+        ['economy', 'competencies'],
+        ['ai-main', 'economy'],
+        ['jobmarket', 'competencies']
       ];
 
       connections.forEach(([from, to]) => {
