@@ -1,0 +1,888 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>AI Fluency Journey | Practically Beta</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    .journey-wrapper {
+      position: relative;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* Immersive Scene - First Person View */
+    .immersive-scene {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 0;
+      overflow: hidden;
+    }
+
+    /* Sky gradient */
+    .sky {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 55%;
+      background: linear-gradient(180deg,
+        #d4e4ed 0%,
+        #e8d5e7 25%,
+        #f5e6e8 50%,
+        #fef6e4 100%
+      );
+    }
+
+    /* Sun */
+    .sun {
+      position: absolute;
+      top: 8%;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 100px;
+      height: 100px;
+      background: radial-gradient(circle,
+        rgba(255, 253, 240, 1) 0%,
+        rgba(255, 244, 214, 0.8) 30%,
+        rgba(255, 236, 179, 0.4) 50%,
+        transparent 70%
+      );
+      border-radius: 50%;
+    }
+
+    /* Distant mountains */
+    .mountains-far {
+      position: absolute;
+      top: 25%;
+      left: 0;
+      width: 100%;
+      height: 35%;
+    }
+
+    .mountains-far svg {
+      width: 100%;
+      height: 100%;
+    }
+
+    /* Ground/meadow */
+    .ground {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: 50%;
+      background: linear-gradient(180deg,
+        #b8cfb8 0%,
+        #9bc49b 20%,
+        #8ab88a 50%,
+        #7aab7a 100%
+      );
+    }
+
+    /* The path - perspective */
+    .trail {
+      position: absolute;
+      bottom: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 100%;
+      height: 50%;
+    }
+
+    .trail svg {
+      width: 100%;
+      height: 100%;
+    }
+
+    /* Checkpoint sign that appears */
+    .checkpoint-sign {
+      position: absolute;
+      top: 35%;
+      left: 50%;
+      transform: translateX(-50%);
+      text-align: center;
+      transition: all 0.8s ease;
+      opacity: 0;
+      z-index: 5;
+    }
+
+    .checkpoint-sign.visible {
+      opacity: 1;
+    }
+
+    .sign-post {
+      width: 8px;
+      height: 60px;
+      background: linear-gradient(180deg, #8b7355 0%, #6b5344 100%);
+      margin: 0 auto;
+      border-radius: 2px;
+    }
+
+    .sign-board {
+      background: linear-gradient(135deg, #faf6f0 0%, #f5efe6 100%);
+      border: 3px solid #8b7355;
+      border-radius: 6px;
+      padding: 12px 24px;
+      margin-bottom: -5px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    }
+
+    .sign-board.summit {
+      background: linear-gradient(135deg, #fff9e6 0%, #fef3d0 100%);
+      border-color: #c9a227;
+    }
+
+    .sign-text {
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: #5d4e37;
+      letter-spacing: 1px;
+    }
+
+    .sign-distance {
+      font-size: 0.8rem;
+      color: #8b7355;
+      margin-top: 4px;
+    }
+
+    /* Quiz Container - floating on the path */
+    .quiz-container {
+      position: relative;
+      z-index: 10;
+      background: rgba(255, 255, 255, 0.97);
+      border-radius: 24px;
+      box-shadow: 0 12px 50px rgba(0, 74, 173, 0.12);
+      padding: 32px 28px;
+      max-width: 560px;
+      width: 90%;
+      margin: auto;
+      margin-top: 25vh;
+      margin-bottom: 40px;
+      backdrop-filter: blur(10px);
+    }
+
+    .quiz-header {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    .quiz-header h1 {
+      color: #004aad;
+      font-size: 1.5rem;
+      margin-bottom: 6px;
+      letter-spacing: 0.5px;
+    }
+
+    .quiz-header .subtitle {
+      color: #9b8aa5;
+      font-size: 0.9rem;
+    }
+
+    /* Journey progress bar */
+    .journey-progress {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 24px;
+      padding: 16px 12px;
+      background: linear-gradient(135deg, #f8f6ff 0%, #f6faf8 100%);
+      border-radius: 16px;
+    }
+
+    .progress-step {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      flex: 1;
+      position: relative;
+    }
+
+    .progress-step:not(:last-child)::after {
+      content: '';
+      position: absolute;
+      top: 12px;
+      left: 60%;
+      width: 80%;
+      height: 3px;
+      background: #e0d8e8;
+      z-index: 0;
+    }
+
+    .progress-step.reached:not(:last-child)::after {
+      background: linear-gradient(90deg, #98d4bb 0%, #e0d8e8 100%);
+    }
+
+    .progress-step.completed:not(:last-child)::after {
+      background: #98d4bb;
+    }
+
+    .step-icon {
+      width: 26px;
+      height: 26px;
+      border-radius: 50%;
+      background: #e8e4ef;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.75rem;
+      color: #9b8aa5;
+      position: relative;
+      z-index: 1;
+      transition: all 0.5s ease;
+      border: 2px solid transparent;
+    }
+
+    .progress-step.current .step-icon {
+      background: #004aad;
+      color: #fff;
+      border-color: #004aad;
+      box-shadow: 0 0 0 4px rgba(0, 74, 173, 0.15);
+    }
+
+    .progress-step.reached .step-icon,
+    .progress-step.completed .step-icon {
+      background: #98d4bb;
+      color: #fff;
+      border-color: #5d9e7d;
+    }
+
+    .step-label {
+      font-size: 0.65rem;
+      color: #9b8aa5;
+      margin-top: 6px;
+      text-align: center;
+    }
+
+    .progress-step.current .step-label {
+      color: #004aad;
+      font-weight: 600;
+    }
+
+    .progress-step.reached .step-label,
+    .progress-step.completed .step-label {
+      color: #5d9e7d;
+    }
+
+    .progress-text {
+      text-align: center;
+      color: #9b8aa5;
+      font-size: 0.85rem;
+      margin-bottom: 18px;
+    }
+
+    .part-tag {
+      display: inline-block;
+      background: linear-gradient(135deg, #e8d5e7 0%, #d4e8e4 100%);
+      color: #6b5b7a;
+      font-size: 0.7rem;
+      padding: 4px 12px;
+      border-radius: 12px;
+      margin-bottom: 12px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .question {
+      font-size: 1.1rem;
+      color: #333;
+      margin-bottom: 20px;
+      line-height: 1.55;
+      font-weight: 500;
+    }
+
+    .options {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .option-btn {
+      font-family: inherit;
+      background: #fff;
+      color: #333;
+      border: 2px solid #e8e4ef;
+      border-radius: 12px;
+      font-size: 0.95rem;
+      padding: 14px 18px;
+      cursor: pointer;
+      transition: all 0.25s ease;
+      text-align: left;
+    }
+
+    .option-btn:hover {
+      border-color: #c9b8d4;
+      background: #faf8fc;
+      transform: translateX(4px);
+    }
+
+    .option-btn.correct {
+      background: linear-gradient(135deg, #e8f5e9 0%, #f1f8e9 100%);
+      border-color: #81c784;
+      color: #2e7d32;
+    }
+
+    .option-btn.incorrect {
+      background: linear-gradient(135deg, #ffebee 0%, #fce4ec 100%);
+      border-color: #e57373;
+      color: #c62828;
+    }
+
+    .option-btn:disabled {
+      cursor: default;
+      transform: none;
+    }
+
+    .feedback {
+      margin-top: 18px;
+      padding: 16px;
+      border-radius: 12px;
+      font-size: 0.9rem;
+      line-height: 1.5;
+      display: none;
+    }
+
+    .feedback.show {
+      display: block;
+      animation: fadeSlideUp 0.4s ease;
+    }
+
+    .feedback.correct {
+      background: linear-gradient(135deg, #e8f5e9 0%, #f1f8e9 100%);
+      color: #2e7d32;
+    }
+
+    .feedback.incorrect {
+      background: linear-gradient(135deg, #fff8f8 0%, #fff3f0 100%);
+      color: #b74a4a;
+    }
+
+    @keyframes fadeSlideUp {
+      from { opacity: 0; transform: translateY(12px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .next-btn {
+      margin-top: 16px;
+      background: linear-gradient(135deg, #004aad 0%, #3366bb 100%);
+      color: #fff;
+      border: none;
+      border-radius: 10px;
+      padding: 12px 24px;
+      font-size: 0.95rem;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      font-family: inherit;
+    }
+
+    .next-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(0, 74, 173, 0.25);
+    }
+
+    /* Results */
+    .result-container {
+      text-align: center;
+      padding: 10px 0;
+    }
+
+    .result-destination {
+      font-size: 0.85rem;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      color: #9b8aa5;
+      margin-bottom: 8px;
+    }
+
+    .result-container h2 {
+      color: #004aad;
+      font-size: 1.8rem;
+      margin-bottom: 16px;
+    }
+
+    .result-badge {
+      display: inline-block;
+      padding: 14px 28px;
+      background: linear-gradient(135deg, #e8f5e9 0%, #e3f2fd 100%);
+      border-radius: 20px;
+      margin-bottom: 20px;
+    }
+
+    .result-badge .location-icon {
+      font-size: 1.4rem;
+      margin-right: 8px;
+    }
+
+    .result-badge .location-name {
+      font-size: 1.1rem;
+      color: #3d6b4f;
+      font-weight: 600;
+    }
+
+    .result-message {
+      color: #555;
+      font-size: 0.95rem;
+      line-height: 1.65;
+      margin-bottom: 24px;
+      padding: 0 10px;
+    }
+
+    .result-score {
+      color: #9b8aa5;
+      font-size: 0.9rem;
+      margin-bottom: 20px;
+    }
+
+    .retake-btn {
+      background: #fff;
+      color: #004aad;
+      border: 2px solid #004aad;
+      border-radius: 12px;
+      padding: 12px 28px;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      font-family: inherit;
+    }
+
+    .retake-btn:hover {
+      background: #004aad;
+      color: #fff;
+    }
+
+    /* Responsive */
+    @media (max-width: 600px) {
+      .quiz-container {
+        padding: 24px 18px;
+        margin-top: 20vh;
+      }
+      .quiz-header h1 {
+        font-size: 1.25rem;
+      }
+      .step-label {
+        font-size: 0.55rem;
+      }
+      .checkpoint-sign {
+        top: 28%;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="journey-wrapper">
+    <!-- Immersive Background Scene -->
+    <div class="immersive-scene">
+      <div class="sky"></div>
+      <div class="sun"></div>
+
+      <!-- Distant Mountains -->
+      <div class="mountains-far">
+        <svg viewBox="0 0 1200 400" preserveAspectRatio="xMidYMax slice">
+          <!-- Far distant mountains -->
+          <path d="M-100 400 L150 180 L300 280 L450 120 L600 220 L750 100 L900 200 L1050 140 L1200 240 L1300 400 Z"
+                fill="#c8d5e0" opacity="0.5"/>
+
+          <!-- Mid mountains with snow -->
+          <path d="M-50 400 L200 150 L350 280 L500 100 L650 250 L800 130 L1000 220 L1250 400 Z"
+                fill="#9aafbe"/>
+          <!-- Snow caps -->
+          <path d="M500 100 L470 145 L500 140 L530 145 Z" fill="#fff"/>
+          <path d="M800 130 L770 170 L800 165 L830 170 Z" fill="#fff"/>
+
+          <!-- Front mountain range -->
+          <path d="M-100 400 L100 220 L250 320 L400 180 L600 300 L800 200 L1000 280 L1200 190 L1300 400 Z"
+                fill="#7a95a8"/>
+          <!-- Snow detail -->
+          <path d="M400 180 L375 215 L400 208 L425 215 Z" fill="#f0f5f8"/>
+        </svg>
+      </div>
+
+      <!-- Ground -->
+      <div class="ground"></div>
+
+      <!-- Trail in perspective -->
+      <div class="trail">
+        <svg viewBox="0 0 400 300" preserveAspectRatio="xMidYMax slice">
+          <!-- Path going toward horizon -->
+          <path d="M200 300
+                   Q200 250 195 200
+                   Q190 150 192 100
+                   Q194 60 200 30"
+                stroke="#a89080"
+                stroke-width="40"
+                fill="none"
+                stroke-linecap="round"
+                opacity="0.6"/>
+
+          <!-- Path center line (lighter) -->
+          <path d="M200 300
+                   Q200 250 195 200
+                   Q190 150 192 100
+                   Q194 60 200 30"
+                stroke="#c4b8a8"
+                stroke-width="20"
+                fill="none"
+                stroke-linecap="round"
+                stroke-dasharray="15 20"
+                opacity="0.7"/>
+
+          <!-- Wildflowers/grass along path -->
+          <circle cx="160" cy="280" r="3" fill="#d4a5a5" opacity="0.7"/>
+          <circle cx="245" cy="270" r="2.5" fill="#b8a5d4" opacity="0.7"/>
+          <circle cx="155" cy="250" r="2" fill="#d4a5a5" opacity="0.6"/>
+          <circle cx="250" cy="240" r="3" fill="#a5c4d4" opacity="0.6"/>
+          <circle cx="150" cy="220" r="2" fill="#b8d4a5" opacity="0.5"/>
+          <circle cx="252" cy="200" r="2.5" fill="#d4a5a5" opacity="0.5"/>
+        </svg>
+      </div>
+
+      <!-- Checkpoint Sign (appears dynamically) -->
+      <div class="checkpoint-sign" id="checkpoint-sign">
+        <div class="sign-board" id="sign-board">
+          <div class="sign-text" id="sign-text">First Overlook</div>
+          <div class="sign-distance" id="sign-distance">Ahead →</div>
+        </div>
+        <div class="sign-post"></div>
+      </div>
+    </div>
+
+    <!-- Quiz Container -->
+    <div class="quiz-container">
+      <div class="quiz-header">
+        <h1>Your AI Fluency Journey</h1>
+        <p class="subtitle">Practically Beta Capstone</p>
+      </div>
+
+      <!-- Journey Progress -->
+      <div class="journey-progress">
+        <div class="progress-step current" id="step-0">
+          <div class="step-icon">📍</div>
+          <span class="step-label">Start</span>
+        </div>
+        <div class="progress-step" id="step-1">
+          <div class="step-icon">1</div>
+          <span class="step-label">First Overlook</span>
+        </div>
+        <div class="progress-step" id="step-2">
+          <div class="step-icon">2</div>
+          <span class="step-label">Second Overlook</span>
+        </div>
+        <div class="progress-step" id="step-3">
+          <div class="step-icon">⛰</div>
+          <span class="step-label">Summit</span>
+        </div>
+      </div>
+
+      <div id="quiz">
+        <p class="progress-text">Question <span id="current-q">1</span> of <span id="total-q">8</span></p>
+        <div id="question-area"></div>
+      </div>
+
+      <div id="result" style="display:none;"></div>
+    </div>
+  </div>
+
+  <script>
+    const quizData = [
+      {
+        question: "You need to summarize a 20-page report quickly. What's the most effective approach?",
+        options: [
+          { text: "Paste the whole document and ask 'summarize this'", correct: false },
+          { text: "Break it into sections and ask AI to identify key points from each, then synthesize", correct: true },
+          { text: "Ask AI to read it and trust the summary completely", correct: false },
+          { text: "Don't use AI for important documents", correct: false }
+        ],
+        rationale: "Breaking complex tasks into steps gives AI clearer focus and gives you checkpoints to verify accuracy.",
+        part: "Prompts"
+      },
+      {
+        question: "What's the main difference between AI and traditional software?",
+        options: [
+          { text: "AI is always smarter", correct: false },
+          { text: "AI learns patterns from data rather than following fixed rules", correct: true },
+          { text: "AI doesn't make mistakes", correct: false },
+          { text: "AI can only answer questions", correct: false }
+        ],
+        rationale: "Traditional software follows explicit rules; AI identifies patterns in data to make predictions.",
+        part: "Basics"
+      },
+      {
+        question: "A coworker shares an AI-generated report full of confident claims. What should you do first?",
+        options: [
+          { text: "Forward it to leadership — AI is reliable", correct: false },
+          { text: "Verify key facts and check sources before sharing", correct: true },
+          { text: "Assume it's wrong because AI can't be trusted", correct: false },
+          { text: "Ask the AI if its own answer is correct", correct: false }
+        ],
+        rationale: "AI can hallucinate confidently. Verification is your responsibility, not optional.",
+        part: "Intention"
+      },
+      {
+        question: "Which persona setup would help AI write better content for busy executives?",
+        options: [
+          { text: "\"Be professional\"", correct: false },
+          { text: "\"You're a communications specialist who writes for time-pressed executives. Use clear headers, bullet points, and lead with the main takeaway.\"", correct: true },
+          { text: "\"Write formally\"", correct: false },
+          { text: "\"Be an executive\"", correct: false }
+        ],
+        rationale: "Effective personas include role, audience, and specific style guidance — not just tone words.",
+        part: "Personas"
+      },
+      {
+        question: "You're stuck on a creative project. How can AI help most effectively?",
+        options: [
+          { text: "Ask it to do the project for you", correct: false },
+          { text: "Use it to brainstorm options, then select and refine the best ideas yourself", correct: true },
+          { text: "Avoid AI for creative work entirely", correct: false },
+          { text: "Generate one idea and use it as-is", correct: false }
+        ],
+        rationale: "AI excels at expanding possibilities. Your judgment shapes which possibilities become reality.",
+        part: "Intention"
+      },
+      {
+        question: "What makes this prompt weak? \"Give me marketing ideas.\"",
+        options: [
+          { text: "It's too short", correct: false },
+          { text: "It lacks context about audience, goals, constraints, or format", correct: true },
+          { text: "Marketing isn't AI's strength", correct: false },
+          { text: "It should be a question", correct: false }
+        ],
+        rationale: "Vague prompts get generic answers. Context transforms generic into useful.",
+        part: "Prompts"
+      },
+      {
+        question: "Why should you define the intended audience when setting up a persona?",
+        options: [
+          { text: "It makes AI respond faster", correct: false },
+          { text: "It helps you evaluate whether the output's tone and depth are appropriate", correct: true },
+          { text: "AI requires it to function", correct: false },
+          { text: "It prevents errors completely", correct: false }
+        ],
+        rationale: "Knowing your audience helps you judge if AI's output actually fits who it's meant for.",
+        part: "Personas"
+      },
+      {
+        question: "What's the biggest risk of using AI without critical thinking?",
+        options: [
+          { text: "Slower responses", correct: false },
+          { text: "Higher costs", correct: false },
+          { text: "Amplifying bias, spreading misinformation, or losing your own skills", correct: true },
+          { text: "The AI will stop working", correct: false }
+        ],
+        rationale: "AI is a tool, not a replacement for judgment. Uncritical use can cause real harm.",
+        part: "Intention"
+      }
+    ];
+
+    const checkpoints = [
+      { name: "Start", threshold: 0, signText: "Your journey begins", icon: "📍" },
+      { name: "First Overlook", threshold: 3, signText: "First Overlook", icon: "🌄" },
+      { name: "Second Overlook", threshold: 5, signText: "Second Overlook", icon: "⛅" },
+      { name: "Summit", threshold: 7, signText: "The Summit", icon: "🏔" }
+    ];
+
+    const destinations = [
+      {
+        name: "Base Camp",
+        minCorrect: 0,
+        message: "Every journey starts somewhere. You've got the curiosity — now build the skills. Revisit the microlearnings and try again when ready."
+      },
+      {
+        name: "First Overlook",
+        minCorrect: 3,
+        message: "Nice climb! You're building real intuition for how AI works. The view is getting clearer — keep going."
+      },
+      {
+        name: "Second Overlook",
+        minCorrect: 5,
+        message: "Solid progress! You understand not just how to use AI, but how to use it well. The summit is within reach."
+      },
+      {
+        name: "The Summit",
+        minCorrect: 7,
+        message: "You made it to the top. Your fluency spans the full journey — from basics to intentional use. Time to help others find the trail."
+      }
+    ];
+
+    let currentQuestion = 0;
+    let correctAnswers = 0;
+    let answered = false;
+
+    const signElement = document.getElementById('checkpoint-sign');
+    const signBoard = document.getElementById('sign-board');
+    const signText = document.getElementById('sign-text');
+    const signDistance = document.getElementById('sign-distance');
+
+    function updateProgress() {
+      const steps = [
+        document.getElementById('step-0'),
+        document.getElementById('step-1'),
+        document.getElementById('step-2'),
+        document.getElementById('step-3')
+      ];
+
+      steps.forEach((step, index) => {
+        step.classList.remove('current', 'reached', 'completed');
+
+        if (correctAnswers >= checkpoints[index].threshold) {
+          if (index < 3 && correctAnswers >= checkpoints[index + 1].threshold) {
+            step.classList.add('completed');
+          } else {
+            step.classList.add('reached');
+          }
+        }
+      });
+
+      // Show current checkpoint
+      let currentCheckpoint = checkpoints[0];
+      for (let i = checkpoints.length - 1; i >= 0; i--) {
+        if (correctAnswers >= checkpoints[i].threshold) {
+          currentCheckpoint = checkpoints[i];
+          break;
+        }
+      }
+
+      // Update sign
+      const nextCheckpoint = checkpoints.find(c => c.threshold > correctAnswers) || checkpoints[checkpoints.length - 1];
+
+      if (correctAnswers > 0) {
+        signElement.classList.add('visible');
+        signText.textContent = nextCheckpoint.signText;
+        signDistance.textContent = nextCheckpoint.threshold <= correctAnswers ? "You've arrived ✓" : `${nextCheckpoint.threshold - correctAnswers} more to reach →`;
+
+        if (nextCheckpoint.name === "Summit") {
+          signBoard.classList.add('summit');
+        } else {
+          signBoard.classList.remove('summit');
+        }
+      }
+    }
+
+    function showQuestion() {
+      if (currentQuestion >= quizData.length) {
+        showResult();
+        return;
+      }
+
+      answered = false;
+      const q = quizData[currentQuestion];
+      document.getElementById('current-q').textContent = currentQuestion + 1;
+      document.getElementById('total-q').textContent = quizData.length;
+
+      document.getElementById('question-area').innerHTML = `
+        <div class="part-tag">From: ${q.part}</div>
+        <div class="question">${q.question}</div>
+        <div class="options" id="options">
+          ${q.options.map((opt, idx) =>
+            `<button class="option-btn" onclick="selectAnswer(${idx})">${opt.text}</button>`
+          ).join('')}
+        </div>
+        <div class="feedback" id="feedback"></div>
+      `;
+    }
+
+    window.selectAnswer = function(idx) {
+      if (answered) return;
+      answered = true;
+
+      const q = quizData[currentQuestion];
+      const buttons = document.querySelectorAll('.option-btn');
+      const feedback = document.getElementById('feedback');
+      const isCorrect = q.options[idx].correct;
+
+      buttons.forEach((btn, i) => {
+        btn.disabled = true;
+        if (q.options[i].correct) {
+          btn.classList.add('correct');
+        } else if (i === idx) {
+          btn.classList.add('incorrect');
+        }
+      });
+
+      if (isCorrect) {
+        correctAnswers++;
+        updateProgress();
+        feedback.className = 'feedback correct show';
+        feedback.innerHTML = `<strong>Correct!</strong> ${q.rationale}`;
+      } else {
+        feedback.className = 'feedback incorrect show';
+        feedback.innerHTML = `<strong>Not quite.</strong> ${q.rationale}`;
+      }
+
+      feedback.innerHTML += `<br><button class="next-btn" onclick="nextQuestion()">Continue →</button>`;
+    }
+
+    window.nextQuestion = function() {
+      currentQuestion++;
+      showQuestion();
+    }
+
+    function showResult() {
+      document.getElementById('quiz').style.display = 'none';
+      const resultDiv = document.getElementById('result');
+      resultDiv.style.display = 'block';
+
+      let destination = destinations[0];
+      for (let i = destinations.length - 1; i >= 0; i--) {
+        if (correctAnswers >= destinations[i].minCorrect) {
+          destination = destinations[i];
+          break;
+        }
+      }
+
+      // Final sign update
+      signText.textContent = destination.name;
+      signDistance.textContent = "You've arrived ✓";
+      signElement.classList.add('visible');
+      if (destination.name === "The Summit") {
+        signBoard.classList.add('summit');
+      }
+
+      resultDiv.innerHTML = `
+        <div class="result-container">
+          <div class="result-destination">Your destination</div>
+          <h2>${destination.name}</h2>
+          <div class="result-badge">
+            <span class="location-icon">📍</span>
+            <span class="location-name">${destination.name}</span>
+          </div>
+          <p class="result-message">${destination.message}</p>
+          <p class="result-score">${correctAnswers} of ${quizData.length} correct answers</p>
+          <button class="retake-btn" onclick="restartQuiz()">Start New Journey</button>
+        </div>
+      `;
+    }
+
+    window.restartQuiz = function() {
+      currentQuestion = 0;
+      correctAnswers = 0;
+      answered = false;
+      signElement.classList.remove('visible');
+      signBoard.classList.remove('summit');
+      updateProgress();
+      document.getElementById('quiz').style.display = 'block';
+      document.getElementById('result').style.display = 'none';
+      showQuestion();
+    }
+
+    // Start
+    showQuestion();
+  </script>
+</body>
+</html>
