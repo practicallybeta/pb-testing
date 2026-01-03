@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Share Feature Demo | Practically Beta</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      min-height: 100vh;
+      background: linear-gradient(135deg, #e8d5e7 0%, #d4e8e4 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    .container {
+      max-width: 500px;
+      width: 100%;
+      background: #fff;
+      border-radius: 20px;
+      box-shadow: 0 10px 40px rgba(0, 74, 173, 0.1);
+      padding: 36px 32px;
+    }
+
+    h1 {
+      color: #004aad;
+      font-size: 1.5rem;
+      text-align: center;
+      margin-bottom: 8px;
+    }
+
+    .subtitle {
+      color: #9b8aa5;
+      text-align: center;
+      font-size: 0.9rem;
+      margin-bottom: 28px;
+    }
+
+    .demo-note {
+      background: linear-gradient(135deg, #fff9e6 0%, #fef3d0 100%);
+      border: 1px solid #e6d9a8;
+      border-radius: 10px;
+      padding: 14px 18px;
+      margin-bottom: 24px;
+      font-size: 0.85rem;
+      color: #8b7355;
+    }
+
+    .result-box {
+      background: linear-gradient(135deg, #e8f5e9 0%, #e3f2fd 100%);
+      border-radius: 16px;
+      padding: 28px 24px;
+      text-align: center;
+      margin-bottom: 24px;
+    }
+
+    .result-icon {
+      font-size: 3rem;
+      margin-bottom: 12px;
+    }
+
+    .result-title {
+      color: #004aad;
+      font-size: 1.4rem;
+      margin-bottom: 8px;
+    }
+
+    .result-location {
+      color: #5d9e7d;
+      font-size: 1rem;
+      margin-bottom: 12px;
+    }
+
+    .result-message {
+      color: #555;
+      font-size: 0.95rem;
+      line-height: 1.5;
+    }
+
+    /* Share Section */
+    .share-section {
+      border-top: 1px solid #e8e4ef;
+      padding-top: 24px;
+    }
+
+    .share-label {
+      color: #7d6b7d;
+      font-size: 0.9rem;
+      text-align: center;
+      margin-bottom: 16px;
+    }
+
+    .share-buttons {
+      display: flex;
+      justify-content: center;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .share-btn {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 12px 20px;
+      border: none;
+      border-radius: 10px;
+      font-size: 0.9rem;
+      font-family: inherit;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      text-decoration: none;
+    }
+
+    .share-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    }
+
+    .share-btn.twitter {
+      background: #1DA1F2;
+      color: white;
+    }
+
+    .share-btn.linkedin {
+      background: #0A66C2;
+      color: white;
+    }
+
+    .share-btn.facebook {
+      background: #1877F2;
+      color: white;
+    }
+
+    .share-btn.copy {
+      background: #f0f0f0;
+      color: #333;
+      border: 1px solid #ddd;
+    }
+
+    .share-btn.copy.copied {
+      background: #d4edda;
+      color: #155724;
+      border-color: #c3e6cb;
+    }
+
+    /* Share icons using Unicode/emoji */
+    .share-icon {
+      font-size: 1.1rem;
+    }
+
+    /* Toast notification */
+    .toast {
+      position: fixed;
+      bottom: 30px;
+      left: 50%;
+      transform: translateX(-50%) translateY(100px);
+      background: #333;
+      color: white;
+      padding: 14px 28px;
+      border-radius: 10px;
+      font-size: 0.9rem;
+      opacity: 0;
+      transition: all 0.3s ease;
+      z-index: 1000;
+    }
+
+    .toast.show {
+      transform: translateX(-50%) translateY(0);
+      opacity: 1;
+    }
+
+    .retake-btn {
+      display: block;
+      width: 100%;
+      margin-top: 20px;
+      padding: 14px;
+      background: white;
+      color: #004aad;
+      border: 2px solid #004aad;
+      border-radius: 10px;
+      font-size: 1rem;
+      font-family: inherit;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .retake-btn:hover {
+      background: #004aad;
+      color: white;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>🎉 Journey Complete!</h1>
+    <p class="subtitle">AI Fluency Assessment</p>
+
+    <div class="demo-note">
+      <strong>Demo Note:</strong> This shows what the end of a quiz looks like with the "Share Your Result" feature. Click any share button to see how it works!
+    </div>
+
+    <div class="result-box">
+      <div class="result-icon">🏔️</div>
+      <div class="result-title">You reached the Summit!</div>
+      <div class="result-location">📍 The Summit</div>
+      <p class="result-message">Your AI fluency spans the full journey — from basics to intentional use. You're ready to lead others up the mountain.</p>
+    </div>
+
+    <div class="share-section">
+      <p class="share-label">Share your achievement:</p>
+      <div class="share-buttons">
+        <a href="#" class="share-btn twitter" onclick="shareTwitter(); return false;">
+          <span class="share-icon">𝕏</span>
+          <span>Twitter</span>
+        </a>
+        <a href="#" class="share-btn linkedin" onclick="shareLinkedIn(); return false;">
+          <span class="share-icon">in</span>
+          <span>LinkedIn</span>
+        </a>
+        <a href="#" class="share-btn facebook" onclick="shareFacebook(); return false;">
+          <span class="share-icon">f</span>
+          <span>Facebook</span>
+        </a>
+        <button class="share-btn copy" onclick="copyLink()">
+          <span class="share-icon">🔗</span>
+          <span>Copy Link</span>
+        </button>
+      </div>
+    </div>
+
+    <button class="retake-btn" onclick="alert('This would restart the quiz!')">Start New Journey</button>
+  </div>
+
+  <div class="toast" id="toast">Link copied to clipboard!</div>
+
+  <script>
+    // Configure these for each quiz
+    const QUIZ_URL = "https://practicallybeta.com/learning-hub/ai-fluency-journey";
+    const QUIZ_NAME = "Practically Beta's AI Fluency Journey";
+    const RESULT_TEXT = "I just reached the Summit on";
+
+    function getShareText() {
+      return `${RESULT_TEXT} ${QUIZ_NAME}! 🏔️ Test your AI fluency:`;
+    }
+
+    function shareTwitter() {
+      const text = encodeURIComponent(getShareText());
+      const url = encodeURIComponent(QUIZ_URL);
+      window.open(`https://twitter.com/intent/tweet?text=${text}&url=${url}`, '_blank', 'width=550,height=420');
+    }
+
+    function shareLinkedIn() {
+      const url = encodeURIComponent(QUIZ_URL);
+      window.open(`https://www.linkedin.com/sharing/share-offsite/?url=${url}`, '_blank', 'width=550,height=420');
+    }
+
+    function shareFacebook() {
+      const url = encodeURIComponent(QUIZ_URL);
+      window.open(`https://www.facebook.com/sharer/sharer.php?u=${url}`, '_blank', 'width=550,height=420');
+    }
+
+    function copyLink() {
+      const shareText = `${getShareText()} ${QUIZ_URL}`;
+      navigator.clipboard.writeText(shareText).then(() => {
+        // Update button
+        const btn = document.querySelector('.share-btn.copy');
+        btn.classList.add('copied');
+        btn.innerHTML = '<span class="share-icon">✓</span><span>Copied!</span>';
+
+        // Show toast
+        const toast = document.getElementById('toast');
+        toast.classList.add('show');
+
+        // Reset after 3 seconds
+        setTimeout(() => {
+          btn.classList.remove('copied');
+          btn.innerHTML = '<span class="share-icon">🔗</span><span>Copy Link</span>';
+          toast.classList.remove('show');
+        }, 3000);
+      });
+    }
+  </script>
+</body>
+</html>
