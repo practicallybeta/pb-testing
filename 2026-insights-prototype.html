@@ -95,7 +95,7 @@
       stroke: #4a90d9;
       stroke-width: 0.6;
       fill: none;
-      opacity: 0.25;
+      opacity: 0.32;
     }
 
     /* Header */
@@ -231,15 +231,16 @@
       left: 50%;
       transform: translateX(-50%);
       width: 320px;
-      background: #1a1230;
-      border: 2px solid rgba(167, 139, 250, 0.5);
+      background-color: #12101f;
+      border: 2px solid rgba(167, 139, 250, 0.6);
       border-radius: 16px;
       padding: 20px;
       opacity: 0;
       visibility: hidden;
       transition: all 0.3s ease;
-      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.9), 0 0 30px rgba(167, 139, 250, 0.2);
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 1), 0 0 30px rgba(167, 139, 250, 0.3);
       z-index: 1000;
+      isolation: isolate;
     }
 
     .brain-node.active .insight-content {
