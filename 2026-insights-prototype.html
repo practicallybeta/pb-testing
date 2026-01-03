@@ -92,10 +92,10 @@
     }
 
     .mesh-line {
-      stroke: url(#meshGradient);
-      stroke-width: 1.5;
+      stroke: #60a5fa;
+      stroke-width: 2;
       fill: none;
-      opacity: 0.6;
+      opacity: 0.7;
     }
 
     /* Header */
@@ -591,7 +591,7 @@
         }
       }
 
-      // Create connections between nearby nodes - MORE connections
+      // Create connections between nearby nodes - MUCH MORE connections
       for (let i = 0; i < nodes.length; i++) {
         for (let j = i + 1; j < nodes.length; j++) {
           const dist = Math.sqrt(
@@ -599,19 +599,20 @@
             Math.pow(nodes[i].y - nodes[j].y, 2)
           );
 
-          // Connect if close enough - more lenient threshold, less randomness
-          if (dist < 100 && Math.random() > 0.4) {
+          // Connect if close enough - very lenient, high probability
+          if (dist < 150 && Math.random() > 0.3) {
             const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
             line.setAttribute('x1', nodes[i].x);
             line.setAttribute('y1', nodes[i].y);
             line.setAttribute('x2', nodes[j].x);
             line.setAttribute('y2', nodes[j].y);
             line.setAttribute('class', 'mesh-line');
-            line.setAttribute('opacity', Math.random() * 0.4 + 0.3);
             svg.appendChild(line);
           }
         }
       }
+
+      console.log('Neural mesh created with', nodes.length, 'nodes');
     }
 
     // Draw connections between interactive brain nodes
