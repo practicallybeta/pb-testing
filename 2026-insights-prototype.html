@@ -1,0 +1,561 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>2026 Insights | Practically Beta</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      min-height: 100vh;
+      background: linear-gradient(135deg, #0a0a1a 0%, #1a1035 50%, #0d0d2b 100%);
+      overflow-x: hidden;
+      color: #fff;
+    }
+
+    /* Stars background */
+    .stars {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .star {
+      position: absolute;
+      background: white;
+      border-radius: 50%;
+      animation: twinkle var(--duration) ease-in-out infinite;
+      opacity: 0;
+    }
+
+    @keyframes twinkle {
+      0%, 100% { opacity: 0.2; transform: scale(1); }
+      50% { opacity: 0.8; transform: scale(1.2); }
+    }
+
+    /* Header */
+    .header {
+      text-align: center;
+      padding: 50px 20px 30px;
+      position: relative;
+      z-index: 10;
+    }
+
+    .header h1 {
+      font-size: 2.5rem;
+      background: linear-gradient(135deg, #a78bfa 0%, #60a5fa 50%, #f9a8d4 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 12px;
+    }
+
+    .header p {
+      color: #a5b4c4;
+      font-size: 1.1rem;
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    /* Neural Network Container */
+    .neural-container {
+      position: relative;
+      width: 100%;
+      max-width: 1200px;
+      height: 800px;
+      margin: 0 auto;
+      z-index: 10;
+    }
+
+    /* SVG Connections */
+    .connections {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    .connection-line {
+      stroke: url(#connectionGradient);
+      stroke-width: 1.5;
+      fill: none;
+      opacity: 0.4;
+      transition: opacity 0.3s ease;
+    }
+
+    .connection-line.highlight {
+      opacity: 0.8;
+      stroke-width: 2;
+    }
+
+    /* Brain Nodes */
+    .brain-node {
+      position: absolute;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      cursor: pointer;
+      z-index: 10;
+      transition: transform 0.3s ease;
+    }
+
+    .brain-node:hover {
+      transform: scale(1.08);
+    }
+
+    .brain-node:hover .brain-glow {
+      opacity: 0.6;
+    }
+
+    .brain-visual {
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .brain-glow {
+      position: absolute;
+      border-radius: 50%;
+      background: radial-gradient(circle, var(--glow-color) 0%, transparent 70%);
+      opacity: 0.3;
+      transition: opacity 0.3s ease;
+      animation: pulse var(--pulse-speed, 4s) ease-in-out infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); opacity: 0.3; }
+      50% { transform: scale(1.1); opacity: 0.5; }
+    }
+
+    .brain-icon {
+      font-size: var(--brain-size, 3rem);
+      z-index: 2;
+      filter: drop-shadow(0 0 10px var(--glow-color));
+      animation: float var(--float-speed, 6s) ease-in-out infinite;
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-8px); }
+    }
+
+    .brain-label {
+      margin-top: 12px;
+      font-size: 0.85rem;
+      color: #c4b5fd;
+      text-align: center;
+      max-width: 140px;
+      line-height: 1.4;
+      text-shadow: 0 2px 10px rgba(0,0,0,0.5);
+      transition: color 0.3s ease;
+    }
+
+    .brain-node:hover .brain-label {
+      color: #e9d5ff;
+    }
+
+    /* Sub-nodes (smaller) */
+    .brain-node.sub-node .brain-icon {
+      font-size: 2rem;
+    }
+
+    .brain-node.sub-node .brain-label {
+      font-size: 0.75rem;
+      max-width: 100px;
+    }
+
+    /* Expanded Content */
+    .insight-content {
+      position: absolute;
+      top: calc(100% + 20px);
+      left: 50%;
+      transform: translateX(-50%);
+      width: 320px;
+      background: linear-gradient(135deg, rgba(30, 20, 50, 0.95) 0%, rgba(20, 30, 60, 0.95) 100%);
+      border: 1px solid rgba(167, 139, 250, 0.3);
+      border-radius: 16px;
+      padding: 20px;
+      opacity: 0;
+      visibility: hidden;
+      transition: all 0.3s ease;
+      backdrop-filter: blur(10px);
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+      z-index: 100;
+    }
+
+    .brain-node.active .insight-content {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    .insight-content h3 {
+      color: #a78bfa;
+      font-size: 1rem;
+      margin-bottom: 10px;
+    }
+
+    .insight-content p {
+      color: #c4d4e4;
+      font-size: 0.9rem;
+      line-height: 1.6;
+    }
+
+    .insight-close {
+      position: absolute;
+      top: 10px;
+      right: 12px;
+      background: none;
+      border: none;
+      color: #8892a2;
+      font-size: 1.2rem;
+      cursor: pointer;
+      transition: color 0.2s;
+    }
+
+    .insight-close:hover {
+      color: #fff;
+    }
+
+    /* Footer */
+    .footer {
+      text-align: center;
+      padding: 40px 20px;
+      color: #6b7280;
+      font-size: 0.85rem;
+      position: relative;
+      z-index: 10;
+    }
+
+    .footer a {
+      color: #a78bfa;
+      text-decoration: none;
+    }
+
+    /* Responsive */
+    @media (max-width: 900px) {
+      .neural-container {
+        height: 1200px;
+      }
+      .header h1 {
+        font-size: 1.8rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Stars -->
+  <div class="stars" id="stars"></div>
+
+  <!-- Header -->
+  <div class="header">
+    <h1>2026 Insights</h1>
+    <p>Interconnected perspectives on AI, talent, and the systems shaping our future.</p>
+  </div>
+
+  <!-- Neural Network -->
+  <div class="neural-container" id="neural-container">
+    <!-- SVG Connections drawn by JS -->
+    <svg class="connections" id="connections">
+      <defs>
+        <linearGradient id="connectionGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+          <stop offset="0%" style="stop-color:#a78bfa;stop-opacity:0.6" />
+          <stop offset="50%" style="stop-color:#60a5fa;stop-opacity:0.8" />
+          <stop offset="100%" style="stop-color:#f9a8d4;stop-opacity:0.6" />
+        </linearGradient>
+      </defs>
+    </svg>
+
+    <!-- Brain Nodes -->
+    <!-- Node 1: Compensation -->
+    <div class="brain-node" data-id="compensation" style="left: 15%; top: 20%;">
+      <div class="brain-visual">
+        <div class="brain-glow" style="width: 100px; height: 100px; --glow-color: #a78bfa;"></div>
+        <span class="brain-icon" style="--brain-size: 3.5rem; --glow-color: #a78bfa; --float-speed: 5s;">🧠</span>
+      </div>
+      <span class="brain-label">"If I stay, will my pay go up?"</span>
+      <div class="insight-content">
+        <button class="insight-close" onclick="closeInsight(event)">×</button>
+        <h3>Compensation Outlook</h3>
+        <p>If you're in healthcare or construction, a tight labor supply will likely push employers to compensate appropriately. Unfortunately, white-collar and manufacturing workers will continue facing a tough job market, giving employers the advantage.</p>
+      </div>
+    </div>
+
+    <!-- Node 2: Job Market -->
+    <div class="brain-node" data-id="jobmarket" style="left: 50%; top: 10%;">
+      <div class="brain-visual">
+        <div class="brain-glow" style="width: 120px; height: 120px; --glow-color: #60a5fa;"></div>
+        <span class="brain-icon" style="--brain-size: 4rem; --glow-color: #60a5fa; --float-speed: 7s;">🧠</span>
+      </div>
+      <span class="brain-label">The Real Job Market</span>
+      <div class="insight-content">
+        <button class="insight-close" onclick="closeInsight(event)">×</button>
+        <h3>Beyond the Headlines</h3>
+        <p>Official numbers don't tell the full story. Payroll data has shown negative actual job growth for consecutive months while headlines report gains. The discrepancy matters for your career planning.</p>
+      </div>
+    </div>
+
+    <!-- Node 3: AI - Main Node -->
+    <div class="brain-node" data-id="ai-main" style="left: 82%; top: 18%;">
+      <div class="brain-visual">
+        <div class="brain-glow" style="width: 110px; height: 110px; --glow-color: #f9a8d4;"></div>
+        <span class="brain-icon" style="--brain-size: 3.8rem; --glow-color: #f9a8d4; --float-speed: 6s;">🧠</span>
+      </div>
+      <span class="brain-label">AI & Work</span>
+      <div class="insight-content">
+        <button class="insight-close" onclick="closeInsight(event)">×</button>
+        <h3>The AI Transformation</h3>
+        <p>AI isn't replacing jobs uniformly — it's reshaping what work looks like. The question isn't "will AI take my job?" but "how will AI change what my job requires?"</p>
+      </div>
+    </div>
+
+    <!-- Node 4: AI Sub-node 1 -->
+    <div class="brain-node sub-node" data-id="ai-skills" style="left: 92%; top: 35%;">
+      <div class="brain-visual">
+        <div class="brain-glow" style="width: 60px; height: 60px; --glow-color: #f9a8d4;"></div>
+        <span class="brain-icon" style="--brain-size: 2rem; --glow-color: #f9a8d4; --float-speed: 5s;">🧠</span>
+      </div>
+      <span class="brain-label">AI Fluency Gap</span>
+      <div class="insight-content" style="width: 280px;">
+        <button class="insight-close" onclick="closeInsight(event)">×</button>
+        <h3>The Skills Divide</h3>
+        <p>Those who learn to work WITH AI will accelerate. Those who resist will find themselves competing against augmented colleagues.</p>
+      </div>
+    </div>
+
+    <!-- Node 5: AI Sub-node 2 -->
+    <div class="brain-node sub-node" data-id="ai-ethics" style="left: 75%; top: 40%;">
+      <div class="brain-visual">
+        <div class="brain-glow" style="width: 60px; height: 60px; --glow-color: #c4b5fd;"></div>
+        <span class="brain-icon" style="--brain-size: 2rem; --glow-color: #c4b5fd; --float-speed: 4s;">🧠</span>
+      </div>
+      <span class="brain-label">AI Ethics & Safety</span>
+      <div class="insight-content" style="width: 280px;">
+        <button class="insight-close" onclick="closeInsight(event)">×</button>
+        <h3>The Responsibility Layer</h3>
+        <p>As AI scales, the gap between capability and governance widens. Organizations that invest in ethical frameworks now will have competitive advantage later.</p>
+      </div>
+    </div>
+
+    <!-- Node 6: Federal Workforce -->
+    <div class="brain-node" data-id="federal" style="left: 25%; top: 45%;">
+      <div class="brain-visual">
+        <div class="brain-glow" style="width: 100px; height: 100px; --glow-color: #60a5fa;"></div>
+        <span class="brain-icon" style="--brain-size: 3.2rem; --glow-color: #60a5fa; --float-speed: 6.5s;">🧠</span>
+      </div>
+      <span class="brain-label">Federal Workforce</span>
+      <div class="insight-content">
+        <button class="insight-close" onclick="closeInsight(event)">×</button>
+        <h3>Public Sector Exodus</h3>
+        <p>43% of federal workers are reconsidering public service. Mission-driven work is colliding with systemic dysfunction. The talent drain will reshape government capability for years.</p>
+      </div>
+    </div>
+
+    <!-- Node 7: Economic Reality -->
+    <div class="brain-node" data-id="economy" style="left: 55%; top: 50%;">
+      <div class="brain-visual">
+        <div class="brain-glow" style="width: 115px; height: 115px; --glow-color: #fbbf24;"></div>
+        <span class="brain-icon" style="--brain-size: 3.8rem; --glow-color: #fbbf24; --float-speed: 7.5s;">🧠</span>
+      </div>
+      <span class="brain-label">Economic Indicators</span>
+      <div class="insight-content">
+        <button class="insight-close" onclick="closeInsight(event)">×</button>
+        <h3>The Real Numbers</h3>
+        <p>Credit card delinquencies, BNPL usage, fast food spending patterns — tangential indicators tell a different story than official narratives. Follow the actual money.</p>
+      </div>
+    </div>
+
+    <!-- Node 8: Talent Strategy -->
+    <div class="brain-node" data-id="talent" style="left: 10%; top: 65%;">
+      <div class="brain-visual">
+        <div class="brain-glow" style="width: 105px; height: 105px; --glow-color: #34d399;"></div>
+        <span class="brain-icon" style="--brain-size: 3.5rem; --glow-color: #34d399; --float-speed: 5.5s;">🧠</span>
+      </div>
+      <span class="brain-label">Talent Strategy</span>
+      <div class="insight-content">
+        <button class="insight-close" onclick="closeInsight(event)">×</button>
+        <h3>Retention Over Recruitment</h3>
+        <p>In a shifting market, the smartest organizations are focusing on developing internal talent rather than competing for external hires. The war for talent is becoming the war for development.</p>
+      </div>
+    </div>
+
+    <!-- Node 9: Learning & Development -->
+    <div class="brain-node" data-id="learning" style="left: 40%; top: 72%;">
+      <div class="brain-visual">
+        <div class="brain-glow" style="width: 95px; height: 95px; --glow-color: #a78bfa;"></div>
+        <span class="brain-icon" style="--brain-size: 3.2rem; --glow-color: #a78bfa; --float-speed: 6s;">🧠</span>
+      </div>
+      <span class="brain-label">Learning Evolution</span>
+      <div class="insight-content">
+        <button class="insight-close" onclick="closeInsight(event)">×</button>
+        <h3>From Training to Transformation</h3>
+        <p>Traditional L&D is dying. Microlearning, just-in-time development, and AI-assisted skill building are replacing the annual training calendar.</p>
+      </div>
+    </div>
+
+    <!-- Node 10: Competencies -->
+    <div class="brain-node" data-id="competencies" style="left: 70%; top: 68%;">
+      <div class="brain-visual">
+        <div class="brain-glow" style="width: 100px; height: 100px; --glow-color: #f472b6;"></div>
+        <span class="brain-icon" style="--brain-size: 3.4rem; --glow-color: #f472b6; --float-speed: 5s;">🧠</span>
+      </div>
+      <span class="brain-label">Competency Shift</span>
+      <div class="insight-content">
+        <button class="insight-close" onclick="closeInsight(event)">×</button>
+        <h3>What Actually Matters</h3>
+        <p>Adaptability, systems thinking, and human-AI collaboration are becoming core competencies. Technical skills have a shorter half-life than ever.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <div class="footer">
+    <p>© 2026 <a href="https://practicallybeta.com">Practically Beta</a> | Thinking in beta. Building boldly.</p>
+  </div>
+
+  <script>
+    // Generate stars
+    function createStars() {
+      const starsContainer = document.getElementById('stars');
+      const starCount = 150;
+
+      for (let i = 0; i < starCount; i++) {
+        const star = document.createElement('div');
+        star.className = 'star';
+        star.style.left = Math.random() * 100 + '%';
+        star.style.top = Math.random() * 100 + '%';
+        star.style.width = (Math.random() * 2 + 1) + 'px';
+        star.style.height = star.style.width;
+        star.style.setProperty('--duration', (Math.random() * 3 + 2) + 's');
+        star.style.animationDelay = Math.random() * 5 + 's';
+        starsContainer.appendChild(star);
+      }
+    }
+
+    // Draw connections between nodes
+    function drawConnections() {
+      const svg = document.getElementById('connections');
+      const nodes = document.querySelectorAll('.brain-node');
+      const container = document.getElementById('neural-container');
+      const containerRect = container.getBoundingClientRect();
+
+      // Define connections (which nodes connect to which)
+      const connections = [
+        ['compensation', 'jobmarket'],
+        ['jobmarket', 'ai-main'],
+        ['jobmarket', 'economy'],
+        ['ai-main', 'ai-skills'],
+        ['ai-main', 'ai-ethics'],
+        ['ai-main', 'competencies'],
+        ['federal', 'economy'],
+        ['federal', 'talent'],
+        ['economy', 'compensation'],
+        ['talent', 'learning'],
+        ['learning', 'competencies'],
+        ['learning', 'ai-skills'],
+        ['competencies', 'ai-ethics'],
+        ['federal', 'jobmarket']
+      ];
+
+      connections.forEach(([from, to]) => {
+        const fromNode = document.querySelector(`[data-id="${from}"]`);
+        const toNode = document.querySelector(`[data-id="${to}"]`);
+
+        if (fromNode && toNode) {
+          const fromRect = fromNode.getBoundingClientRect();
+          const toRect = toNode.getBoundingClientRect();
+
+          const x1 = fromRect.left - containerRect.left + fromRect.width / 2;
+          const y1 = fromRect.top - containerRect.top + fromRect.height / 3;
+          const x2 = toRect.left - containerRect.left + toRect.width / 2;
+          const y2 = toRect.top - containerRect.top + toRect.height / 3;
+
+          const line = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+
+          // Create curved line
+          const midX = (x1 + x2) / 2;
+          const midY = (y1 + y2) / 2 - 30;
+          const d = `M ${x1} ${y1} Q ${midX} ${midY} ${x2} ${y2}`;
+
+          line.setAttribute('d', d);
+          line.setAttribute('class', 'connection-line');
+          line.setAttribute('data-from', from);
+          line.setAttribute('data-to', to);
+          svg.appendChild(line);
+        }
+      });
+    }
+
+    // Node click handling
+    document.querySelectorAll('.brain-node').forEach(node => {
+      node.addEventListener('click', function(e) {
+        if (e.target.classList.contains('insight-close')) return;
+
+        const wasActive = this.classList.contains('active');
+
+        // Close all others
+        document.querySelectorAll('.brain-node').forEach(n => n.classList.remove('active'));
+
+        // Toggle this one
+        if (!wasActive) {
+          this.classList.add('active');
+
+          // Highlight connected lines
+          const nodeId = this.dataset.id;
+          document.querySelectorAll('.connection-line').forEach(line => {
+            if (line.dataset.from === nodeId || line.dataset.to === nodeId) {
+              line.classList.add('highlight');
+            } else {
+              line.classList.remove('highlight');
+            }
+          });
+        } else {
+          document.querySelectorAll('.connection-line').forEach(line => {
+            line.classList.remove('highlight');
+          });
+        }
+      });
+    });
+
+    function closeInsight(e) {
+      e.stopPropagation();
+      const node = e.target.closest('.brain-node');
+      node.classList.remove('active');
+      document.querySelectorAll('.connection-line').forEach(line => {
+        line.classList.remove('highlight');
+      });
+    }
+
+    // Close when clicking outside
+    document.addEventListener('click', function(e) {
+      if (!e.target.closest('.brain-node')) {
+        document.querySelectorAll('.brain-node').forEach(n => n.classList.remove('active'));
+        document.querySelectorAll('.connection-line').forEach(line => {
+          line.classList.remove('highlight');
+        });
+      }
+    });
+
+    // Initialize
+    createStars();
+    setTimeout(drawConnections, 100);
+    window.addEventListener('resize', () => {
+      document.querySelectorAll('.connection-line').forEach(l => l.remove());
+      drawConnections();
+    });
+  </script>
+</body>
+</html>
