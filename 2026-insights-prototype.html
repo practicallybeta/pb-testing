@@ -67,14 +67,14 @@
       100% { transform: translateX(-700px) translateY(400px); opacity: 0; }
     }
 
-    /* Dense neural mesh background */
+    /* Neural mesh background - wider to cover all brains */
     .neural-mesh {
       position: fixed;
       top: 50%;
       left: 50%;
       transform: translate(-50%, -50%);
-      width: 1200px;
-      height: 900px;
+      width: 1600px;
+      height: 1000px;
       pointer-events: none;
       z-index: 1;
       opacity: 1;
@@ -93,9 +93,9 @@
 
     .mesh-line {
       stroke: #4a90d9;
-      stroke-width: 0.8;
+      stroke-width: 0.6;
       fill: none;
-      opacity: 0.35;
+      opacity: 0.25;
     }
 
     /* Header */
@@ -310,8 +310,8 @@
   <!-- Stars -->
   <div class="stars" id="stars"></div>
 
-  <!-- Dense Neural Mesh Background - v2 -->
-  <svg class="neural-mesh" id="neural-mesh" viewBox="0 0 1200 900" preserveAspectRatio="xMidYMid meet">
+  <!-- Neural Mesh Background - wider coverage -->
+  <svg class="neural-mesh" id="neural-mesh" viewBox="0 0 1600 1000" preserveAspectRatio="xMidYMid meet">
     <defs>
       <linearGradient id="meshGradient" x1="0%" y1="0%" x2="100%" y2="100%">
         <stop offset="0%" style="stop-color:#60a5fa;stop-opacity:0.5" />
@@ -547,24 +547,25 @@
     // Fire one immediately so user sees it
     setTimeout(createShootingStar, 1500);
 
-    // Generate subtle neural mesh background
+    // Generate subtle, wide neural mesh background
     function createNeuralMesh() {
       const svg = document.getElementById('neural-mesh');
-      const width = 1200;
-      const height = 900;
-      const nodeCount = 200;
+      const width = 1600;
+      const height = 1000;
+      const nodeCount = 150;
       const nodes = [];
 
-      // Create nodes in brain-like distribution - more organic shape
+      // Create nodes spread wider across the entire area
       for (let i = 0; i < nodeCount; i++) {
         const angle = Math.random() * Math.PI * 2;
-        const radiusX = (Math.random() * 0.45 + 0.2) * width * 0.38;
-        const radiusY = (Math.random() * 0.45 + 0.2) * height * 0.35;
+        // Wider spread to cover all brain positions
+        const radiusX = (Math.random() * 0.5 + 0.2) * width * 0.45;
+        const radiusY = (Math.random() * 0.5 + 0.2) * height * 0.42;
 
-        const x = width / 2 + Math.cos(angle) * radiusX + (Math.random() - 0.5) * 100;
-        const y = height / 2 + Math.sin(angle) * radiusY * 0.85 + (Math.random() - 0.5) * 80;
+        const x = width / 2 + Math.cos(angle) * radiusX + (Math.random() - 0.5) * 200;
+        const y = height / 2 + Math.sin(angle) * radiusY * 0.9 + (Math.random() - 0.5) * 150;
 
-        if (x > 100 && x < width - 100 && y > 100 && y < height - 100) {
+        if (x > 50 && x < width - 50 && y > 50 && y < height - 50) {
           nodes.push({ x, y });
 
           // Create small node dots
@@ -572,25 +573,25 @@
           circle.setAttribute('cx', x);
           circle.setAttribute('cy', y);
 
-          // Smaller nodes
-          const size = Math.random() * 2.5 + 1;
+          // Small nodes
+          const size = Math.random() * 2 + 1;
           circle.setAttribute('r', size);
 
-          // Colorful nodes for that rainbow effect
+          // Colorful nodes
           const colors = ['#60a5fa', '#a78bfa', '#f472b6', '#fbbf24', '#34d399', '#f9a8d4', '#fb923c'];
           const color = colors[Math.floor(Math.random() * colors.length)];
           circle.setAttribute('fill', color);
-          circle.setAttribute('opacity', Math.random() * 0.5 + 0.4);
+          circle.setAttribute('opacity', Math.random() * 0.4 + 0.3);
 
           // Subtle pulse
-          circle.style.animation = `meshPulse ${Math.random() * 4 + 3}s ease-in-out infinite`;
-          circle.style.animationDelay = Math.random() * 3 + 's';
+          circle.style.animation = `meshPulse ${Math.random() * 5 + 4}s ease-in-out infinite`;
+          circle.style.animationDelay = Math.random() * 4 + 's';
 
           svg.appendChild(circle);
         }
       }
 
-      // Create connections - more selective, creating web pattern
+      // Create connections - sparse, subtle web
       for (let i = 0; i < nodes.length; i++) {
         for (let j = i + 1; j < nodes.length; j++) {
           const dist = Math.sqrt(
@@ -598,8 +599,8 @@
             Math.pow(nodes[i].y - nodes[j].y, 2)
           );
 
-          // Connect nearby nodes with lower probability for cleaner look
-          if (dist < 120 && Math.random() > 0.55) {
+          // Sparse connections for subtle background effect
+          if (dist < 150 && Math.random() > 0.65) {
             const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
             line.setAttribute('x1', nodes[i].x);
             line.setAttribute('y1', nodes[i].y);
