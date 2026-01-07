@@ -798,28 +798,28 @@
       <!-- Climbing Path with markers -->
       <div class="climbing-path" id="climbing-path">
         <svg viewBox="0 0 100 100" preserveAspectRatio="none">
-          <!-- Trail path - stays on mountain terrain -->
-          <path class="trail-line" d="M 8,88 L 15,82 L 22,76 L 28,70 L 35,64 L 40,58 L 45,52 L 50,46 L 55,40 L 58,35 L 62,30" />
+          <!-- Trail path - goes up the actual mountain (center-right) -->
+          <path class="trail-line" d="M 5,92 L 15,85 L 25,78 L 35,72 L 42,66 L 50,58 L 58,50 L 65,44 L 72,38 L 78,33 L 83,28" />
 
-          <!-- Position markers (0-10) - on the mountain -->
-          <circle class="path-marker" id="marker-0" cx="8" cy="88" r="1.2" />
-          <circle class="path-marker" id="marker-1" cx="15" cy="82" r="1" />
-          <circle class="path-marker" id="marker-2" cx="22" cy="76" r="1" />
-          <circle class="path-marker" id="marker-3" cx="28" cy="70" r="1" />
-          <circle class="path-marker" id="marker-4" cx="35" cy="64" r="1.2" /> <!-- Overlook 1 -->
-          <circle class="path-marker" id="marker-5" cx="40" cy="58" r="1" />
-          <circle class="path-marker" id="marker-6" cx="45" cy="52" r="1.2" /> <!-- Overlook 2 -->
-          <circle class="path-marker" id="marker-7" cx="50" cy="46" r="1" />
-          <circle class="path-marker" id="marker-8" cx="55" cy="40" r="1.2" /> <!-- Overlook 3 -->
-          <circle class="path-marker" id="marker-9" cx="58" cy="35" r="1" />
-          <circle class="path-marker" id="marker-10" cx="62" cy="30" r="1.5" /> <!-- Summit -->
+          <!-- Position markers (0-10) - on the mountain terrain -->
+          <circle class="path-marker" id="marker-0" cx="5" cy="92" r="1.2" />
+          <circle class="path-marker" id="marker-1" cx="15" cy="85" r="1" />
+          <circle class="path-marker" id="marker-2" cx="25" cy="78" r="1" />
+          <circle class="path-marker" id="marker-3" cx="35" cy="72" r="1" />
+          <circle class="path-marker" id="marker-4" cx="42" cy="66" r="1.2" /> <!-- Overlook 1 -->
+          <circle class="path-marker" id="marker-5" cx="50" cy="58" r="1" />
+          <circle class="path-marker" id="marker-6" cx="58" cy="50" r="1.2" /> <!-- Overlook 2 -->
+          <circle class="path-marker" id="marker-7" cx="65" cy="44" r="1" />
+          <circle class="path-marker" id="marker-8" cx="72" cy="38" r="1.2" /> <!-- Overlook 3 -->
+          <circle class="path-marker" id="marker-9" cx="78" cy="33" r="1" />
+          <circle class="path-marker" id="marker-10" cx="83" cy="28" r="1.5" /> <!-- Summit -->
         </svg>
 
-        <!-- Flag markers at overlooks -->
-        <div class="flag-marker" id="flag-4" style="position:absolute; left:35%; top:64%;">🚩</div>
-        <div class="flag-marker" id="flag-6" style="position:absolute; left:45%; top:52%;">🚩</div>
-        <div class="flag-marker" id="flag-8" style="position:absolute; left:55%; top:40%;">🚩</div>
-        <div class="flag-marker summit-flag" id="flag-10" style="position:absolute; left:62%; top:30%;">🏁</div>
+        <!-- Flag markers at overlooks - positioned on the mountain -->
+        <div class="flag-marker" id="flag-4" style="position:absolute; left:42%; top:66%;">🚩</div>
+        <div class="flag-marker" id="flag-6" style="position:absolute; left:58%; top:50%;">🚩</div>
+        <div class="flag-marker" id="flag-8" style="position:absolute; left:72%; top:38%;">🚩</div>
+        <div class="flag-marker summit-flag" id="flag-10" style="position:absolute; left:83%; top:28%;">🏁</div>
       </div>
 
       <!-- Climber -->
@@ -1346,19 +1346,19 @@
     ];
 
     // Path positions for climber (x%, y% from top of scene)
-    // Adjusted to stay ON the mountain terrain
+    // Path goes UP the actual mountain terrain (which is center-right)
     const pathPositions = [
-      { x: 8, y: 88 },    // 0 - Start (bottom left on grass)
-      { x: 15, y: 82 },   // 1
-      { x: 22, y: 76 },   // 2
-      { x: 28, y: 70 },   // 3
-      { x: 35, y: 64 },   // 4 - Overlook 1 (on first mountain slope)
-      { x: 40, y: 58 },   // 5
-      { x: 45, y: 52 },   // 6 - Overlook 2 (mid mountain)
-      { x: 50, y: 46 },   // 7
-      { x: 55, y: 40 },   // 8 - Overlook 3 (upper mountain)
-      { x: 58, y: 35 },   // 9
-      { x: 62, y: 30 }    // 10 - Summit (peak area)
+      { x: 5, y: 92 },    // 0 - Start (bottom left on grass)
+      { x: 15, y: 85 },   // 1 - moving toward mountain
+      { x: 25, y: 78 },   // 2 - on lower front slope
+      { x: 35, y: 72 },   // 3 - climbing front mountain
+      { x: 42, y: 66 },   // 4 - Overlook 1 (on front peak area)
+      { x: 50, y: 58 },   // 5 - transitioning to mid mountain
+      { x: 58, y: 50 },   // 6 - Overlook 2 (mid mountain)
+      { x: 65, y: 44 },   // 7 - climbing higher
+      { x: 72, y: 38 },   // 8 - Overlook 3 (upper mountain near snow)
+      { x: 78, y: 33 },   // 9 - approaching summit
+      { x: 83, y: 28 }    // 10 - Summit (at the snowy peak!)
     ];
 
     const positionLabels = [
