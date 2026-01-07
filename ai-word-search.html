@@ -244,6 +244,62 @@
       margin-bottom: 20px;
     }
 
+    .retry-btn {
+      background: linear-gradient(135deg, #a78bfa 0%, #60a5fa 100%);
+      color: white;
+      border: none;
+      padding: 12px 30px;
+      border-radius: 8px;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    .retry-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(167, 139, 250, 0.4);
+    }
+
+    /* Start Button */
+    .start-btn {
+      display: block;
+      width: 100%;
+      background: linear-gradient(135deg, #a78bfa 0%, #60a5fa 100%);
+      color: white;
+      border: none;
+      padding: 14px 30px;
+      border-radius: 8px;
+      font-size: 1.1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: transform 0.2s, box-shadow 0.2s;
+      margin-bottom: 15px;
+    }
+
+    .start-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(167, 139, 250, 0.4);
+    }
+
+    .start-btn.hidden {
+      display: none;
+    }
+
+    /* Timer */
+    .timer {
+      text-align: center;
+      font-size: 1.5rem;
+      font-weight: 600;
+      color: #60a5fa;
+      margin-bottom: 15px;
+      font-family: 'Courier New', monospace;
+    }
+
+    .timer.hidden {
+      display: none;
+    }
+
     /* Share Section */
     .share-section {
       position: relative;
@@ -344,8 +400,8 @@
 
   <!-- Header -->
   <div class="header">
-    <h1>AI Word Search</h1>
-    <p>Find all 15 AI and workforce terms hidden in the grid. Words can go in any direction!</p>
+    <h1>PB Brain Break: Find the Buzz Words</h1>
+    <p>Think you know AI and workforce lingo? Find all 15 terms hiding in the grid. Words can go in any direction—just like the future of work.</p>
   </div>
 
   <!-- Game -->
@@ -355,6 +411,8 @@
     </div>
 
     <div class="word-list-container">
+      <button class="start-btn" id="start-btn" onclick="startGame()">Start</button>
+      <div class="timer hidden" id="timer">0:00</div>
       <h2>Find These Words</h2>
       <div class="word-list" id="word-list"></div>
       <div class="progress">
@@ -368,8 +426,9 @@
 
   <!-- Victory -->
   <div class="victory" id="victory">
-    <h2>You Found Them All!</h2>
-    <p>Nice work navigating the AI landscape. Share your victory!</p>
+    <h2>🧠 Brain Unlocked. Puzzle Cracked.</h2>
+    <p>You just outsmarted the AI grid.<br>Share your win. Challenge your network. Think in beta.</p>
+    <button class="retry-btn" onclick="retryPuzzle()">Play Again</button>
   </div>
 
   <!-- Share Section -->
@@ -427,10 +486,59 @@
     let selecting = false;
     let selectedCells = [];
     let startCell = null;
+    let timerInterval = null;
+    let elapsedSeconds = 0;
 
     // Initialize
     function init() {
       createStars();
+      generateGrid();
+      renderGrid();
+      renderWordList();
+      updateProgress();
+      // Timer starts when user clicks Start button
+    }
+
+    // Start game - called when Start button clicked
+    function startGame() {
+      document.getElementById('start-btn').classList.add('hidden');
+      document.getElementById('timer').classList.remove('hidden');
+      startTimer();
+    }
+
+    // Timer functions
+    function startTimer() {
+      elapsedSeconds = 0;
+      updateTimerDisplay();
+      timerInterval = setInterval(() => {
+        elapsedSeconds++;
+        updateTimerDisplay();
+      }, 1000);
+    }
+
+    function stopTimer() {
+      if (timerInterval) {
+        clearInterval(timerInterval);
+        timerInterval = null;
+      }
+    }
+
+    function updateTimerDisplay() {
+      const minutes = Math.floor(elapsedSeconds / 60);
+      const seconds = elapsedSeconds % 60;
+      document.getElementById('timer').textContent = `${minutes}:${seconds.toString().padStart(2, '0')}`;
+    }
+
+    // Retry function
+    function retryPuzzle() {
+      stopTimer();
+      foundWords.clear();
+      wordPositions = {};
+      document.getElementById('victory').classList.remove('show');
+      document.getElementById('word-list').innerHTML = '';
+      document.getElementById('start-btn').classList.remove('hidden');
+      document.getElementById('timer').classList.add('hidden');
+      document.getElementById('timer').textContent = '0:00';
       generateGrid();
       renderGrid();
       renderWordList();
@@ -596,6 +704,7 @@
         updateProgress();
 
         if (foundWords.size === WORDS.length) {
+          stopTimer();
           document.getElementById('victory').classList.add('show');
         }
       }
