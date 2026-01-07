@@ -636,14 +636,33 @@
           cell.addEventListener('touchstart', (e) => {
             e.preventDefault();
             startSelection(r, c, e);
-          });
+          }, { passive: false });
 
           gridEl.appendChild(cell);
         }
       }
 
+      // Mouse events
       document.addEventListener('mouseup', endSelection);
+
+      // Touch events - need touchmove to track finger drag
+      document.addEventListener('touchmove', handleTouchMove, { passive: false });
       document.addEventListener('touchend', endSelection);
+    }
+
+    // Handle touch drag - find which cell finger is over
+    function handleTouchMove(e) {
+      if (!selecting) return;
+      e.preventDefault();
+
+      const touch = e.touches[0];
+      const element = document.elementFromPoint(touch.clientX, touch.clientY);
+
+      if (element && element.classList.contains('cell')) {
+        const row = parseInt(element.dataset.row);
+        const col = parseInt(element.dataset.col);
+        continueSelection(row, col);
+      }
     }
 
     function startSelection(row, col, e) {
