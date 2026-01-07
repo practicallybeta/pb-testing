@@ -178,50 +178,95 @@
       );
     }
 
-    /* Trail */
-    .trail {
+    /* Climbing Path */
+    .climbing-path {
       position: absolute;
       bottom: 0;
-      left: 50%;
-      transform: translateX(-50%);
-      width: 80%;
-      height: 50%;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
     }
 
-    /* Checkpoint marker */
-    .checkpoint-marker {
+    .climbing-path svg {
+      width: 100%;
+      height: 100%;
+    }
+
+    /* Path trail line */
+    .trail-line {
+      fill: none;
+      stroke: rgba(255, 255, 255, 0.4);
+      stroke-width: 3;
+      stroke-dasharray: 8, 6;
+    }
+
+    /* Position markers on path */
+    .path-marker {
+      fill: rgba(255, 255, 255, 0.6);
+      transition: all 0.3s ease;
+    }
+
+    .path-marker.reached {
+      fill: #98d4bb;
+    }
+
+    .path-marker.current {
+      fill: #004aad;
+      filter: drop-shadow(0 0 6px rgba(0, 74, 173, 0.5));
+    }
+
+    /* Flag markers */
+    .flag-marker {
+      font-size: 1.2rem;
+      transition: transform 0.3s ease;
+    }
+
+    .flag-marker.reached {
+      animation: flagCelebrate 0.5s ease;
+    }
+
+    @keyframes flagCelebrate {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.3); }
+    }
+
+    /* Summit flag - bigger */
+    .summit-flag {
+      font-size: 1.8rem;
+    }
+
+    /* Climber marker */
+    .climber {
       position: absolute;
-      bottom: 30%;
-      left: 50%;
-      transform: translateX(-50%);
-      text-align: center;
-      opacity: 0;
-      transition: opacity 0.5s ease;
-      z-index: 10;
+      font-size: 1.5rem;
+      transition: all 0.6s ease-out;
+      filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3));
+      z-index: 20;
     }
 
-    .checkpoint-marker.visible {
-      opacity: 1;
+    .climber.celebrating {
+      animation: climberBounce 0.5s ease;
     }
 
-    .checkpoint-flag {
-      font-size: 3rem;
-      animation: flagWave 2s ease-in-out infinite;
+    @keyframes climberBounce {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-10px); }
     }
 
-    @keyframes flagWave {
-      0%, 100% { transform: rotate(-5deg); }
-      50% { transform: rotate(5deg); }
-    }
-
-    .checkpoint-label {
+    /* Current position label */
+    .position-label {
+      position: absolute;
       background: rgba(255, 255, 255, 0.95);
-      padding: 8px 16px;
-      border-radius: 20px;
+      padding: 6px 12px;
+      border-radius: 16px;
+      font-size: 0.75rem;
       font-weight: 600;
       color: #2d5a3d;
-      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-      margin-top: 10px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+      white-space: nowrap;
+      transition: all 0.6s ease-out;
+      z-index: 15;
     }
 
     /* Quiz Panel - Right Side */
@@ -750,11 +795,38 @@
 
       <div class="ground"></div>
 
-      <!-- Checkpoint Marker -->
-      <div class="checkpoint-marker" id="checkpoint-marker">
-        <div class="checkpoint-flag">🚩</div>
-        <div class="checkpoint-label" id="checkpoint-label">First Overlook</div>
+      <!-- Climbing Path with markers -->
+      <div class="climbing-path" id="climbing-path">
+        <svg viewBox="0 0 400 500" preserveAspectRatio="xMidYMax meet">
+          <!-- Trail path - winds up the mountain -->
+          <path class="trail-line" d="M 50,480 Q 80,440 120,420 T 160,380 T 140,340 T 180,300 T 160,260 T 200,220 T 180,180 T 220,140 T 200,100 T 240,60" />
+
+          <!-- Position markers (0-10) -->
+          <circle class="path-marker" id="marker-0" cx="50" cy="480" r="6" />
+          <circle class="path-marker" id="marker-1" cx="120" cy="420" r="5" />
+          <circle class="path-marker" id="marker-2" cx="160" cy="380" r="5" />
+          <circle class="path-marker" id="marker-3" cx="140" cy="340" r="5" />
+          <circle class="path-marker" id="marker-4" cx="180" cy="300" r="6" /> <!-- Overlook 1 -->
+          <circle class="path-marker" id="marker-5" cx="160" cy="260" r="5" />
+          <circle class="path-marker" id="marker-6" cx="200" cy="220" r="6" /> <!-- Overlook 2 -->
+          <circle class="path-marker" id="marker-7" cx="180" cy="180" r="5" />
+          <circle class="path-marker" id="marker-8" cx="220" cy="140" r="6" /> <!-- Overlook 3 -->
+          <circle class="path-marker" id="marker-9" cx="200" cy="100" r="5" />
+          <circle class="path-marker" id="marker-10" cx="240" cy="60" r="8" /> <!-- Summit -->
+        </svg>
+
+        <!-- Flag markers at overlooks -->
+        <div class="flag-marker" id="flag-4" style="position:absolute; left:43%; top:56%;">🚩</div>
+        <div class="flag-marker" id="flag-6" style="position:absolute; left:48%; top:40%;">🚩</div>
+        <div class="flag-marker" id="flag-8" style="position:absolute; left:53%; top:24%;">🚩</div>
+        <div class="flag-marker summit-flag" id="flag-10" style="position:absolute; left:58%; top:8%;">🏁</div>
       </div>
+
+      <!-- Climber -->
+      <div class="climber" id="climber">🧗</div>
+
+      <!-- Position Label -->
+      <div class="position-label" id="position-label">Start</div>
     </div>
 
     <!-- Quiz Panel -->
@@ -774,13 +846,17 @@
         </div>
         <div class="progress-step" id="step-1">
           <div class="step-icon">1</div>
-          <span class="step-label">First Overlook</span>
+          <span class="step-label">Overlook 1</span>
         </div>
         <div class="progress-step" id="step-2">
           <div class="step-icon">2</div>
-          <span class="step-label">Second Overlook</span>
+          <span class="step-label">Overlook 2</span>
         </div>
         <div class="progress-step" id="step-3">
+          <div class="step-icon">3</div>
+          <span class="step-label">Overlook 3</span>
+        </div>
+        <div class="progress-step" id="step-4">
           <div class="step-icon">⛰</div>
           <span class="step-label">Summit</span>
         </div>
@@ -1263,9 +1339,30 @@
 
     const checkpoints = [
       { name: "Trailhead", threshold: 0, sky: "dawn", emoji: "📍", message: "Your journey begins" },
-      { name: "First Overlook", threshold: 3, sky: "morning", emoji: "🌄", message: "The mist is clearing. You're building real intuition for how AI works." },
+      { name: "First Overlook", threshold: 4, sky: "morning", emoji: "🌄", message: "The mist is clearing. You're building real intuition for how AI works." },
       { name: "Second Overlook", threshold: 6, sky: "golden", emoji: "⛅", message: "The golden hour. Your understanding is deepening with every step." },
-      { name: "The Summit", threshold: 9, sky: "summit", emoji: "🏔️", message: "You made it. The view from here? You're ready to lead others up the mountain." }
+      { name: "Third Overlook", threshold: 8, sky: "golden", emoji: "🏔", message: "Almost there! The summit is in sight. Your AI fluency is taking shape." },
+      { name: "The Summit", threshold: 10, sky: "summit", emoji: "🏁", message: "You made it. The view from here? You're ready to lead others up the mountain." }
+    ];
+
+    // Path positions for climber (x%, y% from bottom-left of scene)
+    const pathPositions = [
+      { x: 12, y: 96 },   // 0 - Start
+      { x: 28, y: 84 },   // 1
+      { x: 38, y: 76 },   // 2
+      { x: 33, y: 68 },   // 3
+      { x: 43, y: 60 },   // 4 - Overlook 1
+      { x: 38, y: 52 },   // 5
+      { x: 48, y: 44 },   // 6 - Overlook 2
+      { x: 43, y: 36 },   // 7
+      { x: 53, y: 28 },   // 8 - Overlook 3
+      { x: 48, y: 20 },   // 9
+      { x: 58, y: 12 }    // 10 - Summit
+    ];
+
+    const positionLabels = [
+      "Start", "Q1", "Q2", "Q3", "First Overlook",
+      "Q5", "Second Overlook", "Q7", "Third Overlook", "Q9", "The Summit"
     ];
 
     const partNames = {
@@ -1362,6 +1459,56 @@
       celestial.className = 'celestial ' + skyClass;
     }
 
+    // ============================================
+    // CLIMBER MOVEMENT
+    // ============================================
+
+    function updateClimberPosition(position, celebrate = false) {
+      const climber = document.getElementById('climber');
+      const label = document.getElementById('position-label');
+      const pos = pathPositions[position];
+
+      // Move climber
+      climber.style.left = pos.x + '%';
+      climber.style.bottom = (100 - pos.y) + '%';
+
+      // Move label (slightly offset from climber)
+      label.style.left = (pos.x + 5) + '%';
+      label.style.bottom = (100 - pos.y + 5) + '%';
+      label.textContent = positionLabels[position];
+
+      // Update path markers
+      for (let i = 0; i <= 10; i++) {
+        const marker = document.getElementById('marker-' + i);
+        if (marker) {
+          marker.classList.remove('reached', 'current');
+          if (i < position) {
+            marker.classList.add('reached');
+          } else if (i === position) {
+            marker.classList.add('current');
+          }
+        }
+      }
+
+      // Update flag markers
+      [4, 6, 8, 10].forEach(flagPos => {
+        const flag = document.getElementById('flag-' + flagPos);
+        if (flag) {
+          if (position >= flagPos) {
+            flag.classList.add('reached');
+          } else {
+            flag.classList.remove('reached');
+          }
+        }
+      });
+
+      // Celebration animation
+      if (celebrate) {
+        climber.classList.add('celebrating');
+        setTimeout(() => climber.classList.remove('celebrating'), 500);
+      }
+    }
+
     function getCurrentCheckpointIndex() {
       for (let i = checkpoints.length - 1; i >= 0; i--) {
         if (correctAnswers >= checkpoints[i].threshold) {
@@ -1381,7 +1528,8 @@
         // Update sky
         updateSky(checkpoint.sky);
 
-        // Show celebration if not at start
+        // Show celebration if at overlook (not start or summit)
+        // Summit celebration happens in showResult()
         if (currentIdx > 0 && currentIdx < checkpoints.length - 1) {
           showCheckpointCelebration(checkpoint);
           return true; // Checkpoint reached
@@ -1396,11 +1544,6 @@
       document.getElementById('overlay-title').textContent = checkpoint.name + ' Reached!';
       document.getElementById('overlay-message').textContent = checkpoint.message;
       overlay.classList.add('show');
-
-      // Update marker
-      const marker = document.getElementById('checkpoint-marker');
-      document.getElementById('checkpoint-label').textContent = checkpoint.name;
-      marker.classList.add('visible');
     }
 
     function closeOverlay() {
@@ -1416,7 +1559,8 @@
         document.getElementById('step-0'),
         document.getElementById('step-1'),
         document.getElementById('step-2'),
-        document.getElementById('step-3')
+        document.getElementById('step-3'),
+        document.getElementById('step-4')
       ];
 
       const currentCheckpointIdx = getCurrentCheckpointIndex();
@@ -1448,7 +1592,6 @@
       document.getElementById('total-q').textContent = currentQuestions.length;
 
       document.getElementById('question-area').innerHTML = `
-        <div class="part-tag">${partNames[q.part] || q.part}</div>
         <div class="question">${q.question}</div>
         <div class="options" id="options">
           ${q.options.map((opt, idx) =>
@@ -1480,6 +1623,7 @@
       if (isCorrect) {
         correctAnswers++;
         updateProgressBar();
+        updateClimberPosition(correctAnswers, true); // Move climber with celebration
         feedback.className = 'feedback correct show';
         feedback.innerHTML = `<strong>Correct!</strong> ${q.rationale}`;
       } else {
@@ -1530,10 +1674,8 @@
       // Update sky for final state
       updateSky(checkpoint.sky);
 
-      // Update marker
-      const marker = document.getElementById('checkpoint-marker');
-      document.getElementById('checkpoint-label').textContent = checkpoint.name;
-      marker.classList.add('visible');
+      // Update climber to final position
+      updateClimberPosition(correctAnswers, isSummit);
 
       // Save progress
       saveProgress();
@@ -1647,8 +1789,8 @@
 
       updateSky('dawn');
       updateProgressBar();
+      updateClimberPosition(0); // Reset climber to start
 
-      document.getElementById('checkpoint-marker').classList.remove('visible');
       document.getElementById('quiz').style.display = 'block';
       document.getElementById('result').style.display = 'none';
 
@@ -1664,6 +1806,7 @@
       showWelcomeBack();
       currentQuestions = selectQuestions();
       updateProgressBar();
+      updateClimberPosition(0); // Start at position 0
       showQuestion();
     }
 
