@@ -196,9 +196,9 @@
     /* Path trail line */
     .trail-line {
       fill: none;
-      stroke: rgba(255, 255, 255, 0.4);
-      stroke-width: 3;
-      stroke-dasharray: 8, 6;
+      stroke: rgba(255, 255, 255, 0.5);
+      stroke-width: 1.5;
+      stroke-dasharray: 4, 3;
     }
 
     /* Position markers on path */
@@ -775,20 +775,21 @@
       <div class="sky dawn" id="sky"></div>
       <div class="celestial dawn" id="celestial"></div>
 
-      <!-- Mountains -->
+      <!-- Mountains - Made larger to meet the climbing path -->
       <div class="mountains">
-        <svg viewBox="0 0 800 400" preserveAspectRatio="xMidYMax slice">
-          <!-- Far mountains -->
-          <path d="M-50 400 L100 180 L200 280 L350 120 L500 220 L650 100 L800 200 L850 400 Z"
+        <svg viewBox="0 0 800 500" preserveAspectRatio="xMidYMax slice">
+          <!-- Far mountains - taller -->
+          <path d="M-50 500 L50 200 L150 320 L280 80 L400 200 L520 50 L650 180 L780 100 L850 500 Z"
                 fill="#9aafbe" opacity="0.6"/>
-          <!-- Mid mountains -->
-          <path d="M-50 400 L150 200 L280 300 L400 150 L550 280 L700 180 L850 400 Z"
+          <!-- Mid mountains - main climbing mountain, much taller -->
+          <path d="M-50 500 L100 280 L200 380 L350 120 L480 280 L600 80 L750 220 L850 500 Z"
                 fill="#7a95a8"/>
-          <!-- Snow caps -->
-          <path d="M400 150 L375 190 L400 185 L425 190 Z" fill="#fff" opacity="0.9"/>
-          <path d="M650 100 L625 140 L650 135 L675 140 Z" fill="#fff" opacity="0.9"/>
+          <!-- Snow caps - repositioned for taller peaks -->
+          <path d="M350 120 L320 180 L350 170 L380 180 Z" fill="#fff" opacity="0.9"/>
+          <path d="M600 80 L565 150 L600 140 L635 150 Z" fill="#fff" opacity="0.9"/>
+          <path d="M520 50 L490 120 L520 110 L550 120 Z" fill="#fff" opacity="0.9"/>
           <!-- Front mountains -->
-          <path d="M-50 400 L80 280 L180 350 L300 240 L450 330 L600 260 L750 320 L850 400 Z"
+          <path d="M-50 500 L80 350 L180 420 L300 300 L420 380 L550 320 L700 380 L850 500 Z"
                 fill="#5a7a6a"/>
         </svg>
       </div>
@@ -801,18 +802,18 @@
           <!-- Trail path - goes up the actual mountain (center-right) -->
           <path class="trail-line" d="M 5,92 L 15,85 L 25,78 L 35,72 L 42,66 L 50,58 L 58,50 L 65,44 L 72,38 L 78,33 L 83,28" />
 
-          <!-- Position markers (0-10) - on the mountain terrain -->
-          <circle class="path-marker" id="marker-0" cx="5" cy="92" r="1.2" />
-          <circle class="path-marker" id="marker-1" cx="15" cy="85" r="1" />
-          <circle class="path-marker" id="marker-2" cx="25" cy="78" r="1" />
-          <circle class="path-marker" id="marker-3" cx="35" cy="72" r="1" />
-          <circle class="path-marker" id="marker-4" cx="42" cy="66" r="1.2" /> <!-- Overlook 1 -->
-          <circle class="path-marker" id="marker-5" cx="50" cy="58" r="1" />
-          <circle class="path-marker" id="marker-6" cx="58" cy="50" r="1.2" /> <!-- Overlook 2 -->
-          <circle class="path-marker" id="marker-7" cx="65" cy="44" r="1" />
-          <circle class="path-marker" id="marker-8" cx="72" cy="38" r="1.2" /> <!-- Overlook 3 -->
-          <circle class="path-marker" id="marker-9" cx="78" cy="33" r="1" />
-          <circle class="path-marker" id="marker-10" cx="83" cy="28" r="1.5" /> <!-- Summit -->
+          <!-- Position markers (0-10) - smaller dots on the path -->
+          <circle class="path-marker" id="marker-0" cx="5" cy="92" r="0.8" />
+          <circle class="path-marker" id="marker-1" cx="15" cy="85" r="0.6" />
+          <circle class="path-marker" id="marker-2" cx="25" cy="78" r="0.6" />
+          <circle class="path-marker" id="marker-3" cx="35" cy="72" r="0.6" />
+          <circle class="path-marker" id="marker-4" cx="42" cy="66" r="0.8" /> <!-- Overlook 1 -->
+          <circle class="path-marker" id="marker-5" cx="50" cy="58" r="0.6" />
+          <circle class="path-marker" id="marker-6" cx="58" cy="50" r="0.8" /> <!-- Overlook 2 -->
+          <circle class="path-marker" id="marker-7" cx="65" cy="44" r="0.6" />
+          <circle class="path-marker" id="marker-8" cx="72" cy="38" r="0.8" /> <!-- Overlook 3 -->
+          <circle class="path-marker" id="marker-9" cx="78" cy="33" r="0.6" />
+          <circle class="path-marker" id="marker-10" cx="83" cy="28" r="1" /> <!-- Summit -->
         </svg>
 
         <!-- Flag markers at overlooks - positioned on the mountain -->
