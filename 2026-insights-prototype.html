@@ -802,11 +802,46 @@
         const wasActive = this.classList.contains('active');
 
         // Close all others
-        document.querySelectorAll('.brain-node').forEach(n => n.classList.remove('active'));
+        document.querySelectorAll('.brain-node').forEach(n => {
+          n.classList.remove('active');
+          const content = n.querySelector('.insight-content');
+          if (content) {
+            content.style.left = '';
+            content.style.right = '';
+            content.style.transform = '';
+          }
+        });
 
         // Toggle this one
         if (!wasActive) {
           this.classList.add('active');
+
+          // Check if popup would overflow and adjust position
+          const content = this.querySelector('.insight-content');
+          if (content) {
+            // Reset styles first
+            content.style.left = '50%';
+            content.style.right = '';
+            content.style.transform = 'translateX(-50%)';
+
+            // Wait for render then check bounds
+            requestAnimationFrame(() => {
+              const rect = content.getBoundingClientRect();
+              const viewportWidth = window.innerWidth;
+
+              if (rect.right > viewportWidth - 20) {
+                // Popup overflows right - anchor to right side
+                content.style.left = 'auto';
+                content.style.right = '0';
+                content.style.transform = 'none';
+              } else if (rect.left < 20) {
+                // Popup overflows left - anchor to left side
+                content.style.left = '0';
+                content.style.right = 'auto';
+                content.style.transform = 'none';
+              }
+            });
+          }
 
           // Highlight connected lines
           const nodeId = this.dataset.id;

@@ -261,6 +261,31 @@
       box-shadow: 0 8px 20px rgba(167, 139, 250, 0.4);
     }
 
+    /* Start Button */
+    .start-btn {
+      display: block;
+      width: 100%;
+      background: linear-gradient(135deg, #a78bfa 0%, #60a5fa 100%);
+      color: white;
+      border: none;
+      padding: 14px 30px;
+      border-radius: 8px;
+      font-size: 1.1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: transform 0.2s, box-shadow 0.2s;
+      margin-bottom: 15px;
+    }
+
+    .start-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(167, 139, 250, 0.4);
+    }
+
+    .start-btn.hidden {
+      display: none;
+    }
+
     /* Timer */
     .timer {
       text-align: center;
@@ -269,6 +294,10 @@
       color: #60a5fa;
       margin-bottom: 15px;
       font-family: 'Courier New', monospace;
+    }
+
+    .timer.hidden {
+      display: none;
     }
 
     /* Share Section */
@@ -382,7 +411,8 @@
     </div>
 
     <div class="word-list-container">
-      <div class="timer" id="timer">0:00</div>
+      <button class="start-btn" id="start-btn" onclick="startGame()">Start</button>
+      <div class="timer hidden" id="timer">0:00</div>
       <h2>Find These Words</h2>
       <div class="word-list" id="word-list"></div>
       <div class="progress">
@@ -466,6 +496,13 @@
       renderGrid();
       renderWordList();
       updateProgress();
+      // Timer starts when user clicks Start button
+    }
+
+    // Start game - called when Start button clicked
+    function startGame() {
+      document.getElementById('start-btn').classList.add('hidden');
+      document.getElementById('timer').classList.remove('hidden');
       startTimer();
     }
 
@@ -499,11 +536,13 @@
       wordPositions = {};
       document.getElementById('victory').classList.remove('show');
       document.getElementById('word-list').innerHTML = '';
+      document.getElementById('start-btn').classList.remove('hidden');
+      document.getElementById('timer').classList.add('hidden');
+      document.getElementById('timer').textContent = '0:00';
       generateGrid();
       renderGrid();
       renderWordList();
       updateProgress();
-      startTimer();
     }
 
     // Create stars background
