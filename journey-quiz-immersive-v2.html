@@ -1,0 +1,1858 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>AI Fluency Journey | Practically Beta</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* Split Layout */
+    .journey-wrapper {
+      display: flex;
+      min-height: 100vh;
+    }
+
+    /* Immersive Scene - Left Side */
+    .immersive-scene {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 60%;
+      height: 100%;
+      z-index: 0;
+      overflow: hidden;
+      transition: all 1.5s ease;
+    }
+
+    /* Sky gradients for different times of day */
+    .sky {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      transition: background 1.5s ease;
+    }
+
+    /* Dawn - Start */
+    .sky.dawn {
+      background: linear-gradient(180deg,
+        #2d1b4e 0%,
+        #4a3a6e 20%,
+        #8b6a9e 40%,
+        #d4a5b9 60%,
+        #f5d6c6 80%,
+        #fef0e1 100%
+      );
+    }
+
+    /* Morning - First Overlook */
+    .sky.morning {
+      background: linear-gradient(180deg,
+        #87CEEB 0%,
+        #98d4e4 25%,
+        #b8e4e8 50%,
+        #d4ece8 75%,
+        #fef6e4 100%
+      );
+    }
+
+    /* Golden Hour - Second Overlook */
+    .sky.golden {
+      background: linear-gradient(180deg,
+        #4a90a4 0%,
+        #7ab8c4 20%,
+        #f5d76e 50%,
+        #f7a951 75%,
+        #f08c4a 100%
+      );
+    }
+
+    /* Bright Summit */
+    .sky.summit {
+      background: linear-gradient(180deg,
+        #1e90ff 0%,
+        #63b8ff 30%,
+        #87CEEB 60%,
+        #b0e0e6 80%,
+        #f0ffff 100%
+      );
+    }
+
+    /* Sun/Moon */
+    .celestial {
+      position: absolute;
+      border-radius: 50%;
+      transition: all 1.5s ease;
+    }
+
+    .celestial.dawn {
+      top: 75%;
+      left: 30%;
+      width: 80px;
+      height: 80px;
+      background: radial-gradient(circle,
+        rgba(255, 200, 150, 1) 0%,
+        rgba(255, 150, 100, 0.8) 30%,
+        rgba(255, 100, 50, 0.4) 60%,
+        transparent 70%
+      );
+    }
+
+    .celestial.morning {
+      top: 20%;
+      left: 25%;
+      width: 100px;
+      height: 100px;
+      background: radial-gradient(circle,
+        rgba(255, 253, 240, 1) 0%,
+        rgba(255, 244, 214, 0.8) 40%,
+        rgba(255, 236, 179, 0.3) 60%,
+        transparent 70%
+      );
+    }
+
+    .celestial.golden {
+      top: 50%;
+      left: 20%;
+      width: 120px;
+      height: 120px;
+      background: radial-gradient(circle,
+        rgba(255, 200, 100, 1) 0%,
+        rgba(255, 160, 50, 0.8) 30%,
+        rgba(255, 120, 0, 0.4) 50%,
+        transparent 70%
+      );
+    }
+
+    .celestial.summit {
+      top: 10%;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 100px;
+      height: 100px;
+      background: radial-gradient(circle,
+        rgba(255, 255, 255, 1) 0%,
+        rgba(255, 255, 240, 0.9) 30%,
+        rgba(255, 250, 200, 0.5) 50%,
+        transparent 70%
+      );
+    }
+
+    /* Mountains Container - THIS IS THE KEY */
+    .mountains {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: 70%;
+    }
+
+    .mountains svg {
+      width: 100%;
+      height: 100%;
+    }
+
+    /* Ground/meadow */
+    .ground {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: 25%;
+      background: linear-gradient(180deg,
+        #7aab7a 0%,
+        #6a9b6a 50%,
+        #5a8b5a 100%
+      );
+    }
+
+    /* Climbing Path - NOW MATCHES MOUNTAINS EXACTLY */
+    .climbing-path {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: 70%;  /* SAME as mountains! */
+      pointer-events: none;
+    }
+
+    .climbing-path svg {
+      width: 100%;
+      height: 100%;
+    }
+
+    /* Path trail line */
+    .trail-line {
+      fill: none;
+      stroke: rgba(255, 255, 255, 0.6);
+      stroke-width: 3;
+      stroke-dasharray: 8, 6;
+      stroke-linecap: round;
+    }
+
+    /* Position markers on path */
+    .path-marker {
+      fill: rgba(255, 255, 255, 0.5);
+      transition: all 0.3s ease;
+    }
+
+    .path-marker.reached {
+      fill: #98d4bb;
+    }
+
+    .path-marker.current {
+      fill: #004aad;
+      filter: drop-shadow(0 0 4px rgba(0, 74, 173, 0.6));
+    }
+
+    /* Overlook markers - slightly larger */
+    .path-marker.overlook {
+      fill: rgba(255, 255, 255, 0.7);
+    }
+
+    .path-marker.summit-marker {
+      fill: rgba(255, 215, 0, 0.8);
+    }
+
+    /* Flag markers */
+    .flag-marker {
+      position: absolute;
+      font-size: 1.1rem;
+      transition: transform 0.3s ease;
+      filter: drop-shadow(0 1px 2px rgba(0,0,0,0.3));
+    }
+
+    .flag-marker.reached {
+      animation: flagCelebrate 0.5s ease;
+    }
+
+    @keyframes flagCelebrate {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.3); }
+    }
+
+    /* Summit flag - bigger */
+    .summit-flag {
+      font-size: 1.6rem;
+    }
+
+    /* Climber marker */
+    .climber {
+      position: absolute;
+      font-size: 1.4rem;
+      transition: all 0.6s ease-out;
+      filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3));
+      z-index: 20;
+    }
+
+    .climber.celebrating {
+      animation: climberBounce 0.5s ease;
+    }
+
+    @keyframes climberBounce {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-10px); }
+    }
+
+    /* Current position label */
+    .position-label {
+      position: absolute;
+      background: rgba(255, 255, 255, 0.95);
+      padding: 5px 10px;
+      border-radius: 12px;
+      font-size: 0.7rem;
+      font-weight: 600;
+      color: #2d5a3d;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+      white-space: nowrap;
+      transition: all 0.6s ease-out;
+      z-index: 15;
+    }
+
+    /* Quiz Panel - Right Side */
+    .quiz-panel {
+      position: relative;
+      margin-left: 60%;
+      width: 40%;
+      min-height: 100vh;
+      background: rgba(255, 255, 255, 0.98);
+      padding: 30px;
+      z-index: 10;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .quiz-header {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    .quiz-header h1 {
+      color: #004aad;
+      font-size: 1.5rem;
+      margin-bottom: 6px;
+    }
+
+    .quiz-header .subtitle {
+      color: #9b8aa5;
+      font-size: 0.9rem;
+    }
+
+    .welcome-back {
+      background: linear-gradient(135deg, #e8f5e9 0%, #e3f2fd 100%);
+      padding: 12px 16px;
+      border-radius: 12px;
+      margin-bottom: 16px;
+      text-align: center;
+      color: #2d5a3d;
+      font-size: 0.9rem;
+    }
+
+    /* Journey Progress */
+    .journey-progress {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 24px;
+      padding: 16px 12px;
+      background: linear-gradient(135deg, #f8f6ff 0%, #f6faf8 100%);
+      border-radius: 16px;
+    }
+
+    .progress-step {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      flex: 1;
+      position: relative;
+    }
+
+    .progress-step:not(:last-child)::after {
+      content: '';
+      position: absolute;
+      top: 13px;
+      left: 60%;
+      width: 80%;
+      height: 3px;
+      background: #e0d8e8;
+      z-index: 0;
+    }
+
+    .progress-step.completed:not(:last-child)::after {
+      background: #98d4bb;
+    }
+
+    .progress-step.current:not(:last-child)::after {
+      background: linear-gradient(90deg, #98d4bb 0%, #e0d8e8 100%);
+    }
+
+    .step-icon {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      background: #e8e4ef;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.8rem;
+      color: #9b8aa5;
+      position: relative;
+      z-index: 1;
+      transition: all 0.5s ease;
+    }
+
+    .progress-step.current .step-icon {
+      background: #004aad;
+      color: #fff;
+      box-shadow: 0 0 0 4px rgba(0, 74, 173, 0.15);
+    }
+
+    .progress-step.completed .step-icon {
+      background: #98d4bb;
+      color: #fff;
+    }
+
+    .step-label {
+      font-size: 0.6rem;
+      color: #9b8aa5;
+      margin-top: 6px;
+      text-align: center;
+    }
+
+    .progress-step.current .step-label {
+      color: #004aad;
+      font-weight: 600;
+    }
+
+    .progress-step.completed .step-label {
+      color: #5d9e7d;
+    }
+
+    /* Question area */
+    .progress-text {
+      text-align: center;
+      color: #9b8aa5;
+      font-size: 0.85rem;
+      margin-bottom: 16px;
+    }
+
+    .part-tag {
+      display: inline-block;
+      background: linear-gradient(135deg, #e8d5e7 0%, #d4e8e4 100%);
+      color: #6b5b7a;
+      font-size: 0.7rem;
+      padding: 4px 12px;
+      border-radius: 12px;
+      margin-bottom: 12px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .question {
+      font-size: 1.05rem;
+      color: #333;
+      margin-bottom: 20px;
+      line-height: 1.55;
+      font-weight: 500;
+    }
+
+    .options {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .option-btn {
+      font-family: inherit;
+      background: #fff;
+      color: #333;
+      border: 2px solid #e8e4ef;
+      border-radius: 12px;
+      font-size: 0.9rem;
+      padding: 14px 16px;
+      cursor: pointer;
+      transition: all 0.25s ease;
+      text-align: left;
+    }
+
+    .option-btn:hover:not(:disabled) {
+      border-color: #c9b8d4;
+      background: #faf8fc;
+      transform: translateX(4px);
+    }
+
+    .option-btn.correct {
+      background: linear-gradient(135deg, #e8f5e9 0%, #f1f8e9 100%);
+      border-color: #81c784;
+      color: #2e7d32;
+    }
+
+    .option-btn.incorrect {
+      background: linear-gradient(135deg, #ffebee 0%, #fce4ec 100%);
+      border-color: #e57373;
+      color: #c62828;
+    }
+
+    .option-btn:disabled {
+      cursor: default;
+      transform: none;
+    }
+
+    .feedback {
+      margin-top: 18px;
+      padding: 16px;
+      border-radius: 12px;
+      font-size: 0.85rem;
+      line-height: 1.5;
+      display: none;
+    }
+
+    .feedback.show {
+      display: block;
+      animation: fadeSlideUp 0.4s ease;
+    }
+
+    .feedback.correct {
+      background: linear-gradient(135deg, #e8f5e9 0%, #f1f8e9 100%);
+      color: #2e7d32;
+    }
+
+    .feedback.incorrect {
+      background: linear-gradient(135deg, #fff8f8 0%, #fff3f0 100%);
+      color: #b74a4a;
+    }
+
+    @keyframes fadeSlideUp {
+      from { opacity: 0; transform: translateY(12px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .next-btn {
+      margin-top: 14px;
+      background: linear-gradient(135deg, #004aad 0%, #3366bb 100%);
+      color: #fff;
+      border: none;
+      border-radius: 10px;
+      padding: 12px 24px;
+      font-size: 0.9rem;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      font-family: inherit;
+    }
+
+    .next-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(0, 74, 173, 0.25);
+    }
+
+    /* Checkpoint Celebration Overlay */
+    .checkpoint-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.4);
+      display: none;
+      justify-content: center;
+      align-items: center;
+      z-index: 100;
+    }
+
+    .checkpoint-overlay.show {
+      display: flex;
+      animation: fadeIn 0.3s ease;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    .checkpoint-card {
+      background: white;
+      padding: 40px;
+      border-radius: 24px;
+      text-align: center;
+      max-width: 400px;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+      animation: scaleIn 0.4s ease;
+    }
+
+    @keyframes scaleIn {
+      from { transform: scale(0.8); opacity: 0; }
+      to { transform: scale(1); opacity: 1; }
+    }
+
+    .checkpoint-card .emoji {
+      font-size: 4rem;
+      margin-bottom: 16px;
+    }
+
+    .checkpoint-card h2 {
+      color: #2d5a3d;
+      margin-bottom: 12px;
+    }
+
+    .checkpoint-card p {
+      color: #666;
+      margin-bottom: 24px;
+      line-height: 1.6;
+    }
+
+    .checkpoint-card button {
+      background: linear-gradient(135deg, #5d9e7d 0%, #4a8a6a 100%);
+      color: white;
+      border: none;
+      padding: 14px 32px;
+      border-radius: 12px;
+      font-size: 1rem;
+      cursor: pointer;
+      font-family: inherit;
+      font-weight: 600;
+    }
+
+    /* Results */
+    .result-container {
+      text-align: center;
+      padding: 20px 0;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    .result-destination {
+      font-size: 0.85rem;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      color: #9b8aa5;
+      margin-bottom: 8px;
+    }
+
+    .result-container h2 {
+      color: #004aad;
+      font-size: 1.6rem;
+      margin-bottom: 16px;
+    }
+
+    .result-badge {
+      display: inline-block;
+      padding: 14px 28px;
+      background: linear-gradient(135deg, #e8f5e9 0%, #e3f2fd 100%);
+      border-radius: 20px;
+      margin-bottom: 20px;
+    }
+
+    .result-badge .location-icon {
+      font-size: 1.4rem;
+      margin-right: 8px;
+    }
+
+    .result-badge .location-name {
+      font-size: 1.1rem;
+      color: #3d6b4f;
+      font-weight: 600;
+    }
+
+    .result-message {
+      color: #555;
+      font-size: 0.9rem;
+      line-height: 1.65;
+      margin-bottom: 20px;
+    }
+
+    .result-guidance {
+      background: #f8f6ff;
+      padding: 16px;
+      border-radius: 12px;
+      margin-bottom: 20px;
+      font-size: 0.85rem;
+      color: #6b5b7a;
+    }
+
+    .result-score {
+      color: #9b8aa5;
+      font-size: 0.85rem;
+      margin-bottom: 20px;
+    }
+
+    /* Share Section */
+    .share-section {
+      margin-top: 24px;
+      padding-top: 24px;
+      border-top: 1px solid #e8e4ef;
+    }
+
+    .share-section h3 {
+      font-size: 0.9rem;
+      color: #6b5b7a;
+      margin-bottom: 12px;
+    }
+
+    .share-buttons {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    .share-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 10px 16px;
+      border-radius: 8px;
+      font-size: 0.8rem;
+      font-weight: 500;
+      text-decoration: none;
+      cursor: pointer;
+      transition: transform 0.2s, box-shadow 0.2s;
+      border: none;
+    }
+
+    .share-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    }
+
+    .share-btn.twitter { background: #1DA1F2; color: white; }
+    .share-btn.linkedin { background: #0A66C2; color: white; }
+    .share-btn.facebook { background: #1877F2; color: white; }
+    .share-btn.bluesky { background: #0085ff; color: white; }
+    .share-btn.copy-link {
+      background: #f0f0f0;
+      color: #333;
+      border: 1px solid #ddd;
+    }
+
+    .retake-btn {
+      background: #fff;
+      color: #004aad;
+      border: 2px solid #004aad;
+      border-radius: 12px;
+      padding: 12px 28px;
+      font-size: 0.95rem;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      font-family: inherit;
+      margin-top: 16px;
+    }
+
+    .retake-btn:hover {
+      background: #004aad;
+      color: #fff;
+    }
+
+    /* Summit Special */
+    .summit-celebration {
+      position: relative;
+    }
+
+    .summit-celebration .confetti {
+      position: absolute;
+      width: 10px;
+      height: 10px;
+      animation: confettiFall 3s ease-in-out infinite;
+    }
+
+    @keyframes confettiFall {
+      0% { transform: translateY(-100px) rotate(0deg); opacity: 1; }
+      100% { transform: translateY(400px) rotate(720deg); opacity: 0; }
+    }
+
+    /* PB Logo */
+    .pb-logo {
+      position: fixed;
+      bottom: 16px;
+      right: 16px;
+      font-size: 0.75rem;
+      color: #9b8aa5;
+      z-index: 50;
+    }
+
+    .pb-logo a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    .pb-logo a:hover {
+      color: #004aad;
+    }
+
+    /* Mobile Responsive */
+    @media (max-width: 900px) {
+      .journey-wrapper {
+        flex-direction: column;
+      }
+
+      .immersive-scene {
+        position: relative;
+        width: 100%;
+        height: 35vh;
+      }
+
+      .quiz-panel {
+        margin-left: 0;
+        width: 100%;
+        min-height: auto;
+      }
+
+      .quiz-header h1 {
+        font-size: 1.3rem;
+      }
+
+      .step-label {
+        font-size: 0.5rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="journey-wrapper">
+    <!-- Immersive Background Scene -->
+    <div class="immersive-scene">
+      <div class="sky dawn" id="sky"></div>
+      <div class="celestial dawn" id="celestial"></div>
+
+      <!-- Mountains SVG -->
+      <div class="mountains">
+        <svg viewBox="0 0 800 500" preserveAspectRatio="xMidYMax slice">
+          <!-- Far mountains (background) -->
+          <path d="M-50 500 L50 200 L150 320 L280 80 L400 200 L520 50 L650 180 L780 100 L850 500 Z"
+                fill="#9aafbe" opacity="0.6"/>
+          <!-- Mid mountains -->
+          <path d="M-50 500 L100 280 L200 380 L350 120 L480 280 L600 80 L750 220 L850 500 Z"
+                fill="#7a95a8"/>
+          <!-- Snow caps -->
+          <path d="M350 120 L320 180 L350 170 L380 180 Z" fill="#fff" opacity="0.9"/>
+          <path d="M600 80 L565 150 L600 140 L635 150 Z" fill="#fff" opacity="0.9"/>
+          <path d="M520 50 L490 120 L520 110 L550 120 Z" fill="#fff" opacity="0.9"/>
+          <!-- Front mountains -->
+          <path d="M-50 500 L80 350 L180 420 L300 300 L420 380 L550 320 L700 380 L850 500 Z"
+                fill="#5a7a6a"/>
+        </svg>
+      </div>
+
+      <div class="ground"></div>
+
+      <!-- Climbing Path - SAME viewBox and aspect ratio as mountains! -->
+      <div class="climbing-path" id="climbing-path">
+        <svg viewBox="0 0 800 500" preserveAspectRatio="xMidYMax slice">
+          <!-- Trail path using ACTUAL mountain coordinates -->
+          <path class="trail-line" d="
+            M 60,480
+            L 110,440
+            L 170,390
+            L 235,345
+            L 300,300
+            L 365,235
+            L 420,175
+            L 470,125
+            L 510,85
+            L 520,65
+            L 520,50
+          " />
+
+          <!-- Position markers (0-10) using same coordinate system -->
+          <circle class="path-marker" id="marker-0" cx="60" cy="480" r="6" />
+          <circle class="path-marker" id="marker-1" cx="110" cy="440" r="5" />
+          <circle class="path-marker" id="marker-2" cx="170" cy="390" r="5" />
+          <circle class="path-marker" id="marker-3" cx="235" cy="345" r="5" />
+          <circle class="path-marker overlook" id="marker-4" cx="300" cy="300" r="7" />
+          <circle class="path-marker" id="marker-5" cx="365" cy="235" r="5" />
+          <circle class="path-marker overlook" id="marker-6" cx="420" cy="175" r="7" />
+          <circle class="path-marker" id="marker-7" cx="470" cy="125" r="5" />
+          <circle class="path-marker overlook" id="marker-8" cx="510" cy="85" r="7" />
+          <circle class="path-marker" id="marker-9" cx="520" cy="65" r="5" />
+          <circle class="path-marker summit-marker" id="marker-10" cx="520" cy="50" r="8" />
+        </svg>
+
+        <!-- Flag markers at overlooks - positioned using same percentages -->
+        <div class="flag-marker" id="flag-4" style="left: 37.5%; top: 60%;">🚩</div>
+        <div class="flag-marker" id="flag-6" style="left: 52.5%; top: 35%;">🚩</div>
+        <div class="flag-marker" id="flag-8" style="left: 63.75%; top: 17%;">🚩</div>
+        <div class="flag-marker summit-flag" id="flag-10" style="left: 65%; top: 10%;">🏁</div>
+      </div>
+
+      <!-- Climber -->
+      <div class="climber" id="climber">🧗</div>
+
+      <!-- Position Label -->
+      <div class="position-label" id="position-label">Start</div>
+    </div>
+
+    <!-- Quiz Panel -->
+    <div class="quiz-panel">
+      <div class="quiz-header">
+        <h1>Your AI Fluency Journey</h1>
+        <p class="subtitle">Practically Beta Capstone</p>
+      </div>
+
+      <div id="welcome-back" class="welcome-back" style="display: none;"></div>
+
+      <!-- Journey Progress -->
+      <div class="journey-progress">
+        <div class="progress-step current" id="step-0">
+          <div class="step-icon">📍</div>
+          <span class="step-label">Start</span>
+        </div>
+        <div class="progress-step" id="step-1">
+          <div class="step-icon">1</div>
+          <span class="step-label">Overlook 1</span>
+        </div>
+        <div class="progress-step" id="step-2">
+          <div class="step-icon">2</div>
+          <span class="step-label">Overlook 2</span>
+        </div>
+        <div class="progress-step" id="step-3">
+          <div class="step-icon">3</div>
+          <span class="step-label">Overlook 3</span>
+        </div>
+        <div class="progress-step" id="step-4">
+          <div class="step-icon">⛰</div>
+          <span class="step-label">Summit</span>
+        </div>
+      </div>
+
+      <div id="quiz">
+        <p class="progress-text">Question <span id="current-q">1</span> of <span id="total-q">10</span></p>
+        <div id="question-area"></div>
+      </div>
+
+      <div id="result" style="display: none;"></div>
+    </div>
+  </div>
+
+  <!-- Checkpoint Celebration Overlay -->
+  <div class="checkpoint-overlay" id="checkpoint-overlay">
+    <div class="checkpoint-card">
+      <div class="emoji" id="overlay-emoji">🌄</div>
+      <h2 id="overlay-title">First Overlook Reached!</h2>
+      <p id="overlay-message">The mist is clearing. You're building real intuition for how AI works.</p>
+      <button onclick="closeOverlay()">Continue Climbing</button>
+    </div>
+  </div>
+
+  <!-- PB Logo -->
+  <div class="pb-logo">
+    <a href="https://practicallybeta.com" target="_blank">Practically Beta</a>
+  </div>
+
+  <script>
+    // ============================================
+    // UNIFIED COORDINATE SYSTEM
+    // Mountain peaks and path share the same 800x500 viewBox
+    // ============================================
+
+    // These are the ACTUAL coordinates used in the SVG path
+    // The path climbs: grass → front peak (300,300) → mid slopes → summit (520,50)
+    const mountainCoordinates = [
+      { x: 60, y: 480 },    // 0 - Start (on grass)
+      { x: 110, y: 440 },   // 1 - beginning ascent
+      { x: 170, y: 390 },   // 2 - lower slope
+      { x: 235, y: 345 },   // 3 - climbing front mountain
+      { x: 300, y: 300 },   // 4 - OVERLOOK 1 (front green peak!)
+      { x: 365, y: 235 },   // 5 - traversing between peaks
+      { x: 420, y: 175 },   // 6 - OVERLOOK 2 (mid mountain)
+      { x: 470, y: 125 },   // 7 - climbing toward snow
+      { x: 510, y: 85 },    // 8 - OVERLOOK 3 (near snow cap)
+      { x: 520, y: 65 },    // 9 - final push
+      { x: 520, y: 50 }     // 10 - SUMMIT (the highest snow-capped peak!)
+    ];
+
+    // Convert mountain coordinates to CSS percentages
+    // These percentages work for both the climbing-path container AND the mountains
+    // because they share the same viewBox (800x500) and preserveAspectRatio
+    const pathPositions = mountainCoordinates.map(coord => ({
+      x: (coord.x / 800) * 100,
+      y: (coord.y / 500) * 100
+    }));
+
+    const positionLabels = [
+      "Start", "Climbing...", "Climbing...", "Climbing...", "First Overlook",
+      "Climbing...", "Second Overlook", "Climbing...", "Third Overlook", "Climbing...", "The Summit"
+    ];
+
+    // ============================================
+    // QUESTION BANK - 40 Questions in 4 Blocks
+    // ============================================
+
+    const questionBlocks = {
+      // Block 1: AI Basics (Pull 3)
+      basics: [
+        {
+          question: "What is the primary goal of Artificial Intelligence (AI)?",
+          options: [
+            { text: "To generate random outputs", correct: false },
+            { text: "To perform tasks that typically require human intelligence", correct: true },
+            { text: "To replace human workers", correct: false },
+            { text: "To create emotional machines", correct: false }
+          ],
+          rationale: "AI mimics human intelligence to perform tasks like learning and decision-making.",
+          part: "Basics"
+        },
+        {
+          question: "Which type of AI is most commonly used today?",
+          options: [
+            { text: "Artificial Narrow Intelligence (ANI)", correct: true },
+            { text: "Artificial Emotional Intelligence (AEI)", correct: false },
+            { text: "Artificial General Intelligence (AGI)", correct: false },
+            { text: "Artificial Superintelligence (ASI)", correct: false }
+          ],
+          rationale: "ANI is the most common form of AI today, used in tools like Siri and Alexa.",
+          part: "Basics"
+        },
+        {
+          question: "True or False: AI and Machine Learning are the same thing.",
+          options: [
+            { text: "False", correct: true },
+            { text: "True", correct: false }
+          ],
+          rationale: "Machine learning is a branch of AI, not the whole field.",
+          part: "Basics"
+        },
+        {
+          question: "Which of the following is NOT a myth about AI?",
+          options: [
+            { text: "AI will replace all jobs", correct: false },
+            { text: "AI is only for tech experts", correct: false },
+            { text: "AI outputs cannot be predicted", correct: true },
+            { text: "AI is difficult to use", correct: false }
+          ],
+          rationale: "AI outputs cannot always be predicted - it's a real characteristic of generative AI models.",
+          part: "Basics"
+        },
+        {
+          question: "Which everyday tool uses AI?",
+          options: [
+            { text: "A paper calendar", correct: false },
+            { text: "A mechanical keyboard", correct: false },
+            { text: "Email autocorrect", correct: true },
+            { text: "A traditional calculator", correct: false }
+          ],
+          rationale: "Email autocorrect uses AI to predict and correct text.",
+          part: "Basics"
+        },
+        {
+          question: "What does the phrase \"Garbage In, Garbage Out\" mean in AI?",
+          options: [
+            { text: "AI deletes irrelevant information", correct: false },
+            { text: "Poor or biased input leads to flawed output", correct: true },
+            { text: "AI ignores bad data", correct: false },
+            { text: "AI can clean up messy data", correct: false }
+          ],
+          rationale: "AI reflects the quality of its input—biased data leads to biased results.",
+          part: "Basics"
+        },
+        {
+          question: "True or False: You need to be highly tech-savvy to use AI tools.",
+          options: [
+            { text: "True", correct: false },
+            { text: "False", correct: true }
+          ],
+          rationale: "AI tools are designed for everyday users, not just tech experts.",
+          part: "Basics"
+        },
+        {
+          question: "What is one major ethical concern with AI?",
+          options: [
+            { text: "AI doesn't use personal data", correct: false },
+            { text: "AI is always transparent", correct: false },
+            { text: "AI can reinforce existing bias", correct: true },
+            { text: "AI is too slow", correct: false }
+          ],
+          rationale: "AI can unintentionally reinforce bias if not carefully managed.",
+          part: "Basics"
+        },
+        {
+          question: "What is a key limitation of AI systems?",
+          options: [
+            { text: "They lack emotional nuance and situational awareness", correct: true },
+            { text: "They require constant human supervision", correct: false },
+            { text: "They can't process large data sets", correct: false },
+            { text: "They work too slowly", correct: false }
+          ],
+          rationale: "AI lacks emotional and contextual understanding, a key limitation.",
+          part: "Basics"
+        },
+        {
+          question: "What is the basic process of how AI works?",
+          options: [
+            { text: "Data → Storage → Deletion", correct: false },
+            { text: "Output → Feedback → Input", correct: false },
+            { text: "Input → Algorithm → Output", correct: true },
+            { text: "Prompt → Emotion → Response", correct: false }
+          ],
+          rationale: "AI processes input through algorithms to generate output.",
+          part: "Basics"
+        }
+      ],
+
+      // Block 2: Prompts (Pull 2)
+      prompts: [
+        {
+          question: "What is a prompt in AI?",
+          options: [
+            { text: "A random phrase used to test the system", correct: false },
+            { text: "An instruction or question that guides AI's response", correct: true },
+            { text: "A technical error message", correct: false },
+            { text: "A pre-written script for AI to follow", correct: false }
+          ],
+          rationale: "Prompts are instructions or questions that guide AI's behavior and output.",
+          part: "Prompts"
+        },
+        {
+          question: "Why do prompts matter when using AI?",
+          options: [
+            { text: "They help AI store data", correct: false },
+            { text: "They shape the quality, relevance, and accuracy of AI's output", correct: true },
+            { text: "They prevent hallucinations", correct: false },
+            { text: "They make AI respond faster", correct: false }
+          ],
+          rationale: "Prompts directly shape the quality and relevance of AI responses.",
+          part: "Prompts"
+        },
+        {
+          question: "Which of the following is a weak prompt?",
+          options: [
+            { text: "\"Tips for time management\"", correct: true },
+            { text: "\"As a working parent, how can I manage time better?\"", correct: false },
+            { text: "\"Create a story about someone learning time management\"", correct: false },
+            { text: "\"Compare time management strategies across roles\"", correct: false }
+          ],
+          rationale: "Vague prompts like \"Tips for time management\" lead to generic answers.",
+          part: "Prompts"
+        },
+        {
+          question: "True or False: Role-based prompting assigns a persona to the AI.",
+          options: [
+            { text: "False", correct: false },
+            { text: "True", correct: true }
+          ],
+          rationale: "Role-based prompting assigns a persona or role to the AI.",
+          part: "Prompts"
+        },
+        {
+          question: "Which of these is NOT a basic prompt type?",
+          options: [
+            { text: "Direct question", correct: false },
+            { text: "Creative", correct: false },
+            { text: "Emotional validation", correct: true },
+            { text: "Zero-shot", correct: false }
+          ],
+          rationale: "Emotional validation is not a standard prompt type.",
+          part: "Prompts"
+        },
+        {
+          question: "What does \"Chain-of-Thought\" prompting encourage AI to do?",
+          options: [
+            { text: "Generate poetic responses", correct: false },
+            { text: "Explain its reasoning step-by-step", correct: true },
+            { text: "Repeat previous answers", correct: false },
+            { text: "Ask clarifying questions", correct: false }
+          ],
+          rationale: "Chain-of-Thought prompting guides AI to explain its reasoning step-by-step.",
+          part: "Prompts"
+        },
+        {
+          question: "Which prompt is most likely to produce a targeted, useful response?",
+          options: [
+            { text: "\"How to start a garden?\"", correct: false },
+            { text: "\"I'm in Phoenix with rocky soil, zero gardening experience, and $50 budget. How do I start a container garden?\"", correct: true },
+            { text: "\"Gardening tips please\"", correct: false },
+            { text: "\"Tell me about plants\"", correct: false }
+          ],
+          rationale: "Specific, contextual prompts produce more targeted and useful results.",
+          part: "Prompts"
+        },
+        {
+          question: "True or False: Zero-shot prompting includes examples to guide the AI.",
+          options: [
+            { text: "False", correct: true },
+            { text: "True", correct: false }
+          ],
+          rationale: "Zero-shot prompting does NOT include examples—it gives the task directly.",
+          part: "Prompts"
+        },
+        {
+          question: "What's the risk of using vague prompts?",
+          options: [
+            { text: "AI might crash", correct: false },
+            { text: "AI will ignore the prompt", correct: false },
+            { text: "AI will give generic or irrelevant answers", correct: true },
+            { text: "AI will ask for payment", correct: false }
+          ],
+          rationale: "Vague prompts lead to generic or irrelevant AI output.",
+          part: "Prompts"
+        },
+        {
+          question: "What's the best way to improve your prompt results?",
+          options: [
+            { text: "Use emojis", correct: false },
+            { text: "Keep prompts as short as possible", correct: false },
+            { text: "Add context, clarity, and specificity", correct: true },
+            { text: "Ask the same question multiple times", correct: false }
+          ],
+          rationale: "Specificity and context improve prompt effectiveness.",
+          part: "Prompts"
+        }
+      ],
+
+      // Block 3: Personas (Pull 2)
+      personas: [
+        {
+          question: "What is a persona in AI prompting?",
+          options: [
+            { text: "A random character name for the AI", correct: false },
+            { text: "A specific role, identity, or expertise you assign to the AI to shape its responses", correct: true },
+            { text: "The AI's default personality setting", correct: false },
+            { text: "A technical term for the AI's memory", correct: false }
+          ],
+          rationale: "A persona is a specific role or identity assigned to AI to shape its responses.",
+          part: "Personas"
+        },
+        {
+          question: "Why does assigning a persona improve AI output?",
+          options: [
+            { text: "It makes the AI respond faster", correct: false },
+            { text: "It unlocks hidden AI features", correct: false },
+            { text: "It forces the AI to be specific and focused instead of giving generic answers", correct: true },
+            { text: "It reduces the cost of using AI", correct: false }
+          ],
+          rationale: "Personas force the AI to be specific and focused rather than giving generic answers.",
+          part: "Personas"
+        },
+        {
+          question: "Which of the following is a WEAK persona prompt?",
+          options: [
+            { text: "\"Act as a certified retirement planning specialist with 20 years of experience\"", correct: false },
+            { text: "\"Act as a financial advisor\"", correct: true },
+            { text: "\"Act as a 3rd-grade teacher using friendly, encouraging language\"", correct: false },
+            { text: "\"Act as a marketing copywriter limited to 100 words with no jargon\"", correct: false }
+          ],
+          rationale: "\"Financial advisor\" is too vague—specific personas include experience level, specialization, and audience.",
+          part: "Personas"
+        },
+        {
+          question: "True or False: A persona only affects WHAT the AI says, not HOW it says it.",
+          options: [
+            { text: "True", correct: false },
+            { text: "False", correct: true }
+          ],
+          rationale: "A persona affects both WHAT the AI says and HOW it says it—including tone, style, vocabulary, and format.",
+          part: "Personas"
+        },
+        {
+          question: "What does defining a persona help you do?",
+          options: [
+            { text: "Delete the AI's previous responses", correct: false },
+            { text: "Predict and verify the quality of the output more easily", correct: true },
+            { text: "Access premium AI features", correct: false },
+            { text: "Speed up the AI's processing time", correct: false }
+          ],
+          rationale: "When you clearly define a role, you have a better idea of what the answer should look like.",
+          part: "Personas"
+        },
+        {
+          question: "Which element should you ALWAYS include when defining a persona?",
+          options: [
+            { text: "The AI's name", correct: false },
+            { text: "The intended audience for the output", correct: true },
+            { text: "A list of topics to avoid", correct: false },
+            { text: "The AI's emotional state", correct: false }
+          ],
+          rationale: "Always define the audience so the AI uses appropriate language and framing.",
+          part: "Personas"
+        },
+        {
+          question: "In the mechanic example, why did the Gen Z and Gen X personas produce different responses?",
+          options: [
+            { text: "They used different AI models", correct: false },
+            { text: "The prompts were written at different times", correct: false },
+            { text: "The persona shaped the tone, style, and vocabulary of each response", correct: true },
+            { text: "One prompt was longer than the other", correct: false }
+          ],
+          rationale: "The different personas (Gen Z vs Gen X) shaped the tone, vocabulary, and style of each response.",
+          part: "Personas"
+        },
+        {
+          question: "What is the best approach if your first persona prompt doesn't produce the right output?",
+          options: [
+            { text: "Delete everything and start over", correct: false },
+            { text: "Switch to a different AI tool", correct: false },
+            { text: "Refine the persona in your next prompt (e.g., \"make the tone more friendly\")", correct: true },
+            { text: "Remove the persona entirely", correct: false }
+          ],
+          rationale: "Refine and iterate—don't delete. Build on what you have by adjusting the persona.",
+          part: "Personas"
+        },
+        {
+          question: "True or False: Using a persona is only useful for creative writing tasks.",
+          options: [
+            { text: "True", correct: false },
+            { text: "False", correct: true }
+          ],
+          rationale: "Personas are useful across all tasks—emails, reports, learning scenarios, technical documentation, and more.",
+          part: "Personas"
+        },
+        {
+          question: "Which prompt demonstrates the BEST use of persona?",
+          options: [
+            { text: "\"Write me an email to my boss\"", correct: false },
+            { text: "\"Help me with a work email\"", correct: false },
+            { text: "\"Act as an email writer and write something professional\"", correct: false },
+            { text: "\"Act as a direct, experienced HR manager. Write a 3-sentence email to my supervisor requesting Friday off, emphasizing my completed deliverables.\"", correct: true }
+          ],
+          rationale: "This prompt includes a specific persona, tone, constraints, audience, and context.",
+          part: "Personas"
+        }
+      ],
+
+      // Block 4: Intention (Pull 3)
+      intention: [
+        {
+          question: "What does it mean to use AI \"intentionally\"?",
+          options: [
+            { text: "Using AI for every possible task", correct: false },
+            { text: "Choosing what AI should do and evaluating whether it did it well", correct: true },
+            { text: "Only using AI when you have no other option", correct: false },
+            { text: "Letting AI make decisions for you", correct: false }
+          ],
+          rationale: "Intentional AI use means choosing what and how AI should work, and evaluating results.",
+          part: "Intention"
+        },
+        {
+          question: "Which question best reflects intentional AI use?",
+          options: [
+            { text: "\"Can AI do this for me?\"", correct: false },
+            { text: "\"How do I get AI to do more?\"", correct: false },
+            { text: "\"Should AI do this—and how will I know it did it well?\"", correct: true },
+            { text: "\"What's the fastest way to use AI?\"", correct: false }
+          ],
+          rationale: "Intentional use asks whether AI should do the task and how you'll validate the output.",
+          part: "Intention"
+        },
+        {
+          question: "What are the four foundational AI task types?",
+          options: [
+            { text: "Writing, Reading, Speaking, Listening", correct: false },
+            { text: "Thinking, Making, Improving, Clarifying", correct: true },
+            { text: "Creating, Deleting, Editing, Sharing", correct: false },
+            { text: "Planning, Executing, Reviewing, Approving", correct: false }
+          ],
+          rationale: "The four foundational task types are Thinking (brainstorming), Making (drafts), Improving (rewriting), and Clarifying (summarizing).",
+          part: "Intention"
+        },
+        {
+          question: "According to the Task Test, when should you try a task with AI?",
+          options: [
+            { text: "When AI is available", correct: false },
+            { text: "When you don't want to do the task yourself", correct: false },
+            { text: "When 2 or more criteria are met: repeatable, clear structure, and you know what good looks like", correct: true },
+            { text: "When the task is creative", correct: false }
+          ],
+          rationale: "The Task Test criteria: Is it repeatable? Clear structure? Know what good looks like? Two or more = try with AI.",
+          part: "Intention"
+        },
+        {
+          question: "True or False: Every task is a good fit for AI.",
+          options: [
+            { text: "True", correct: false },
+            { text: "False", correct: true }
+          ],
+          rationale: "Not every task is a good AI fit—and that's okay. The Task Test helps determine appropriateness.",
+          part: "Intention"
+        },
+        {
+          question: "What is the correct order of the AI Fluency Workflow?",
+          options: [
+            { text: "Shape Input → Define Task → Validate Output → Choose Tool → Refine", correct: false },
+            { text: "Choose Tool → Define Task → Shape Input → Refine → Validate Output", correct: false },
+            { text: "Define Task → Choose Tool → Shape Input → Validate Output → Refine and Repeat", correct: true },
+            { text: "Validate Output → Define Task → Choose Tool → Shape Input → Refine", correct: false }
+          ],
+          rationale: "The AI Fluency Workflow: Define Task → Choose Tool → Shape Input → Validate Output → Refine and Repeat.",
+          part: "Intention"
+        },
+        {
+          question: "Which AI type would you use to generate images from text prompts?",
+          options: [
+            { text: "LLMs (Text Gen)", correct: false },
+            { text: "Image Gen AI", correct: true },
+            { text: "Predictive/Analytic AI", correct: false },
+            { text: "Chatbots/AI Assistants", correct: false }
+          ],
+          rationale: "Image Gen AI (like DALL-E, Midjourney) generates images from text prompts.",
+          part: "Intention"
+        },
+        {
+          question: "What should primarily inform which AI tool you use?",
+          options: [
+            { text: "Which AI is most popular", correct: false },
+            { text: "Which AI is free", correct: false },
+            { text: "Your task and workflow", correct: true },
+            { text: "Which AI has the best interface", correct: false }
+          ],
+          rationale: "Your task and workflow should inform which AI you use—not popularity, cost, or interface alone.",
+          part: "Intention"
+        },
+        {
+          question: "Which of these is NOT one of the three ethics checks before using AI?",
+          options: [
+            { text: "Bias Risk", correct: false },
+            { text: "Data Sensitivity", correct: false },
+            { text: "Human Trust", correct: false },
+            { text: "Processing Speed", correct: true }
+          ],
+          rationale: "The three ethics checks are Bias Risk, Data Sensitivity, and Human Trust.",
+          part: "Intention"
+        },
+        {
+          question: "True or False: Just because AI can do something doesn't mean it should.",
+          options: [
+            { text: "True", correct: true },
+            { text: "False", correct: false }
+          ],
+          rationale: "Just because AI can doesn't mean it should. Consider bias risk, data sensitivity, and human trust.",
+          part: "Intention"
+        }
+      ]
+    };
+
+    // ============================================
+    // CHECKPOINTS & DESTINATIONS
+    // ============================================
+
+    const checkpoints = [
+      { name: "Trailhead", threshold: 0, sky: "dawn", emoji: "📍", message: "Your journey begins" },
+      { name: "First Overlook", threshold: 4, sky: "morning", emoji: "🌄", message: "The mist is clearing. You're building real intuition for how AI works." },
+      { name: "Second Overlook", threshold: 6, sky: "golden", emoji: "⛅", message: "The golden hour. Your understanding is deepening with every step." },
+      { name: "Third Overlook", threshold: 8, sky: "golden", emoji: "🏔", message: "Almost there! The summit is in sight. Your AI fluency is taking shape." },
+      { name: "The Summit", threshold: 10, sky: "summit", emoji: "🏁", message: "You made it. The view from here? You're ready to lead others up the mountain." }
+    ];
+
+    const partNames = {
+      "Basics": "Part 1: Before the Prompt",
+      "Prompts": "Part 2: Before the Persona",
+      "Personas": "Part 3: Before the Output",
+      "Intention": "Part 4: Now You're In"
+    };
+
+    // ============================================
+    // GAME STATE
+    // ============================================
+
+    let currentQuestions = [];
+    let currentQuestion = 0;
+    let correctAnswers = 0;
+    let answered = false;
+    let missedParts = new Set();
+    let lastCheckpoint = 0;
+
+    // ============================================
+    // QUESTION SELECTION (Weighted Random)
+    // ============================================
+
+    function selectQuestions() {
+      const selected = [];
+
+      // Pull 3 from Basics
+      selected.push(...getRandomQuestions(questionBlocks.basics, 3));
+      // Pull 2 from Prompts
+      selected.push(...getRandomQuestions(questionBlocks.prompts, 2));
+      // Pull 2 from Personas
+      selected.push(...getRandomQuestions(questionBlocks.personas, 2));
+      // Pull 3 from Intention
+      selected.push(...getRandomQuestions(questionBlocks.intention, 3));
+
+      // Shuffle the selected questions
+      return shuffleArray(selected);
+    }
+
+    function getRandomQuestions(block, count) {
+      const shuffled = shuffleArray([...block]);
+      return shuffled.slice(0, count);
+    }
+
+    function shuffleArray(array) {
+      for (let i = array.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [array[i], array[j]] = [array[j], array[i]];
+      }
+      return array;
+    }
+
+    // ============================================
+    // LOCAL STORAGE
+    // ============================================
+
+    function saveProgress() {
+      const data = {
+        highestCheckpoint: getCurrentCheckpointIndex(),
+        lastScore: correctAnswers,
+        timestamp: Date.now()
+      };
+      localStorage.setItem('pb_journey_progress', JSON.stringify(data));
+    }
+
+    function loadProgress() {
+      const data = localStorage.getItem('pb_journey_progress');
+      if (data) {
+        return JSON.parse(data);
+      }
+      return null;
+    }
+
+    function showWelcomeBack() {
+      const progress = loadProgress();
+      if (progress && progress.highestCheckpoint > 0) {
+        const checkpoint = checkpoints[progress.highestCheckpoint];
+        const welcomeEl = document.getElementById('welcome-back');
+        welcomeEl.innerHTML = `Welcome back! You reached <strong>${checkpoint.name}</strong> last time. Let's see if you can go further! 🏔️`;
+        welcomeEl.style.display = 'block';
+      }
+    }
+
+    // ============================================
+    // SKY & SCENE TRANSITIONS
+    // ============================================
+
+    function updateSky(skyClass) {
+      const sky = document.getElementById('sky');
+      const celestial = document.getElementById('celestial');
+
+      sky.className = 'sky ' + skyClass;
+      celestial.className = 'celestial ' + skyClass;
+    }
+
+    // ============================================
+    // CLIMBER MOVEMENT - NOW USES UNIFIED COORDINATES
+    // ============================================
+
+    function updateClimberPosition(position, celebrate = false) {
+      const climber = document.getElementById('climber');
+      const label = document.getElementById('position-label');
+      const climbingPath = document.getElementById('climbing-path');
+      const pos = pathPositions[position];
+
+      // Position climber relative to the climbing-path container
+      // Since climbing-path matches mountains exactly, percentages align!
+      const climbingPathRect = climbingPath.getBoundingClientRect();
+      const sceneRect = climbingPath.parentElement.getBoundingClientRect();
+
+      // Calculate position within the scene
+      // climbing-path is at bottom, 70% height
+      const offsetTop = sceneRect.height * 0.3; // 30% from top is where climbing-path starts
+
+      climber.style.left = pos.x + '%';
+      climber.style.top = (offsetTop + (climbingPathRect.height * pos.y / 100)) + 'px';
+
+      // Move label (slightly above and right of climber)
+      label.style.left = (pos.x + 3) + '%';
+      label.style.top = (offsetTop + (climbingPathRect.height * pos.y / 100) - 30) + 'px';
+      label.textContent = positionLabels[position];
+
+      // Update path markers
+      for (let i = 0; i <= 10; i++) {
+        const marker = document.getElementById('marker-' + i);
+        if (marker) {
+          marker.classList.remove('reached', 'current');
+          if (i < position) {
+            marker.classList.add('reached');
+          } else if (i === position) {
+            marker.classList.add('current');
+          }
+        }
+      }
+
+      // Update flag markers
+      [4, 6, 8, 10].forEach(flagPos => {
+        const flag = document.getElementById('flag-' + flagPos);
+        if (flag) {
+          if (position >= flagPos) {
+            flag.classList.add('reached');
+          } else {
+            flag.classList.remove('reached');
+          }
+        }
+      });
+
+      // Celebration animation
+      if (celebrate) {
+        climber.classList.add('celebrating');
+        setTimeout(() => climber.classList.remove('celebrating'), 500);
+      }
+    }
+
+    // Recalculate on resize
+    window.addEventListener('resize', () => {
+      updateClimberPosition(correctAnswers);
+    });
+
+    function getCurrentCheckpointIndex() {
+      for (let i = checkpoints.length - 1; i >= 0; i--) {
+        if (correctAnswers >= checkpoints[i].threshold) {
+          return i;
+        }
+      }
+      return 0;
+    }
+
+    function checkForCheckpoint() {
+      const currentIdx = getCurrentCheckpointIndex();
+
+      if (currentIdx > lastCheckpoint) {
+        lastCheckpoint = currentIdx;
+        const checkpoint = checkpoints[currentIdx];
+
+        // Update sky
+        updateSky(checkpoint.sky);
+
+        // Show celebration if at overlook (not start or summit)
+        if (currentIdx > 0 && currentIdx < checkpoints.length - 1) {
+          showCheckpointCelebration(checkpoint);
+          return true;
+        }
+      }
+      return false;
+    }
+
+    function showCheckpointCelebration(checkpoint) {
+      const overlay = document.getElementById('checkpoint-overlay');
+      document.getElementById('overlay-emoji').textContent = checkpoint.emoji;
+      document.getElementById('overlay-title').textContent = checkpoint.name + ' Reached!';
+      document.getElementById('overlay-message').textContent = checkpoint.message;
+      overlay.classList.add('show');
+    }
+
+    function closeOverlay() {
+      document.getElementById('checkpoint-overlay').classList.remove('show');
+    }
+
+    // ============================================
+    // PROGRESS BAR
+    // ============================================
+
+    function updateProgressBar() {
+      const steps = [
+        document.getElementById('step-0'),
+        document.getElementById('step-1'),
+        document.getElementById('step-2'),
+        document.getElementById('step-3'),
+        document.getElementById('step-4')
+      ];
+
+      const currentCheckpointIdx = getCurrentCheckpointIndex();
+
+      steps.forEach((step, index) => {
+        step.classList.remove('current', 'completed');
+
+        if (index < currentCheckpointIdx) {
+          step.classList.add('completed');
+        } else if (index === currentCheckpointIdx) {
+          step.classList.add('current');
+        }
+      });
+    }
+
+    // ============================================
+    // QUIZ LOGIC
+    // ============================================
+
+    function showQuestion() {
+      if (currentQuestion >= currentQuestions.length) {
+        showResult();
+        return;
+      }
+
+      answered = false;
+      const q = currentQuestions[currentQuestion];
+      document.getElementById('current-q').textContent = currentQuestion + 1;
+      document.getElementById('total-q').textContent = currentQuestions.length;
+
+      document.getElementById('question-area').innerHTML = `
+        <div class="question">${q.question}</div>
+        <div class="options" id="options">
+          ${q.options.map((opt, idx) =>
+            `<button class="option-btn" onclick="selectAnswer(${idx})">${opt.text}</button>`
+          ).join('')}
+        </div>
+        <div class="feedback" id="feedback"></div>
+      `;
+    }
+
+    window.selectAnswer = function(idx) {
+      if (answered) return;
+      answered = true;
+
+      const q = currentQuestions[currentQuestion];
+      const buttons = document.querySelectorAll('.option-btn');
+      const feedback = document.getElementById('feedback');
+      const isCorrect = q.options[idx].correct;
+
+      buttons.forEach((btn, i) => {
+        btn.disabled = true;
+        if (q.options[i].correct) {
+          btn.classList.add('correct');
+        } else if (i === idx) {
+          btn.classList.add('incorrect');
+        }
+      });
+
+      if (isCorrect) {
+        correctAnswers++;
+        updateProgressBar();
+        updateClimberPosition(correctAnswers, true);
+        feedback.className = 'feedback correct show';
+        feedback.innerHTML = `<strong>Correct!</strong> ${q.rationale}`;
+      } else {
+        missedParts.add(q.part);
+        feedback.className = 'feedback incorrect show';
+        feedback.innerHTML = `<strong>Not quite.</strong> ${q.rationale}`;
+      }
+
+      feedback.innerHTML += `<br><button class="next-btn" onclick="nextQuestion()">Continue →</button>`;
+    }
+
+    window.nextQuestion = function() {
+      const reachedCheckpoint = checkForCheckpoint();
+
+      if (!reachedCheckpoint) {
+        currentQuestion++;
+        showQuestion();
+      } else {
+        currentQuestion++;
+        setTimeout(() => {
+          if (!document.getElementById('checkpoint-overlay').classList.contains('show')) {
+            showQuestion();
+          }
+        }, 100);
+      }
+    }
+
+    window.closeOverlay = function() {
+      document.getElementById('checkpoint-overlay').classList.remove('show');
+      showQuestion();
+    }
+
+    // ============================================
+    // RESULTS
+    // ============================================
+
+    function showResult() {
+      document.getElementById('quiz').style.display = 'none';
+      const resultDiv = document.getElementById('result');
+      resultDiv.style.display = 'block';
+
+      const checkpointIdx = getCurrentCheckpointIndex();
+      const checkpoint = checkpoints[checkpointIdx];
+      const isSummit = checkpointIdx === checkpoints.length - 1;
+
+      updateSky(checkpoint.sky);
+      updateClimberPosition(correctAnswers, isSummit);
+      saveProgress();
+
+      let guidanceHTML = '';
+      if (!isSummit && missedParts.size > 0) {
+        const missedArray = Array.from(missedParts);
+        if (missedArray.length <= 2) {
+          const partsList = missedArray.map(p => partNames[p]).join(' and ');
+          guidanceHTML = `<div class="result-guidance">Keep climbing! You stumbled on <strong>${partsList}</strong>. Revisit the AI Fluency Roadmap to strengthen your path.</div>`;
+        } else {
+          guidanceHTML = `<div class="result-guidance">Keep climbing! Revisit the AI Fluency Roadmap to build your foundation.</div>`;
+        }
+      }
+
+      const shareText = isSummit
+        ? "Summit reached. 🏔️ I'm AI fluent. Ready to guide others. Start your journey →"
+        : `I'm on the AI Fluency Journey with Practically Beta. 🏔️ Where are you on the path? →`;
+
+      const shareUrl = window.location.href;
+
+      let summitExtras = '';
+      if (isSummit) {
+        summitExtras = `
+          <div class="summit-celebration" id="summit-celebration"></div>
+          <p style="color: #5d9e7d; font-weight: 600; margin-bottom: 16px;">🎉 You're ready to lead others up the mountain.</p>
+        `;
+        setTimeout(createConfetti, 300);
+      }
+
+      resultDiv.innerHTML = `
+        <div class="result-container">
+          <div class="result-destination">Your destination</div>
+          <h2>${checkpoint.name}</h2>
+          ${summitExtras}
+          <div class="result-badge">
+            <span class="location-icon">${checkpoint.emoji}</span>
+            <span class="location-name">${checkpoint.name}</span>
+          </div>
+          <p class="result-message">${checkpoint.message}</p>
+          ${guidanceHTML}
+          <p class="result-score">${correctAnswers} of ${currentQuestions.length} correct answers</p>
+
+          <div class="share-section">
+            <h3>Share your journey</h3>
+            <div class="share-buttons">
+              <a href="https://twitter.com/intent/tweet?text=${encodeURIComponent(shareText)}&url=${encodeURIComponent(shareUrl)}" target="_blank" class="share-btn twitter">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+                Post
+              </a>
+              <a href="https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(shareUrl)}" target="_blank" class="share-btn linkedin">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+                Share
+              </a>
+              <a href="https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(shareUrl)}" target="_blank" class="share-btn facebook">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
+                Share
+              </a>
+              <a href="https://bsky.app/intent/compose?text=${encodeURIComponent(shareText + ' ' + shareUrl)}" target="_blank" class="share-btn bluesky">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.477 2 2 6.477 2 12s4.477 10 10 10 10-4.477 10-10S17.523 2 12 2zm0 18c-4.411 0-8-3.589-8-8s3.589-8 8-8 8 3.589 8 8-3.589 8-8 8z"/></svg>
+                BlueSky
+              </a>
+              <button class="share-btn copy-link" onclick="copyLink()">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>
+                Copy Link
+              </button>
+            </div>
+          </div>
+
+          <button class="retake-btn" onclick="restartQuiz()">Start New Journey</button>
+        </div>
+      `;
+    }
+
+    function createConfetti() {
+      const container = document.getElementById('summit-celebration');
+      if (!container) return;
+
+      const colors = ['#f0c674', '#81c784', '#64b5f6', '#e57373', '#ba68c8'];
+
+      for (let i = 0; i < 50; i++) {
+        const confetti = document.createElement('div');
+        confetti.className = 'confetti';
+        confetti.style.left = Math.random() * 100 + '%';
+        confetti.style.background = colors[Math.floor(Math.random() * colors.length)];
+        confetti.style.animationDelay = Math.random() * 2 + 's';
+        confetti.style.animationDuration = (Math.random() * 2 + 2) + 's';
+        container.appendChild(confetti);
+      }
+    }
+
+    window.copyLink = function() {
+      navigator.clipboard.writeText(window.location.href).then(() => {
+        const btn = document.querySelector('.copy-link');
+        btn.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg> Copied!';
+        setTimeout(() => {
+          btn.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg> Copy Link';
+        }, 2000);
+      });
+    }
+
+    window.restartQuiz = function() {
+      currentQuestion = 0;
+      correctAnswers = 0;
+      answered = false;
+      missedParts.clear();
+      lastCheckpoint = 0;
+
+      updateSky('dawn');
+      updateProgressBar();
+      updateClimberPosition(0);
+
+      document.getElementById('quiz').style.display = 'block';
+      document.getElementById('result').style.display = 'none';
+
+      currentQuestions = selectQuestions();
+      showQuestion();
+    }
+
+    // ============================================
+    // INITIALIZE
+    // ============================================
+
+    function init() {
+      showWelcomeBack();
+      currentQuestions = selectQuestions();
+      updateProgressBar();
+      updateClimberPosition(0);
+      showQuestion();
+    }
+
+    init();
+  </script>
+</body>
+</html>
