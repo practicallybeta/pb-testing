@@ -156,7 +156,7 @@
       bottom: 0;
       left: 0;
       width: 100%;
-      height: 70%;
+      height: 80%;
     }
 
     .mountains svg {
@@ -164,13 +164,13 @@
       height: 100%;
     }
 
-    /* Ground/meadow */
+    /* Ground/meadow - shortened to give mountains more presence */
     .ground {
       position: absolute;
       bottom: 0;
       left: 0;
       width: 100%;
-      height: 25%;
+      height: 15%;
       background: linear-gradient(180deg,
         #7aab7a 0%,
         #6a9b6a 50%,
@@ -184,7 +184,7 @@
       bottom: 0;
       left: 0;
       width: 100%;
-      height: 70%;  /* SAME as mountains! */
+      height: 80%;  /* SAME as mountains! */
       pointer-events: none;
     }
 
@@ -811,12 +811,12 @@
       <!-- Climbing Path - SAME viewBox and aspect ratio as mountains! -->
       <div class="climbing-path" id="climbing-path">
         <svg viewBox="0 0 800 500" preserveAspectRatio="xMidYMax slice">
-          <!-- Trail path using ACTUAL mountain coordinates -->
+          <!-- Trail path - starts at mountain base, not in grass -->
           <path class="trail-line" d="
-            M 60,480
-            L 110,440
-            L 170,390
-            L 235,345
+            M 100,400
+            L 150,375
+            L 200,350
+            L 250,325
             L 300,300
             L 365,235
             L 420,175
@@ -826,11 +826,11 @@
             L 520,50
           " />
 
-          <!-- Position markers (0-10) using same coordinate system -->
-          <circle class="path-marker" id="marker-0" cx="60" cy="480" r="6" />
-          <circle class="path-marker" id="marker-1" cx="110" cy="440" r="5" />
-          <circle class="path-marker" id="marker-2" cx="170" cy="390" r="5" />
-          <circle class="path-marker" id="marker-3" cx="235" cy="345" r="5" />
+          <!-- Position markers (0-10) - path now starts at mountain foot -->
+          <circle class="path-marker" id="marker-0" cx="100" cy="400" r="6" />
+          <circle class="path-marker" id="marker-1" cx="150" cy="375" r="5" />
+          <circle class="path-marker" id="marker-2" cx="200" cy="350" r="5" />
+          <circle class="path-marker" id="marker-3" cx="250" cy="325" r="5" />
           <circle class="path-marker overlook" id="marker-4" cx="300" cy="300" r="7" />
           <circle class="path-marker" id="marker-5" cx="365" cy="235" r="5" />
           <circle class="path-marker overlook" id="marker-6" cx="420" cy="175" r="7" />
@@ -918,12 +918,12 @@
     // ============================================
 
     // These are the ACTUAL coordinates used in the SVG path
-    // The path climbs: grass → front peak (300,300) → mid slopes → summit (520,50)
+    // Path starts at mountain base, climbs front peak (300,300) → mid slopes → summit (520,50)
     const mountainCoordinates = [
-      { x: 60, y: 480 },    // 0 - Start (on grass)
-      { x: 110, y: 440 },   // 1 - beginning ascent
-      { x: 170, y: 390 },   // 2 - lower slope
-      { x: 235, y: 345 },   // 3 - climbing front mountain
+      { x: 100, y: 400 },   // 0 - Start (at mountain foot, not grass)
+      { x: 150, y: 375 },   // 1 - beginning ascent
+      { x: 200, y: 350 },   // 2 - on lower slope
+      { x: 250, y: 325 },   // 3 - climbing front mountain
       { x: 300, y: 300 },   // 4 - OVERLOOK 1 (front green peak!)
       { x: 365, y: 235 },   // 5 - traversing between peaks
       { x: 420, y: 175 },   // 6 - OVERLOOK 2 (mid mountain)
@@ -1514,8 +1514,8 @@
       const sceneRect = climbingPath.parentElement.getBoundingClientRect();
 
       // Calculate position within the scene
-      // climbing-path is at bottom, 70% height
-      const offsetTop = sceneRect.height * 0.3; // 30% from top is where climbing-path starts
+      // climbing-path is at bottom, 80% height
+      const offsetTop = sceneRect.height * 0.2; // 20% from top is where climbing-path starts
 
       climber.style.left = pos.x + '%';
       climber.style.top = (offsetTop + (climbingPathRect.height * pos.y / 100)) + 'px';
