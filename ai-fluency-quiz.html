@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>So You Think You're AI Fluent?</title>
+  <style>
+    body {
+      font-family: Verdana, Geneva, sans-serif;
+      background: linear-gradient(90deg, #cdffd8 0%, #94b9ff 100%);
+      margin: 0;
+      padding: 0;
+      min-height: 100vh;
+    }
+
+    .container {
+      max-width: 600px;
+      margin: 48px auto;
+      background: #fff;
+      border-radius: 20px;
+      box-shadow: 0 8px 32px 0 rgba(61, 78, 161, 0.08);
+      padding: 32px 28px 36px 28px;
+    }
+    h1 {
+      text-align: center;
+      font-size: 2.1rem;
+      color: #004aad;
+      letter-spacing: 1px;
+      margin-bottom: 12px;
+    }
+    .pb-logo {
+      width: 60px;
+      margin: 0 auto 10px auto;
+      display: block;
+    }
+    .question {
+      font-size: 1.18rem;
+      color: #333;
+      margin: 30px 0 18px 0;
+      font-weight: bold;
+      text-align: left;
+    }
+    .options {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+    .option-btn {
+      font-family: inherit;
+      background: linear-gradient(90deg, #004aad 0%, #cb6ce6 100%);
+      color: #fff;
+      border: none;
+      border-radius: 9px;
+      font-size: 1rem;
+      padding: 18px 18px;
+      cursor: pointer;
+      transition: background 0.2s, transform 0.1s;
+      box-shadow: 0 2px 8px rgba(61, 78, 161, 0.06);
+      text-align: left;
+    }
+    .option-btn:hover, .option-btn:focus {
+      background: linear-gradient(90deg, #cb6ce6 0%, #004aad 100%);
+      transform: translateY(-2px) scale(1.03);
+      outline: none;
+    }
+    .quiz-footer {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 30px;
+      font-size: 1rem;
+    }
+    .result {
+      margin: 34px 0 12px 0;
+      padding: 28px 22px;
+      border-radius: 14px;
+      background: linear-gradient(90deg, #cdffd8 0%, #94b9ff 100%);
+      box-shadow: 0 3px 12px 0 rgba(61, 78, 161, 0.10);
+      color: #29223e;
+      font-size: 1.16rem;
+      text-align: center;
+      font-weight: 500;
+      min-height: 110px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+    .result h2 {
+      color: #004aad;
+      margin: 0 0 12px;
+      font-size: 1.5rem;
+    }
+    .retake-btn {
+      background: #fff;
+      color: #004aad;
+      border: 2px solid #004aad;
+      border-radius: 8px;
+      padding: 12px 30px;
+      font-size: 1.1rem;
+      cursor: pointer;
+      margin: 20px auto 0 auto;
+      display: block;
+      transition: background 0.2s, color 0.2s;
+    }
+    .retake-btn:hover, .retake-btn:focus {
+      background: #004aad;
+      color: #fff;
+      outline: none;
+    }
+    @media (max-width: 650px) {
+      .container { max-width: 98vw; padding: 18px 3vw 24px 3vw;}
+      h1 { font-size: 1.22rem; }
+      .result { font-size: 1.07rem;}
+      .result h2 { font-size: 1.3rem; }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <img class="pb-logo" src="https://images.spr.so/cdn-cgi/imagedelivery/j42No7y-dcokJuNgXeA0ig/6d7c016b-8307-4fbe-8200-ecef8144c00b/PB_Logo_Circle/w=96,quality=90,fit=scale-down" alt="Practically Beta logo" />
+    <h1>So You Think You're AI Fluent?</h1>
+    <div id="quiz"></div>
+    <div id="result" class="result" style="display:none;"></div>
+    <button id="retake" class="retake-btn" style="display:none;">Retake Quiz</button>
+  </div>
+  <script>
+    const quizData = [
+      {
+        question: "What does it mean to use AI \"intentionally\"?",
+        options: [
+          { text: "Using AI for every possible task", correct: false },
+          { text: "Choosing what AI should do and evaluating whether it did it well", correct: true },
+          { text: "Only using AI when you have no other option", correct: false },
+          { text: "Letting AI make decisions for you", correct: false }
+        ],
+        rationale: "Intentional AI use means choosing what and how AI should work, and evaluating results—not just using AI for everything."
+      },
+      {
+        question: "Which question best reflects intentional AI use?",
+        options: [
+          { text: "\"Can AI do this for me?\"", correct: false },
+          { text: "\"How do I get AI to do more?\"", correct: false },
+          { text: "\"Should AI do this—and how will I know it did it well?\"", correct: true },
+          { text: "\"What's the fastest way to use AI?\"", correct: false }
+        ],
+        rationale: "Intentional use asks whether AI should do the task and how you'll validate the output, not just whether AI can do it."
+      },
+      {
+        question: "What are the four foundational AI task types?",
+        options: [
+          { text: "Writing, Reading, Speaking, Listening", correct: false },
+          { text: "Thinking, Making, Improving, Clarifying", correct: true },
+          { text: "Creating, Deleting, Editing, Sharing", correct: false },
+          { text: "Planning, Executing, Reviewing, Approving", correct: false }
+        ],
+        rationale: "The four foundational task types are Thinking (brainstorming), Making (drafts/outlines), Improving (rewriting/fixing), and Clarifying (summarizing/explaining)."
+      },
+      {
+        question: "According to the Task Test, when should you try a task with AI?",
+        options: [
+          { text: "When AI is available", correct: false },
+          { text: "When you don't want to do the task yourself", correct: false },
+          { text: "When 2 or more criteria are met: repeatable, clear structure, and you know what good looks like", correct: true },
+          { text: "When the task is creative", correct: false }
+        ],
+        rationale: "The Task Test criteria are: Is it repeatable? Is there clear structure? Do I know what good looks like? Two or more = try with AI."
+      },
+      {
+        question: "True or False: Every task is a good fit for AI.",
+        options: [
+          { text: "True", correct: false },
+          { text: "False", correct: true }
+        ],
+        rationale: "Not every task is a good AI fit—and that's okay. The Task Test helps determine appropriateness."
+      },
+      {
+        question: "What is the correct order of the AI Fluency Workflow?",
+        options: [
+          { text: "Shape Input → Define Task → Validate Output → Choose Tool → Refine", correct: false },
+          { text: "Choose Tool → Define Task → Shape Input → Refine → Validate Output", correct: false },
+          { text: "Define Task → Choose Tool → Shape Input → Validate Output → Refine and Repeat", correct: true },
+          { text: "Validate Output → Define Task → Choose Tool → Shape Input → Refine", correct: false }
+        ],
+        rationale: "The AI Fluency Workflow is: Define Task → Choose Tool → Shape Input → Validate Output → Refine and Repeat."
+      },
+      {
+        question: "Which AI type would you use to generate images from text prompts?",
+        options: [
+          { text: "LLMs (Text Gen)", correct: false },
+          { text: "Image Gen AI", correct: true },
+          { text: "Predictive/Analytic AI", correct: false },
+          { text: "Chatbots/AI Assistants", correct: false }
+        ],
+        rationale: "Image Gen AI (like DALL-E, Midjourney, Stable Diffusion) generates images from text prompts. LLMs generate text."
+      },
+      {
+        question: "What should primarily inform which AI tool you use?",
+        options: [
+          { text: "Which AI is most popular", correct: false },
+          { text: "Which AI is free", correct: false },
+          { text: "Your task and workflow", correct: true },
+          { text: "Which AI has the best interface", correct: false }
+        ],
+        rationale: "Your task and workflow should inform which AI you use—not popularity, cost, or interface alone."
+      },
+      {
+        question: "Which of these is NOT one of the three ethics checks before using AI?",
+        options: [
+          { text: "Bias Risk", correct: false },
+          { text: "Data Sensitivity", correct: false },
+          { text: "Human Trust", correct: false },
+          { text: "Processing Speed", correct: true }
+        ],
+        rationale: "The three ethics checks are Bias Risk, Data Sensitivity, and Human Trust. Processing Speed is not an ethics consideration."
+      },
+      {
+        question: "True or False: Just because AI can do something doesn't mean it should.",
+        options: [
+          { text: "True", correct: true },
+          { text: "False", correct: false }
+        ],
+        rationale: "Just because AI can doesn't mean it should. Consider bias risk, data sensitivity, and human trust before using AI."
+      }
+    ];
+
+    const results = [
+      {
+        minPercent: 90,
+        emoji: "🚀",
+        title: "PB-Ready",
+        description: "You're ready to use AI with intention, ethics, and workflow mastery. Welcome to the Practically Beta mindset."
+      },
+      {
+        minPercent: 60,
+        emoji: "🌱",
+        title: "AI Practitioner",
+        description: "You understand the foundations of intentional AI use. Keep refining your approach to unlock even more value."
+      },
+      {
+        minPercent: 0,
+        emoji: "🐣",
+        title: "AI Curious",
+        description: "You're just beginning to think about AI intentionally. Keep exploring—every workflow you examine builds fluency."
+      }
+    ];
+
+    // Quiz logic
+    let currentQuestion = 0;
+    let correctAnswers = 0;
+    let incorrectAnswers = [];
+    const totalQuestions = quizData.length;
+
+    const quizDiv = document.getElementById("quiz");
+    const resultDiv = document.getElementById("result");
+    const retakeBtn = document.getElementById("retake");
+
+    function showQuestion() {
+      if (currentQuestion >= quizData.length) {
+        showResult();
+        return;
+      }
+      const q = quizData[currentQuestion];
+      quizDiv.innerHTML = `
+        <div class="question">${q.question}</div>
+        <div class="options">
+          ${q.options.map((opt, idx) => `<button class="option-btn" onclick="selectOption(${idx})">${opt.text}</button>`).join("")}
+        </div>
+        <div class="quiz-footer">
+          <span>Question ${currentQuestion + 1} of ${quizData.length}</span>
+        </div>
+      `;
+    }
+
+    window.selectOption = function(optionIndex) {
+      const q = quizData[currentQuestion];
+      if (q.options[optionIndex].correct) {
+        correctAnswers++;
+      } else {
+        // Track incorrect answers with question details
+        incorrectAnswers.push({
+          questionNumber: currentQuestion + 1,
+          question: q.question,
+          selectedAnswer: q.options[optionIndex].text,
+          correctAnswer: q.options.find(opt => opt.correct).text,
+          rationale: q.rationale
+        });
+      }
+      currentQuestion++;
+      showQuestion();
+    }
+
+    function showResult() {
+      quizDiv.innerHTML = "";
+      const percentage = Math.round((correctAnswers / totalQuestions) * 100);
+
+      // Find the appropriate result tier
+      let resultObj = results.find(r => percentage >= r.minPercent);
+      if (!resultObj) resultObj = results[results.length - 1]; // fallback
+
+      let resultHTML = `
+        <div style="font-size:3rem;margin-bottom:8px;">${resultObj.emoji}</div>
+        <h2>${resultObj.title}</h2>
+        <div style="margin-bottom:12px;">You scored ${percentage}% (${correctAnswers} out of ${totalQuestions} correct)</div>
+        <div>${resultObj.description}</div>
+      `;
+
+      // Add explanations for incorrect answers
+      if (incorrectAnswers.length > 0) {
+        resultHTML += `
+          <div style="margin-top:24px;text-align:left;border-top:2px solid #004aad;padding-top:20px;">
+            <h3 style="color:#004aad;font-size:1.3rem;margin-bottom:16px;">Review Your Answers</h3>
+        `;
+
+        incorrectAnswers.forEach(item => {
+          resultHTML += `
+            <div style="margin-bottom:20px;padding:16px;background:#fff;border-radius:8px;box-shadow:0 2px 8px rgba(0,0,0,0.05);">
+              <div style="font-weight:bold;color:#004aad;margin-bottom:8px;">Question ${item.questionNumber}: ${item.question}</div>
+              <div style="margin-bottom:6px;color:#d32f2f;"><strong>Your answer:</strong> ${item.selectedAnswer}</div>
+              <div style="margin-bottom:8px;color:#2e7d32;"><strong>Correct answer:</strong> ${item.correctAnswer}</div>
+              <div style="color:#555;font-style:italic;"><strong>Why:</strong> ${item.rationale}</div>
+            </div>
+          `;
+        });
+
+        resultHTML += `</div>`;
+      }
+
+      resultDiv.style.display = "block";
+      resultDiv.innerHTML = resultHTML;
+      retakeBtn.style.display = "block";
+    }
+
+    retakeBtn.onclick = function() {
+      currentQuestion = 0;
+      correctAnswers = 0;
+      incorrectAnswers = [];
+      resultDiv.style.display = "none";
+      retakeBtn.style.display = "none";
+      showQuestion();
+    }
+
+    // Start
+    showQuestion();
+  </script>
+</body>
+</html>
