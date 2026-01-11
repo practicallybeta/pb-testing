@@ -1,0 +1,287 @@
+<!doctype html>
+<html lang="en" class="h-full">
+ <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AI Safety for Kids - PB Junior Builders (4th-6th Grade)</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Note: Canva SDK scripts removed for standalone backup -->
+  <!-- <script src="/_sdk/element_sdk.js"></script> -->
+  <!-- <script src="/_sdk/data_sdk.js"></script> -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&amp;family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+  <style>
+    body {
+      box-sizing: border-box;
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0px); }
+      50% { transform: translateY(-15px); }
+    }
+
+    @keyframes pulse-glow {
+      0%, 100% { box-shadow: 0 0 20px rgba(139, 92, 246, 0.3); }
+      50% { box-shadow: 0 0 40px rgba(139, 92, 246, 0.6); }
+    }
+
+    @keyframes slide-in {
+      from { transform: translateX(-20px); opacity: 0; }
+      to { transform: translateX(0); opacity: 1; }
+    }
+
+    @keyframes rotate-slow {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+
+    .float-animation {
+      animation: float 4s ease-in-out infinite;
+    }
+
+    .float-delay-1 {
+      animation-delay: 0.5s;
+    }
+
+    .float-delay-2 {
+      animation-delay: 1s;
+    }
+
+    .float-delay-3 {
+      animation-delay: 1.5s;
+    }
+
+    .glow-animation {
+      animation: pulse-glow 3s ease-in-out infinite;
+    }
+
+    .tip-card {
+      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      cursor: pointer;
+      position: relative;
+    }
+
+    .tip-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      border-radius: 1.5rem;
+      padding: 2px;
+      background: linear-gradient(135deg, rgba(139, 92, 246, 0.5), rgba(59, 130, 246, 0.5));
+      -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+      -webkit-mask-composite: xor;
+      mask-composite: exclude;
+      opacity: 0;
+      transition: opacity 0.4s;
+    }
+
+    .tip-card:hover::before {
+      opacity: 1;
+    }
+
+    .tip-card:hover {
+      transform: translateY(-10px);
+    }
+
+    .tip-card:hover .card-icon {
+      transform: scale(1.2) rotate(10deg);
+    }
+
+    .card-icon {
+      transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .grid-pattern {
+      background-image:
+        linear-gradient(rgba(139, 92, 246, 0.1) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(139, 92, 246, 0.1) 1px, transparent 1px);
+      background-size: 50px 50px;
+    }
+
+    .gradient-text {
+      background: linear-gradient(135deg, #8B5CF6 0%, #3B82F6 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+  </style>
+ </head>
+ <body class="h-full">
+  <div id="app-wrapper" class="h-full w-full overflow-auto" style="background: linear-gradient(135deg, #1e1b4b 0%, #312e81 25%, #1e3a8a 50%, #1e40af 75%, #3730a3 100%);">
+   <!-- Animated background elements -->
+   <div class="absolute inset-0 grid-pattern opacity-30"></div>
+   <div class="absolute top-10 left-10 w-64 h-64 bg-purple-500 rounded-full filter blur-3xl opacity-20 float-animation"></div>
+   <div class="absolute top-40 right-20 w-80 h-80 bg-blue-500 rounded-full filter blur-3xl opacity-20 float-animation float-delay-1"></div>
+   <div class="absolute bottom-20 left-1/4 w-72 h-72 bg-indigo-500 rounded-full filter blur-3xl opacity-20 float-animation float-delay-2"></div>
+
+   <div class="relative z-10 max-w-5xl mx-auto px-6 py-12">
+    <!-- Header Section -->
+    <header class="text-center mb-16">
+     <div class="inline-block mb-6">
+      <div class="float-animation glow-animation">
+       <svg width="100" height="100" viewbox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+         <lineargradient id="robotGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" style="stop-color:#8B5CF6;stop-opacity:1" />
+          <stop offset="100%" style="stop-color:#3B82F6;stop-opacity:1" />
+         </lineargradient>
+        </defs>
+        <rect x="25" y="30" width="50" height="45" rx="8" fill="url(#robotGrad)" />
+        <circle cx="40" cy="45" r="6" fill="#1F2937" />
+        <circle cx="60" cy="45" r="6" fill="#1F2937" />
+        <circle cx="42" cy="43" r="2" fill="#60A5FA" />
+        <circle cx="62" cy="43" r="2" fill="#60A5FA" />
+        <rect x="42" y="58" width="16" height="3" rx="1.5" fill="#1F2937" />
+        <rect x="15" y="20" width="10" height="18" rx="3" fill="#60A5FA" />
+        <rect x="75" y="20" width="10" height="18" rx="3" fill="#60A5FA" />
+        <circle cx="20" cy="18" r="4" fill="#A78BFA" />
+        <circle cx="80" cy="18" r="4" fill="#A78BFA" />
+        <rect x="35" y="75" width="8" height="15" rx="2" fill="#60A5FA" />
+        <rect x="57" y="75" width="8" height="15" rx="2" fill="#60A5FA" />
+       </svg>
+      </div>
+     </div>
+     <h1 id="main-title" class="text-5xl md:text-6xl font-bold mb-4 gradient-text" style="font-family: 'Space Grotesk', sans-serif;">AI Safety for Kids</h1>
+     <p id="subtitle" class="text-xl md:text-2xl max-w-3xl mx-auto text-blue-200" style="font-family: 'Inter', sans-serif;">Smart strategies to navigate the world of artificial intelligence</p>
+     <div class="flex justify-center gap-6 mt-8">
+      <span class="text-3xl float-animation" style="filter: drop-shadow(0 0 10px rgba(139, 92, 246, 0.8));">⚡</span>
+      <span class="text-3xl float-animation float-delay-1" style="filter: drop-shadow(0 0 10px rgba(59, 130, 246, 0.8));">🛡️</span>
+      <span class="text-3xl float-animation float-delay-2" style="filter: drop-shadow(0 0 10px rgba(139, 92, 246, 0.8));">💡</span>
+     </div>
+    </header>
+
+    <!-- Tips Grid -->
+    <div class="grid md:grid-cols-2 gap-8 mb-16">
+     <!-- Tip 1 -->
+     <div class="tip-card rounded-3xl p-8 backdrop-blur-sm" style="background: linear-gradient(135deg, rgba(99, 102, 241, 0.25) 0%, rgba(139, 92, 246, 0.25) 100%); border: 2px solid rgba(139, 92, 246, 0.3);">
+      <div class="card-icon text-5xl mb-4">🔐</div>
+      <h3 id="tip-1-title" class="text-2xl font-bold mb-3 text-purple-200" style="font-family: 'Space Grotesk', sans-serif;">Protect Your Privacy</h3>
+      <p id="tip-1-text" class="text-base leading-relaxed text-purple-100" style="font-family: 'Inter', sans-serif;">Never share personal information like your full name, address, phone number, school name, or photos with AI systems. Your privacy is valuable!</p>
+      <div class="mt-4 inline-block px-4 py-2 rounded-full text-sm font-semibold" style="background: rgba(139, 92, 246, 0.3); color: #C4B5FD;">🔒 Privacy First</div>
+     </div>
+
+     <!-- Tip 2 -->
+     <div class="tip-card rounded-3xl p-8 backdrop-blur-sm" style="background: linear-gradient(135deg, rgba(59, 130, 246, 0.25) 0%, rgba(37, 99, 235, 0.25) 100%); border: 2px solid rgba(59, 130, 246, 0.3);">
+      <div class="card-icon text-5xl mb-4">🔍</div>
+      <h3 id="tip-2-title" class="text-2xl font-bold mb-3 text-blue-200" style="font-family: 'Space Grotesk', sans-serif;">Verify Information</h3>
+      <p id="tip-2-text" class="text-base leading-relaxed text-blue-100" style="font-family: 'Inter', sans-serif;">AI can be wrong! Always fact-check important information using trusted sources like teachers, textbooks, or reputable websites.</p>
+      <div class="mt-4 inline-block px-4 py-2 rounded-full text-sm font-semibold" style="background: rgba(59, 130, 246, 0.3); color: #93C5FD;">✓ Double Check</div>
+     </div>
+
+     <!-- Tip 3 -->
+     <div class="tip-card rounded-3xl p-8 backdrop-blur-sm" style="background: linear-gradient(135deg, rgba(79, 70, 229, 0.25) 0%, rgba(99, 102, 241, 0.25) 100%); border: 2px solid rgba(79, 70, 229, 0.3);">
+      <div class="card-icon text-5xl mb-4">👥</div>
+      <h3 id="tip-3-title" class="text-2xl font-bold mb-3 text-indigo-200" style="font-family: 'Space Grotesk', sans-serif;">Ask for Help</h3>
+      <p id="tip-3-text" class="text-base leading-relaxed text-indigo-100" style="font-family: 'Inter', sans-serif;">If something feels wrong, confusing, or uncomfortable, talk to a trusted adult immediately. There are no silly questions about safety!</p>
+      <div class="mt-4 inline-block px-4 py-2 rounded-full text-sm font-semibold" style="background: rgba(79, 70, 229, 0.3); color: #A5B4FC;">💬 Speak Up</div>
+     </div>
+
+     <!-- Tip 4 -->
+     <div class="tip-card rounded-3xl p-8 backdrop-blur-sm" style="background: linear-gradient(135deg, rgba(124, 58, 237, 0.25) 0%, rgba(147, 51, 234, 0.25) 100%); border: 2px solid rgba(124, 58, 237, 0.3);">
+      <div class="card-icon text-5xl mb-4">🌟</div>
+      <h3 id="tip-4-title" class="text-2xl font-bold mb-3 text-violet-200" style="font-family: 'Space Grotesk', sans-serif;">Use AI Responsibly</h3>
+      <p id="tip-4-text" class="text-base leading-relaxed text-violet-100" style="font-family: 'Inter', sans-serif;">AI is a powerful tool for learning and creativity. Use it ethically, give credit when needed, and remember that critical thinking matters!</p>
+      <div class="mt-4 inline-block px-4 py-2 rounded-full text-sm font-semibold" style="background: rgba(124, 58, 237, 0.3); color: #DDD6FE;">⚡ Smart Use</div>
+     </div>
+    </div>
+
+    <!-- Interactive Quiz Section -->
+    <div class="rounded-3xl p-10 mb-12 backdrop-blur-md glow-animation" style="background: linear-gradient(135deg, rgba(139, 92, 246, 0.2) 0%, rgba(59, 130, 246, 0.2) 100%); border: 3px solid rgba(139, 92, 246, 0.4);">
+     <div id="quiz-container">
+      <h2 class="text-3xl font-bold text-center mb-8 gradient-text" style="font-family: 'Space Grotesk', sans-serif;">🎯 Knowledge Check</h2>
+      <div id="quiz-question" class="text-center">
+       <p class="text-xl mb-8 text-blue-100" style="font-family: 'Inter', sans-serif;">Is it safe to share your school's name and location with an AI chatbot?</p>
+       <div class="flex flex-col sm:flex-row gap-6 justify-center">
+        <button onclick="answerQuiz(false)" class="quiz-btn px-10 py-4 rounded-2xl font-bold text-lg transition-all hover:scale-105 hover:shadow-2xl" style="font-family: 'Space Grotesk', sans-serif; background: linear-gradient(135deg, #EF4444 0%, #DC2626 100%); color: white; border: 2px solid #F87171;">❌ No - Keep it Private</button>
+        <button onclick="answerQuiz(true)" class="quiz-btn px-10 py-4 rounded-2xl font-bold text-lg transition-all hover:scale-105 hover:shadow-2xl" style="font-family: 'Space Grotesk', sans-serif; background: linear-gradient(135deg, #10B981 0%, #059669 100%); color: white; border: 2px solid #34D399;">✅ Yes - It's Fine</button>
+       </div>
+      </div>
+      <div id="quiz-result" class="hidden text-center">
+       <div id="result-content"></div>
+       <button onclick="resetQuiz()" class="mt-6 px-8 py-3 rounded-2xl font-bold transition-all hover:scale-105" style="font-family: 'Space Grotesk', sans-serif; background: linear-gradient(135deg, #8B5CF6 0%, #7C3AED 100%); color: white; border: 2px solid #A78BFA;">Try Again 🔄</button>
+      </div>
+     </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="text-center">
+     <div class="inline-flex items-center gap-4 px-8 py-4 rounded-2xl backdrop-blur-md" style="background: rgba(139, 92, 246, 0.2); border: 2px solid rgba(139, 92, 246, 0.4);">
+      <span class="text-3xl float-animation">🤖</span>
+      <p id="footer-text" class="font-semibold text-lg text-purple-100" style="font-family: 'Inter', sans-serif;">Be smart. Be safe. Be amazing with AI!</p>
+      <span class="text-3xl float-animation float-delay-1">🚀</span>
+     </div>
+     <div class="flex justify-center gap-6 mt-8">
+      <span class="text-3xl float-animation" style="filter: drop-shadow(0 0 8px rgba(139, 92, 246, 0.6));">💜</span>
+      <span class="text-3xl float-animation float-delay-1" style="filter: drop-shadow(0 0 8px rgba(59, 130, 246, 0.6));">💙</span>
+      <span class="text-3xl float-animation float-delay-2" style="filter: drop-shadow(0 0 8px rgba(99, 102, 241, 0.6));">⚡</span>
+      <span class="text-3xl float-animation float-delay-3" style="filter: drop-shadow(0 0 8px rgba(124, 58, 237, 0.6));">🌟</span>
+     </div>
+     <p class="mt-6 text-sm text-purple-300" style="font-family: 'Inter', sans-serif;">A PracticallyBeta Guide | © 2025 PracticallyBeta | All rights reserved</p>
+    </footer>
+   </div>
+  </div>
+
+  <script>
+    // ============================================
+    // AI SAFETY FOR KIDS - PB Junior Builders
+    // 4th-6th Grade Version (Dark Theme)
+    // Canva AI Generated - Backup for iteration
+    // ============================================
+
+    const defaultConfig = {
+      main_title: "AI Safety for Kids",
+      subtitle: "Smart strategies to navigate the world of artificial intelligence",
+      tip_1_title: "Protect Your Privacy",
+      tip_1_text: "Never share personal information like your full name, address, phone number, school name, or photos with AI systems. Your privacy is valuable!",
+      tip_2_title: "Verify Information",
+      tip_2_text: "AI can be wrong! Always fact-check important information using trusted sources like teachers, textbooks, or reputable websites.",
+      tip_3_title: "Ask for Help",
+      tip_3_text: "If something feels wrong, confusing, or uncomfortable, talk to a trusted adult immediately. There are no silly questions about safety!",
+      tip_4_title: "Use AI Responsibly",
+      tip_4_text: "AI is a powerful tool for learning and creativity. Use it ethically, give credit when needed, and remember that critical thinking matters!",
+      footer_text: "Be smart. Be safe. Be amazing with AI!",
+      background_color: "#1e1b4b",
+      card_color: "#8B5CF6",
+      text_color: "#C4B5FD",
+      accent_color: "#3B82F6",
+      border_color: "#A78BFA"
+    };
+
+    // Quiz functionality
+    function answerQuiz(answer) {
+      const questionDiv = document.getElementById('quiz-question');
+      const resultDiv = document.getElementById('quiz-result');
+      const resultContent = document.getElementById('result-content');
+
+      questionDiv.classList.add('hidden');
+      resultDiv.classList.remove('hidden');
+
+      if (answer === false) {
+        resultContent.innerHTML = `
+          <div class="text-7xl mb-6">🎉</div>
+          <h3 class="text-3xl font-bold mb-4 gradient-text" style="font-family: 'Space Grotesk', sans-serif;">Excellent! You're thinking like a pro!</h3>
+          <p class="text-lg text-blue-100" style="font-family: 'Inter', sans-serif;">Protecting your school information is crucial for your safety and privacy. Keep up the smart thinking!</p>
+        `;
+      } else {
+        resultContent.innerHTML = `
+          <div class="text-7xl mb-6">💭</div>
+          <h3 class="text-3xl font-bold mb-4 text-red-300" style="font-family: 'Space Grotesk', sans-serif;">Not quite! Let's think about this...</h3>
+          <p class="text-lg text-red-200" style="font-family: 'Inter', sans-serif;">Sharing your school's name and location can reveal where you spend most of your time. Keep that information private to stay safe!</p>
+        `;
+      }
+    }
+
+    function resetQuiz() {
+      const questionDiv = document.getElementById('quiz-question');
+      const resultDiv = document.getElementById('quiz-result');
+
+      resultDiv.classList.add('hidden');
+      questionDiv.classList.remove('hidden');
+    }
+  </script>
+ </body>
+</html>

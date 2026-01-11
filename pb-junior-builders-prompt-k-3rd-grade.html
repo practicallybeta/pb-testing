@@ -1,0 +1,205 @@
+<!doctype html>
+<html lang="en" class="h-full">
+ <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Creative Prompt Activity Guide - PB Junior Builders (K-3rd Grade)</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Note: Canva SDK scripts removed for standalone backup -->
+  <!-- <script src="/_sdk/element_sdk.js"></script> -->
+  <!-- <script src="/_sdk/data_sdk.js"></script> -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&amp;family=Caveat:wght@500;600&amp;display=swap" rel="stylesheet">
+  <style>
+    body {
+      box-sizing: border-box;
+    }
+
+    .font-nunito {
+      font-family: 'Nunito', sans-serif;
+    }
+
+    .font-caveat {
+      font-family: 'Caveat', cursive;
+    }
+  </style>
+ </head>
+ <body class="h-full font-nunito">
+  <div id="app-container" class="h-full w-full overflow-auto" style="background-color: #f8faf7;">
+   <!-- Main Content -->
+   <div class="max-w-3xl mx-auto p-6 md:p-8">
+    <!-- Header Section -->
+    <header class="text-center mb-8">
+     <div class="inline-flex items-center justify-center gap-3 mb-4">
+      <!-- Lightbulb Icon -->
+      <svg class="w-10 h-10" viewbox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+       <circle cx="24" cy="20" r="14" fill="#fde68a" stroke="#f59e0b" stroke-width="2" />
+       <path d="M20 34h8v4a2 2 0 01-2 2h-4a2 2 0 01-2-2v-4z" fill="#f59e0b" />
+       <path d="M24 10v4M18 12l2 3M30 12l-2 3" stroke="#f59e0b" stroke-width="2" stroke-linecap="round" />
+       <path d="M20 20c0-2.2 1.8-4 4-4s4 1.8 4 4" stroke="#f59e0b" stroke-width="2" stroke-linecap="round" />
+      </svg>
+      <h1 id="main-title" class="text-3xl md:text-4xl font-extrabold" style="color: #5b7a5f;">Imagination Station</h1>
+      <!-- Pencil Icon -->
+      <svg class="w-8 h-8" viewbox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+       <path d="M8 32l2-8 20-20 6 6-20 20-8 2z" fill="#a7c4bc" stroke="#5b7a5f" stroke-width="2" />
+       <path d="M26 10l6 6" stroke="#5b7a5f" stroke-width="2" />
+       <path d="M8 32l2-2" stroke="#5b7a5f" stroke-width="2" stroke-linecap="round" />
+      </svg>
+     </div>
+     <p class="text-lg font-semibold" style="color: #7ba7a3;">A Creative Activity for Ages 7–12</p>
+    </header>
+
+    <!-- Introduction Card -->
+    <section class="rounded-2xl p-6 mb-6 shadow-sm" style="background-color: #e8f0ed;">
+     <div class="flex items-start gap-4">
+      <!-- Book/Guide Icon -->
+      <div class="flex-shrink-0 w-12 h-12 rounded-full flex items-center justify-center" style="background-color: #a7c4bc;">
+       <svg class="w-6 h-6" viewbox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M4 4h16v16H4z" fill="white" />
+        <path d="M4 4h16v16H4V4z" stroke="#5b7a5f" stroke-width="2" />
+        <path d="M12 4v16M4 8h8M4 12h8" stroke="#5b7a5f" stroke-width="1.5" />
+       </svg>
+      </div>
+      <div>
+       <h2 class="text-xl font-bold mb-2" style="color: #5b7a5f;">What's This All About?</h2>
+       <p id="intro-text" class="leading-relaxed" style="color: #4a5d4d;">This activity is designed to spark meaningful conversations and creative thinking between adults and children. Together, you'll explore a thought-provoking prompt, share ideas, and discover new perspectives. There are no wrong answers—just wonderful opportunities to think, create, and connect!</p>
+      </div>
+     </div>
+    </section>
+
+    <!-- Prompt of the Day -->
+    <section class="rounded-2xl p-6 mb-6 shadow-sm border-2" style="background-color: #fffef5; border-color: #f59e0b;">
+     <div class="flex items-center gap-3 mb-4">
+      <!-- Star Icon -->
+      <svg class="w-8 h-8" viewbox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+       <path d="M16 4l3.5 9H28l-7 5.5 2.5 9L16 22l-7.5 5.5 2.5-9-7-5.5h8.5L16 4z" fill="#fde68a" stroke="#f59e0b" stroke-width="2" />
+      </svg>
+      <h2 class="text-xl font-bold" style="color: #d97706;">Prompt of the Day</h2>
+     </div>
+     <div class="rounded-xl p-5" style="background-color: #fef3c7;">
+      <p id="prompt-text" class="text-xl md:text-2xl font-caveat font-semibold text-center leading-relaxed" style="color: #92400e;">"If you could create a new holiday that everyone in the world would celebrate, what would it be called, and how would people celebrate it?"</p>
+     </div>
+    </section>
+
+    <!-- Discussion Questions -->
+    <section class="rounded-2xl p-6 mb-6 shadow-sm" style="background-color: #e6f2f0;">
+     <div class="flex items-center gap-3 mb-5">
+      <!-- Chat/Discussion Icon -->
+      <svg class="w-8 h-8" viewbox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+       <path d="M6 8h20v14H12l-6 4V8z" fill="#a7c4bc" stroke="#5b8a8a" stroke-width="2" />
+       <circle cx="12" cy="15" r="1.5" fill="#5b8a8a" />
+       <circle cx="16" cy="15" r="1.5" fill="#5b8a8a" />
+       <circle cx="20" cy="15" r="1.5" fill="#5b8a8a" />
+      </svg>
+      <h2 class="text-xl font-bold" style="color: #5b8a8a;">Let's Explore Together</h2>
+     </div>
+     <p class="mb-4 text-sm" style="color: #4a6b6b;">Use these questions to guide your conversation and dig deeper into the prompt:</p>
+     <div class="space-y-3">
+      <div class="flex items-start gap-3 p-3 rounded-xl" style="background-color: #ffffff;">
+       <span class="flex-shrink-0 w-7 h-7 rounded-full flex items-center justify-center text-sm font-bold text-white" style="background-color: #7ba7a3;">1</span>
+       <p id="question-1" class="pt-0.5" style="color: #3d5a5a;">What feeling or idea would your holiday celebrate? Why is that important to you?</p>
+      </div>
+      <div class="flex items-start gap-3 p-3 rounded-xl" style="background-color: #ffffff;">
+       <span class="flex-shrink-0 w-7 h-7 rounded-full flex items-center justify-center text-sm font-bold text-white" style="background-color: #7ba7a3;">2</span>
+       <p id="question-2" class="pt-0.5" style="color: #3d5a5a;">What special foods, songs, or traditions would be part of your holiday?</p>
+      </div>
+      <div class="flex items-start gap-3 p-3 rounded-xl" style="background-color: #ffffff;">
+       <span class="flex-shrink-0 w-7 h-7 rounded-full flex items-center justify-center text-sm font-bold text-white" style="background-color: #7ba7a3;">3</span>
+       <p id="question-3" class="pt-0.5" style="color: #3d5a5a;">How could people in different countries celebrate this holiday in their own way?</p>
+      </div>
+      <div class="flex items-start gap-3 p-3 rounded-xl" style="background-color: #ffffff;">
+       <span class="flex-shrink-0 w-7 h-7 rounded-full flex items-center justify-center text-sm font-bold text-white" style="background-color: #7ba7a3;">4</span>
+       <p id="question-4" class="pt-0.5" style="color: #3d5a5a;">If you could design a symbol or mascot for your holiday, what would it look like?</p>
+      </div>
+     </div>
+    </section>
+
+    <!-- Adult Tips -->
+    <section class="rounded-2xl p-5 mb-6 shadow-sm" style="background-color: #f5f0e8;">
+     <div class="flex items-center gap-3 mb-4">
+      <!-- Heart/Care Icon -->
+      <svg class="w-7 h-7" viewbox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+       <path d="M14 24s-9-6-9-12c0-3.3 2.7-6 6-6 2 0 3 1 3 1s1-1 3-1c3.3 0 6 2.7 6 6 0 6-9 12-9 12z" fill="#ddd6c8" stroke="#8b7355" stroke-width="2" />
+      </svg>
+      <h2 class="text-lg font-bold" style="color: #8b7355;">Adult Tips</h2>
+     </div>
+     <ul class="space-y-2">
+      <li class="flex items-start gap-3">
+       <span style="color: #a69070;">✦</span>
+       <p id="tip-1" class="text-sm" style="color: #6b5a45;"><strong>Follow their lead:</strong> Let the child's ideas guide the conversation. Ask "tell me more" to encourage deeper thinking without steering them toward a "right" answer.</p>
+      </li>
+      <li class="flex items-start gap-3">
+       <span style="color: #a69070;">✦</span>
+       <p id="tip-2" class="text-sm" style="color: #6b5a45;"><strong>Share your own ideas:</strong> Model creative thinking by sharing your thoughts too—this makes it a collaborative adventure rather than a quiz!</p>
+      </li>
+     </ul>
+    </section>
+
+    <!-- Footer / Reflection Area -->
+    <footer class="rounded-2xl p-6 shadow-sm border-2 border-dashed" style="background-color: #ffffff; border-color: #c8d8d4;">
+     <div class="flex items-center justify-between mb-4">
+      <h2 class="text-lg font-bold" style="color: #5b7a5f;">What We Discovered</h2>
+      <!-- Sparkle Icon -->
+      <svg class="w-6 h-6" viewbox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+       <path d="M12 2l1.5 4.5L18 8l-4.5 1.5L12 14l-1.5-4.5L6 8l4.5-1.5L12 2z" fill="#fde68a" stroke="#f59e0b" stroke-width="1" />
+       <path d="M19 14l1 3 3 1-3 1-1 3-1-3-3-1 3-1 1-3z" fill="#a7c4bc" stroke="#5b7a5f" stroke-width="0.5" />
+       <path d="M5 16l0.7 2.3L8 19l-2.3 0.7L5 22l-0.7-2.3L2 19l2.3-0.7L5 16z" fill="#7ba7a3" stroke="#5b8a8a" stroke-width="0.5" />
+      </svg>
+     </div>
+     <!-- Name and Date Fields -->
+     <div class="grid grid-cols-2 gap-4 mb-4">
+      <div>
+       <label class="block text-sm font-semibold mb-1" style="color: #6b7a6e;">Name</label>
+       <div class="h-8 border-b-2 border-dashed" style="border-color: #c8d8d4;"></div>
+      </div>
+      <div>
+       <label class="block text-sm font-semibold mb-1" style="color: #6b7a6e;">Date</label>
+       <div class="h-8 border-b-2 border-dashed" style="border-color: #c8d8d4;"></div>
+      </div>
+     </div>
+     <!-- Reflection/Doodle Space -->
+     <div class="min-h-32 rounded-xl border-2 border-dashed p-4 relative" style="border-color: #d8e4e0; background-color: #fafcfb;">
+      <p class="text-sm text-center" style="color: #a0b0a8;">Write or draw something you learned from the AI or from each other!</p>
+      <!-- Corner decorations -->
+      <div class="absolute top-2 left-2 w-4 h-4 border-l-2 border-t-2 rounded-tl" style="border-color: #c8d8d4;"></div>
+      <div class="absolute top-2 right-2 w-4 h-4 border-r-2 border-t-2 rounded-tr" style="border-color: #c8d8d4;"></div>
+      <div class="absolute bottom-2 left-2 w-4 h-4 border-l-2 border-b-2 rounded-bl" style="border-color: #c8d8d4;"></div>
+      <div class="absolute bottom-2 right-2 w-4 h-4 border-r-2 border-b-2 rounded-br" style="border-color: #c8d8d4;"></div>
+     </div>
+     <!-- Small encouragement -->
+     <p class="text-center mt-4 font-caveat text-lg" style="color: #7ba7a3;">✨ Keep exploring—AI and humans make a great team! ✨</p>
+    </footer>
+
+    <!-- PB Footer -->
+    <p class="text-center mt-6 text-sm" style="color: #9CA3AF;">A PracticallyBeta Guide | © 2025 PracticallyBeta | All rights reserved</p>
+   </div>
+  </div>
+
+  <script>
+    // ============================================
+    // CREATIVE PROMPT ACTIVITY - PB Junior Builders
+    // K-3rd Grade Version
+    // Canva AI Generated - Backup for iteration
+    // ============================================
+
+    const defaultConfig = {
+      main_title: "AI Explorer Lab",
+      intro_text: "You and your child are going to chat with an AI together! You'll ask it a creative question, take turns sharing your own answers, and see what the AI comes up with. This is a chance to explore ideas side-by-side, discover how AI thinks, and have fun with your imaginations. Ready to start the conversation?",
+      prompt_text: "\"If you could create a new holiday that everyone in the world would celebrate, what would it be called, and how would people celebrate it?\"",
+      question_1: "Type the question above into your AI chatbot (like ChatGPT, Claude, or another assistant). Hit send together!",
+      question_2: "Read the AI's answer out loud. What do you notice? What's surprising, interesting, or different from what you expected?",
+      question_3: "Take turns answering the question yourselves. Adult first, then child—or flip a coin! Share your ideas without judging.",
+      question_4: "Ask the AI a follow-up question based on one of your ideas. Example: \"What foods would we eat on Kindness Day?\" See where it takes you!",
+      question_5: "Reflect together: How did the AI's answer compare to yours? What did you learn from each other and from the AI?",
+      tip_1: "Stay curious, not critical: Let the AI's response be a starting point, not the \"right answer.\" Ask your child what they think about it—do they agree? Would they change anything?",
+      tip_2: "Model learning together: Share your own honest reaction to the AI's response. Say things like, \"I didn't expect that!\" or \"That's different from my idea.\" It shows that exploring with AI is a shared discovery.",
+      background_color: "#f8faf7",
+      primary_color: "#5b7a5f",
+      accent_color: "#7ba7a3",
+      font_family: "Nunito",
+      font_size: 16
+    };
+  </script>
+ </body>
+</html>
