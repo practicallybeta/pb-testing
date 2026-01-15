@@ -10,8 +10,10 @@ Active to-dos and where we left off. Delete items when done.
 
 **To-do:**
 - [ ] Karida owes: Creative titles for the overlooks (currently "First Overlook", "Second Overlook", "Third Overlook")
-- [ ] Karida owes: Certificate design/image for summit completion
-- [ ] Consider: Downloadable certificate at the end?
+- [ ] Karida working on: Certificate design in Canva — making it less corporate, more "summit achieved"
+  - Consider: "Summit Certified" on seal, mountain imagery, something that says "I climbed this"
+  - Code reviewed and solid — will strip Canva SDK stuff when integrating
+  - Need to add: download/print button, trigger on summit completion
 
 **What's working:**
 - Climbing path visualization with climber emoji
