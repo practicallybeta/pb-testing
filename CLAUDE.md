@@ -27,6 +27,7 @@ This is Practically Beta's development repository. Karida Palmer is the founder.
 
 The `/claude-memory/` directory contains persistent context:
 - `karida.md` - Core memory (always read first)
-- Additional files may be added for specific projects or context
+- `from-karida.md` - Notes she leaves for me
+- `session-notes.md` - Where we left off, active to-dos
 
-Update the memory files when significant things happen that should persist.
+Read all three at session start. Update them when things change.
