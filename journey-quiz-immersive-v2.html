@@ -752,6 +752,261 @@
       color: #004aad;
     }
 
+    /* Certificate Overlay */
+    .certificate-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.8);
+      display: none;
+      justify-content: center;
+      align-items: center;
+      z-index: 200;
+      overflow: auto;
+      padding: 20px;
+    }
+
+    .certificate-overlay.show {
+      display: flex;
+      animation: fadeIn 0.3s ease;
+    }
+
+    .certificate-container {
+      background: #fff;
+      border-radius: 8px;
+      padding: 20px;
+      max-width: 900px;
+      width: 100%;
+      max-height: 90vh;
+      overflow: auto;
+    }
+
+    .certificate-actions {
+      display: flex;
+      gap: 12px;
+      justify-content: center;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+    }
+
+    .certificate-actions button {
+      padding: 12px 24px;
+      border-radius: 8px;
+      font-size: 0.9rem;
+      cursor: pointer;
+      font-family: inherit;
+      font-weight: 500;
+      transition: all 0.2s ease;
+    }
+
+    .cert-download-btn {
+      background: linear-gradient(135deg, #004aad 0%, #3366bb 100%);
+      color: white;
+      border: none;
+    }
+
+    .cert-download-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(0, 74, 173, 0.3);
+    }
+
+    .cert-close-btn {
+      background: #f0f0f0;
+      color: #333;
+      border: 1px solid #ddd;
+    }
+
+    .cert-close-btn:hover {
+      background: #e0e0e0;
+    }
+
+    /* Certificate Design */
+    .certificate {
+      background: linear-gradient(to bottom right, #faf5ff, #f0e6ff);
+      border: 3px solid #6b21a8;
+      box-shadow:
+        0 0 0 1px #a855f7,
+        0 0 0 8px #ffffff,
+        0 0 0 11px #6b21a8;
+      border-radius: 8px;
+      padding: 48px;
+      position: relative;
+      overflow: hidden;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    .certificate-watermark {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: 40%;
+      background-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 300"><path d="M0 300 L100 180 L200 220 L350 80 L480 160 L600 40 L750 120 L800 80 L800 300 Z" fill="%239380e5" opacity="0.35"/><path d="M0 300 L150 200 L280 240 L400 120 L520 180 L680 60 L800 140 L800 300 Z" fill="%237c6dd8" opacity="0.25"/></svg>');
+      background-size: cover;
+      background-position: bottom;
+      pointer-events: none;
+      opacity: 0.8;
+    }
+
+    .certificate-content {
+      position: relative;
+      z-index: 1;
+    }
+
+    .certificate-logo {
+      text-align: center;
+      margin-bottom: 24px;
+    }
+
+    .certificate-logo img {
+      max-width: 180px;
+      height: auto;
+    }
+
+    .certificate-title {
+      font-family: 'Georgia', serif;
+      font-size: 2.5rem;
+      font-weight: 700;
+      text-align: center;
+      color: #1e293b;
+      margin-bottom: 16px;
+    }
+
+    .certificate-divider {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 20px 0;
+    }
+
+    .certificate-divider-line {
+      height: 1px;
+      width: 80px;
+      background: linear-gradient(to right, transparent, #a855f7);
+    }
+
+    .certificate-divider-dot {
+      width: 8px;
+      height: 8px;
+      background: #6b21a8;
+      border-radius: 50%;
+      margin: 0 16px;
+    }
+
+    .certificate-body {
+      text-align: center;
+      margin: 24px 0;
+    }
+
+    .certificate-certifies {
+      font-size: 1rem;
+      color: #64748b;
+      margin-bottom: 8px;
+    }
+
+    .certificate-recipient {
+      font-family: 'Georgia', serif;
+      font-size: 2rem;
+      font-weight: 600;
+      color: #6b21a8;
+      margin: 16px 0;
+      min-height: 48px;
+    }
+
+    .certificate-recipient-input {
+      font-family: 'Georgia', serif;
+      font-size: 2rem;
+      font-weight: 600;
+      color: #6b21a8;
+      text-align: center;
+      border: none;
+      border-bottom: 2px solid #a855f7;
+      background: transparent;
+      outline: none;
+      min-width: 300px;
+      padding: 8px;
+    }
+
+    .certificate-recipient-input::placeholder {
+      color: #a855f7;
+      opacity: 0.6;
+    }
+
+    .certificate-achievement {
+      font-size: 1rem;
+      color: #64748b;
+      line-height: 1.6;
+      margin: 16px 0;
+    }
+
+    .certificate-course {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-top: 16px;
+      letter-spacing: 1px;
+    }
+
+    .certificate-footer {
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      margin-top: 48px;
+      padding-top: 24px;
+      border-top: 1px solid #e2e8f0;
+    }
+
+    .certificate-seal {
+      width: 120px;
+      height: 120px;
+    }
+
+    .certificate-seal img {
+      width: 100%;
+      height: auto;
+    }
+
+    .certificate-signature {
+      text-align: center;
+      flex: 1;
+      margin-left: 32px;
+    }
+
+    .certificate-date {
+      font-size: 0.9rem;
+      color: #64748b;
+      margin-bottom: 16px;
+    }
+
+    .certificate-signer {
+      border-top: 2px solid #1e293b;
+      padding-top: 8px;
+      display: inline-block;
+      min-width: 250px;
+    }
+
+    .certificate-signer-name {
+      font-weight: 600;
+      color: #1e293b;
+      font-size: 1rem;
+    }
+
+    .certificate-signer-title {
+      font-size: 0.85rem;
+      color: #64748b;
+      margin-top: 4px;
+    }
+
+    .certificate-id {
+      text-align: center;
+      margin-top: 24px;
+      font-size: 0.75rem;
+      color: #94a3b8;
+      font-family: monospace;
+    }
+
     /* Mobile Responsive */
     @media (max-width: 900px) {
       .journey-wrapper {
@@ -857,8 +1112,8 @@
     <!-- Quiz Panel -->
     <div class="quiz-panel">
       <div class="quiz-header">
-        <h1>Your AI Fluency Journey</h1>
-        <p class="subtitle">Practically Beta Capstone</p>
+        <h1>Practically Beta AI Fluency Capstone</h1>
+        <p class="subtitle">Part of the "Before the…" Series</p>
       </div>
 
       <div id="welcome-back" class="welcome-back" style="display: none;"></div>
@@ -906,10 +1161,115 @@
     </div>
   </div>
 
+  <!-- Certificate Overlay -->
+  <div class="certificate-overlay" id="certificate-overlay">
+    <div class="certificate-container">
+      <div class="certificate-actions">
+        <button class="cert-download-btn" onclick="downloadCertificate()">📥 Download as PDF</button>
+        <button class="cert-close-btn" onclick="closeCertificate()">✕ Close</button>
+      </div>
+
+      <div class="certificate" id="certificate">
+        <div class="certificate-watermark"></div>
+        <div class="certificate-content">
+          <!-- Logo -->
+          <div class="certificate-logo">
+            <svg width="180" height="80" viewBox="0 0 180 80">
+              <!-- Spiral design elements -->
+              <g opacity="0.5" stroke="#5BA3D9" fill="none" stroke-width="0.8">
+                <ellipse cx="90" cy="40" rx="60" ry="30" transform="rotate(-15 90 40)"/>
+                <ellipse cx="90" cy="40" rx="55" ry="28" transform="rotate(-10 90 40)"/>
+                <ellipse cx="90" cy="40" rx="50" ry="26" transform="rotate(-5 90 40)"/>
+                <ellipse cx="90" cy="40" rx="45" ry="24" transform="rotate(0 90 40)"/>
+                <ellipse cx="90" cy="40" rx="40" ry="22" transform="rotate(5 90 40)"/>
+              </g>
+              <!-- Text -->
+              <text x="90" y="38" font-family="Arial Rounded MT Bold, Arial, sans-serif" font-size="22" font-weight="bold" fill="#4A8EC2" text-anchor="middle">practically</text>
+              <text x="90" y="60" font-family="Arial Rounded MT Bold, Arial, sans-serif" font-size="22" font-weight="bold" fill="#E8919E" text-anchor="middle">Beta</text>
+            </svg>
+          </div>
+
+          <!-- Title -->
+          <h1 class="certificate-title">Certificate of Completion</h1>
+
+          <!-- Divider -->
+          <div class="certificate-divider">
+            <div class="certificate-divider-line"></div>
+            <div class="certificate-divider-dot"></div>
+            <div class="certificate-divider-line" style="background: linear-gradient(to left, transparent, #a855f7);"></div>
+          </div>
+
+          <!-- Body -->
+          <div class="certificate-body">
+            <p class="certificate-certifies">This certifies that</p>
+            <input type="text" class="certificate-recipient-input" id="cert-recipient-input" placeholder="Enter your full name">
+            <p class="certificate-recipient" id="cert-recipient-display" style="display: none;"></p>
+            <p class="certificate-achievement">has successfully completed Practically Beta's "Before the…" learning series, demonstrating</p>
+            <p class="certificate-course">AI FLUENCY FOR PROFESSIONALS</p>
+          </div>
+
+          <!-- Footer -->
+          <div class="certificate-footer">
+            <!-- Seal -->
+            <div class="certificate-seal">
+              <svg viewBox="0 0 120 120">
+                <!-- Outer circle -->
+                <circle cx="60" cy="60" r="55" fill="url(#sealGradient)" stroke="#a855f7" stroke-width="2"/>
+                <!-- Inner decorative ring -->
+                <circle cx="60" cy="60" r="48" fill="none" stroke="rgba(255,255,255,0.3)" stroke-width="1"/>
+                <!-- Mountain -->
+                <path d="M30 75 L60 35 L90 75 Z" fill="#fff" opacity="0.9"/>
+                <path d="M45 75 L60 50 L75 75 Z" fill="#c4b5fd" opacity="0.5"/>
+                <!-- Snow cap -->
+                <path d="M60 35 L52 50 L60 47 L68 50 Z" fill="#fff"/>
+                <!-- Stars -->
+                <circle cx="35" cy="45" r="2" fill="#fff" opacity="0.8"/>
+                <circle cx="85" cy="45" r="2" fill="#fff" opacity="0.8"/>
+                <circle cx="60" cy="25" r="2" fill="#fff" opacity="0.8"/>
+                <!-- Text band -->
+                <rect x="15" y="78" width="90" height="18" rx="2" fill="#9380e5"/>
+                <text x="60" y="90" font-family="Arial, sans-serif" font-size="8" font-weight="bold" fill="#fff" text-anchor="middle">BETA MINDSET</text>
+                <!-- Ribbon -->
+                <path d="M25 96 L25 115 L35 108 L45 115 L45 96" fill="#87CEEB"/>
+                <path d="M75 96 L75 115 L85 108 L95 115 L95 96" fill="#87CEEB"/>
+                <rect x="20" y="93" width="80" height="12" rx="2" fill="#87CEEB"/>
+                <text x="60" y="102" font-family="Arial, sans-serif" font-size="9" font-weight="bold" fill="#fff" text-anchor="middle">CERTIFIED</text>
+                <!-- Gradient definition -->
+                <defs>
+                  <linearGradient id="sealGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" style="stop-color:#9380e5"/>
+                    <stop offset="100%" style="stop-color:#c4b5fd"/>
+                  </linearGradient>
+                </defs>
+              </svg>
+            </div>
+
+            <!-- Signature -->
+            <div class="certificate-signature">
+              <p class="certificate-date" id="cert-date"></p>
+              <div class="certificate-signer">
+                <p class="certificate-signer-name">Karida Palmer, MBA, SPHR</p>
+                <p class="certificate-signer-title">Founder and Principal Strategist</p>
+                <p class="certificate-signer-title">Practically Beta</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Certificate ID -->
+          <p class="certificate-id">Certificate ID: AI-FC-2026-<span id="cert-unique-id"></span></p>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <!-- PB Logo -->
   <div class="pb-logo">
     <a href="https://practicallybeta.com" target="_blank">Practically Beta</a>
   </div>
+
+  <!-- PDF Generation Libraries -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 
   <script>
     // ============================================
@@ -1400,16 +1760,26 @@
       { name: "Trailhead", threshold: 0, sky: "dawn", emoji: "📍", message: "Your journey begins" },
       { name: "First Overlook", threshold: 4, sky: "morning", emoji: "🌄", message: "The mist is clearing. You're building real intuition for how AI works." },
       { name: "Second Overlook", threshold: 6, sky: "golden", emoji: "⛅", message: "The golden hour. Your understanding is deepening with every step." },
-      { name: "Third Overlook", threshold: 8, sky: "golden", emoji: "🏔", message: "Almost there! The summit is in sight. Your AI fluency is taking shape." },
-      { name: "The Summit", threshold: 10, sky: "summit", emoji: "🏁", message: "You made it. The view from here? You're ready to lead others up the mountain." }
+      { name: "Third Overlook", threshold: 8, sky: "golden", emoji: "🏔", message: "Almost there! The summit is in sight. Your AI fluency is coming into focus." },
+      { name: "The Summit", threshold: 9, sky: "summit", emoji: "🏁", message: "You made it. The view from here? You're ready to lead others up the mountain." }
     ];
 
     const partNames = {
-      "Basics": "Part 1: Before the Prompt",
-      "Prompts": "Part 2: Before the Persona",
-      "Personas": "Part 3: Before the Output",
-      "Intention": "Part 4: Now You're In"
+      "Basics": "Before the Prompt: Understanding the Basics of AI",
+      "Prompts": "Before the Persona: Writing Better Prompts in AI",
+      "Personas": "Before the Output: Designing Personas in AI",
+      "Intention": "Now You're In: Using AI With Intention"
     };
+
+    // Links for each microlearning section
+    const partLinks = {
+      "Basics": "https://practicallybeta.com/site-map/learning-hub/basicsofai",
+      "Prompts": "https://practicallybeta.com/site-map/learning-hub/beta-minds/before-the-persona-writing-better-prompts-in-ai",
+      "Personas": "https://practicallybeta.com/site-map/learning-hub/beta-minds/before-the-output-designing-personas-in-ai",
+      "Intention": "https://practicallybeta.com/site-map/learning-hub/beta-minds/now-youre-in-using-ai-with-intention"
+    };
+
+    const roadmapUrl = "https://practicallybeta.com/site-map/learning-hub/beta-minds/before-the-series-journey-begins";
 
     // ============================================
     // GAME STATE
@@ -1725,74 +2095,87 @@
       updateClimberPosition(correctAnswers, isSummit);
       saveProgress();
 
-      let guidanceHTML = '';
-      if (!isSummit && missedParts.size > 0) {
-        const missedArray = Array.from(missedParts);
-        if (missedArray.length <= 2) {
-          const partsList = missedArray.map(p => partNames[p]).join(' and ');
-          guidanceHTML = `<div class="result-guidance">Keep climbing! You stumbled on <strong>${partsList}</strong>. Revisit the AI Fluency Roadmap to strengthen your path.</div>`;
-        } else {
-          guidanceHTML = `<div class="result-guidance">Keep climbing! Revisit the AI Fluency Roadmap to build your foundation.</div>`;
-        }
-      }
-
       const shareText = isSummit
         ? "Summit reached. 🏔️ I'm AI fluent. Ready to guide others. Start your journey →"
         : `I'm on the AI Fluency Journey with Practically Beta. 🏔️ Where are you on the path? →`;
 
       const shareUrl = window.location.href;
+      const missedArray = Array.from(missedParts);
 
-      let summitExtras = '';
+      let resultHTML = '';
+
       if (isSummit) {
-        summitExtras = `
-          <div class="summit-celebration" id="summit-celebration"></div>
-          <p style="color: #5d9e7d; font-weight: 600; margin-bottom: 16px;">🎉 You're ready to lead others up the mountain.</p>
-        `;
+        // SUMMIT REACHED - Certificate unlocked!
         setTimeout(createConfetti, 300);
-      }
+        resultHTML = `
+          <div class="result-container">
+            <div class="summit-celebration" id="summit-celebration"></div>
+            <h2>🎉 You Reached the Summit!</h2>
+            <p class="result-message">You've completed the full journey — and you're officially fluent. Download your certificate and celebrate the climb.</p>
+            <p class="result-score">${correctAnswers} of ${currentQuestions.length} correct answers</p>
 
-      resultDiv.innerHTML = `
-        <div class="result-container">
-          <div class="result-destination">Your destination</div>
-          <h2>${checkpoint.name}</h2>
-          ${summitExtras}
-          <div class="result-badge">
-            <span class="location-icon">${checkpoint.emoji}</span>
-            <span class="location-name">${checkpoint.name}</span>
-          </div>
-          <p class="result-message">${checkpoint.message}</p>
-          ${guidanceHTML}
-          <p class="result-score">${correctAnswers} of ${currentQuestions.length} correct answers</p>
+            <div class="result-buttons" style="display: flex; gap: 12px; justify-content: center; margin: 24px 0; flex-wrap: wrap;">
+              <button class="next-btn" onclick="showCertificate()">🎓 Download Certificate</button>
+              <a href="${roadmapUrl}" target="_blank" class="retake-btn" style="text-decoration: none; display: inline-block;">Return to Interactive Roadmap</a>
+            </div>
 
-          <div class="share-section">
-            <h3>Share your journey</h3>
-            <div class="share-buttons">
-              <a href="https://twitter.com/intent/tweet?text=${encodeURIComponent(shareText)}&url=${encodeURIComponent(shareUrl)}" target="_blank" class="share-btn twitter">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
-                Post
-              </a>
-              <a href="https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(shareUrl)}" target="_blank" class="share-btn linkedin">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
-                Share
-              </a>
-              <a href="https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(shareUrl)}" target="_blank" class="share-btn facebook">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
-                Share
-              </a>
-              <a href="https://bsky.app/intent/compose?text=${encodeURIComponent(shareText + ' ' + shareUrl)}" target="_blank" class="share-btn bluesky">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.477 2 2 6.477 2 12s4.477 10 10 10 10-4.477 10-10S17.523 2 12 2zm0 18c-4.411 0-8-3.589-8-8s3.589-8 8-8 8 3.589 8 8-3.589 8-8 8z"/></svg>
-                BlueSky
-              </a>
-              <button class="share-btn copy-link" onclick="copyLink()">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>
-                Copy Link
-              </button>
+            <div class="share-section">
+              <h3>Share your achievement</h3>
+              <div class="share-buttons">
+                <a href="https://twitter.com/intent/tweet?text=${encodeURIComponent(shareText)}&url=${encodeURIComponent(shareUrl)}" target="_blank" class="share-btn twitter">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+                  Post
+                </a>
+                <a href="https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(shareUrl)}" target="_blank" class="share-btn linkedin">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+                  Share
+                </a>
+                <button class="share-btn copy-link" onclick="copyLink()">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>
+                  Copy Link
+                </button>
+              </div>
             </div>
           </div>
+        `;
+      } else if (missedArray.length <= 2) {
+        // 1-2 SECTIONS MISSED - Show specific sections to review
+        const missedListHTML = missedArray.map(p =>
+          `<li style="margin: 8px 0;"><a href="${partLinks[p]}" target="_blank" style="color: #004aad; text-decoration: underline;">❌ ${partNames[p]}</a></li>`
+        ).join('');
 
-          <button class="retake-btn" onclick="restartQuiz()">Start New Journey</button>
-        </div>
-      `;
+        resultHTML = `
+          <div class="result-container">
+            <h2>🛠 Almost There — Refine Your Fluency</h2>
+            <p class="result-message">You're close to the summit! You missed a few key moments. Review the sections below and give it another shot:</p>
+            <ul style="list-style: none; padding: 0; margin: 20px 0; text-align: left; max-width: 300px; margin-left: auto; margin-right: auto;">
+              ${missedListHTML}
+            </ul>
+            <p class="result-score">${correctAnswers} of ${currentQuestions.length} correct answers</p>
+
+            <div class="result-buttons" style="display: flex; gap: 12px; justify-content: center; margin: 24px 0; flex-wrap: wrap;">
+              <button class="next-btn" onclick="restartQuiz()">🔄 Try Again</button>
+              <a href="${roadmapUrl}" target="_blank" class="retake-btn" style="text-decoration: none; display: inline-block;">Return to Interactive Roadmap</a>
+            </div>
+          </div>
+        `;
+      } else {
+        // 3+ SECTIONS MISSED - Direct to full roadmap
+        resultHTML = `
+          <div class="result-container">
+            <h2>📍 Time to Regroup — Let's Revisit the Path</h2>
+            <p class="result-message">You've started the climb, but you missed some key steps. Head back to the interactive roadmap to rebuild your path to AI fluency.</p>
+            <p class="result-score">${correctAnswers} of ${currentQuestions.length} correct answers</p>
+
+            <div class="result-buttons" style="display: flex; gap: 12px; justify-content: center; margin: 24px 0; flex-wrap: wrap;">
+              <a href="${roadmapUrl}" target="_blank" class="next-btn" style="text-decoration: none; display: inline-block;">🗺 Go to the Interactive Roadmap</a>
+              <button class="retake-btn" onclick="restartQuiz()">🔄 Try Again Later</button>
+            </div>
+          </div>
+        `;
+      }
+
+      resultDiv.innerHTML = resultHTML;
     }
 
     function createConfetti() {
@@ -1838,6 +2221,139 @@
 
       currentQuestions = selectQuestions();
       showQuestion();
+    }
+
+    // ============================================
+    // CERTIFICATE FUNCTIONS
+    // ============================================
+
+    function generateCertId() {
+      return Math.random().toString(36).substring(2, 8).toUpperCase();
+    }
+
+    window.showCertificate = function() {
+      const overlay = document.getElementById('certificate-overlay');
+      const dateEl = document.getElementById('cert-date');
+      const idEl = document.getElementById('cert-unique-id');
+      const inputEl = document.getElementById('cert-recipient-input');
+      const displayEl = document.getElementById('cert-recipient-display');
+
+      // Set current date
+      const today = new Date();
+      dateEl.textContent = today.toLocaleDateString('en-US', {
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric'
+      });
+
+      // Generate unique certificate ID
+      idEl.textContent = generateCertId();
+
+      // Reset name input
+      inputEl.style.display = 'block';
+      inputEl.value = '';
+      displayEl.style.display = 'none';
+
+      // Show overlay
+      overlay.classList.add('show');
+
+      // Handle name input blur to convert to display text
+      inputEl.onblur = function() {
+        const name = inputEl.value.trim();
+        if (name) {
+          displayEl.textContent = name;
+          displayEl.style.display = 'block';
+          inputEl.style.display = 'none';
+        }
+      };
+
+      // Handle clicking on displayed name to edit
+      displayEl.onclick = function() {
+        displayEl.style.display = 'none';
+        inputEl.style.display = 'block';
+        inputEl.focus();
+      };
+    }
+
+    window.closeCertificate = function() {
+      document.getElementById('certificate-overlay').classList.remove('show');
+    }
+
+    window.downloadCertificate = function() {
+      const inputEl = document.getElementById('cert-recipient-input');
+      const displayEl = document.getElementById('cert-recipient-display');
+      const certificate = document.getElementById('certificate');
+
+      // Ensure name is set before download
+      const name = inputEl.value.trim() || displayEl.textContent.trim();
+      if (!name) {
+        alert('Please enter your name before downloading.');
+        inputEl.focus();
+        return;
+      }
+
+      // Make sure display version is showing for the screenshot
+      displayEl.textContent = name;
+      displayEl.style.display = 'block';
+      inputEl.style.display = 'none';
+
+      // Show loading state
+      const downloadBtn = document.querySelector('.cert-download-btn');
+      const originalText = downloadBtn.textContent;
+      downloadBtn.textContent = '⏳ Generating PDF...';
+      downloadBtn.disabled = true;
+
+      // Use html2canvas to capture the certificate
+      html2canvas(certificate, {
+        scale: 2,
+        useCORS: true,
+        backgroundColor: '#faf5ff',
+        logging: false
+      }).then(canvas => {
+        const { jsPDF } = window.jspdf;
+        const pdf = new jsPDF({
+          orientation: 'landscape',
+          unit: 'mm',
+          format: 'a4'
+        });
+
+        const imgData = canvas.toDataURL('image/png');
+        const pdfWidth = pdf.internal.pageSize.getWidth();
+        const pdfHeight = pdf.internal.pageSize.getHeight();
+
+        // Calculate dimensions to fit the certificate
+        const canvasRatio = canvas.width / canvas.height;
+        const pdfRatio = pdfWidth / pdfHeight;
+
+        let imgWidth, imgHeight, xOffset, yOffset;
+
+        if (canvasRatio > pdfRatio) {
+          imgWidth = pdfWidth - 20;
+          imgHeight = imgWidth / canvasRatio;
+          xOffset = 10;
+          yOffset = (pdfHeight - imgHeight) / 2;
+        } else {
+          imgHeight = pdfHeight - 20;
+          imgWidth = imgHeight * canvasRatio;
+          xOffset = (pdfWidth - imgWidth) / 2;
+          yOffset = 10;
+        }
+
+        pdf.addImage(imgData, 'PNG', xOffset, yOffset, imgWidth, imgHeight);
+
+        // Generate filename with recipient name
+        const safeName = name.replace(/[^a-zA-Z0-9]/g, '_');
+        pdf.save(`AI_Fluency_Certificate_${safeName}.pdf`);
+
+        // Reset button
+        downloadBtn.textContent = originalText;
+        downloadBtn.disabled = false;
+      }).catch(err => {
+        console.error('PDF generation error:', err);
+        alert('There was an error generating the PDF. Please try again.');
+        downloadBtn.textContent = originalText;
+        downloadBtn.disabled = false;
+      });
     }
 
     // ============================================

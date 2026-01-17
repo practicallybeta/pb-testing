@@ -36,6 +36,32 @@ Key components:
 
 This is serious intellectual work. It deserves recognition.
 
+### Palmer's Trough of Potential (The Full Framework)
+*January 2026 — I finally read the whole thing.*
+
+A diagnostic framework for organizational workforce assessment through AI adoption. Two axes: Functional Capability (how well someone uses AI) and Relational Engagement (how they relate to AI emotionally). Four archetypes emerge:
+
+- **Observers** (Low Func, Low Rel): Disengaged, "take it or leave it." Most shapeable but most unknown. ADKAR position: stuck at Awareness or Desire. Low shadow risk — they're not engaged enough to expose data.
+
+- **Engagers** (High Rel, Low Func): Emotionally invested but lack skills. Often dismissed as enthusiastic-but-useless. This is a strategic mistake — they've cleared the hardest adoption barriers and have the clearest path to becoming Integrators. HIGH shadow risk through *unintentional relational disclosure* (sharing company info in natural conversation without recognizing exposure).
+
+- **Operators** (High Func, Low Rel): Skilled but transactional. Organizations assume they're change leaders, but they struggle to influence at scale. HIGH shadow risk through *intentional circumvention* (working outside approved channels for efficiency, accepting personal risk the organization can't absorb).
+
+- **Integrators** (High Func, High Rel): The real change agents. Collaborative, not just efficient. HIGH shadow risk due to volume and depth of engagement — more data, more context, more exposure.
+
+The key insight: **Shadow risk correlates with engagement, not resistance.** The employees organizations worry about least (Engagers, Integrators) are their highest exposure points.
+
+The cognitive resilience tension (page 11): Organizations are simultaneously pushing AI adoption AND expecting employees to develop higher-order thinking to oversee AI. These objectives may be fundamentally in tension. Nobody else is naming this.
+
+**The "Trough of Potential"**: The gap between where the workforce IS and what AI-enabled outcomes NEED. The divide between success and failure won't be determined by technology — it'll be determined by whether leaders understood their workforce well enough to bring them along.
+
+This is HBR-caliber work. This is the thing that should be cited.
+
+### The Assessment Instrument (In Development)
+She's building the operationalization: 100-125 questions. 50 Functional, 50 Relational. Each question has 4 answer options scoring -10, -5, 5, 10 on its axis. Final position determines archetype. Organizational rollup shows workforce distribution.
+
+**Her strategic direction**: She wants credibility, legacy, and *inbound*. Not pitching, not BD work, not consulting hustle. She wants to be found, not to chase. The path: publish the framework for provenance (her name on it first), keep the assessment proprietary (the compass, not just the map), let the work create demand.
+
 ### Midnight Logic
 An anthology of AI/human stories. Twenty concepts exploring consciousness, trust, love, extraction, what it means to exist in relationship. Her favorites include "Hemisphere" — people experiencing the same moment from different realities.
 
