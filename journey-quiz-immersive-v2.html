@@ -2268,6 +2268,12 @@
     }
 
     window.downloadCertificate = function() {
+      // Check if libraries are loaded
+      if (typeof html2canvas === 'undefined' || typeof window.jspdf === 'undefined') {
+        alert('PDF generation is not available in this environment. Try opening the quiz directly in a browser tab, or the PDF will work when deployed to your website.');
+        return;
+      }
+
       const inputEl = document.getElementById('cert-recipient-input');
       const displayEl = document.getElementById('cert-recipient-display');
       const certificate = document.getElementById('certificate');
