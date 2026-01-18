@@ -1038,46 +1038,48 @@
     @media print {
       @page {
         size: landscape;
-        margin: 0;
+        margin: 0.25in;
       }
 
-      /* Hide everything except certificate */
-      body * {
-        visibility: hidden;
+      /* Hide everything */
+      body > * {
+        display: none !important;
       }
 
-      .certificate-overlay,
-      .certificate-overlay * {
-        visibility: visible;
-      }
-
+      /* Show only certificate overlay */
       .certificate-overlay {
-        position: absolute;
+        display: block !important;
+        position: fixed;
         top: 0;
         left: 0;
+        right: 0;
+        bottom: 0;
         background: white;
-        width: 100%;
-        height: 100%;
+        z-index: 9999;
+      }
+
+      /* Hide the buttons */
+      .certificate-actions {
+        display: none !important;
       }
 
       .certificate-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
         width: 100%;
-        max-width: none;
+        height: 100vh;
         padding: 0;
         margin: 0;
       }
 
       .certificate {
-        width: 100%;
-        max-width: 10in;
-        margin: 0 auto;
+        width: 9.5in;
+        height: auto;
+        max-height: 7in;
         box-shadow: none;
         border: 2px solid #6b46c1;
-      }
-
-      /* Hide the buttons when printing */
-      .certificate-actions {
-        display: none !important;
+        page-break-inside: avoid;
       }
     }
   </style>
