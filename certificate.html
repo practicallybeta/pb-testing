@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AI Fluency Certificate | Practically Beta</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: #f5f5f5;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 20px;
+    }
+
+    .print-instructions {
+      text-align: center;
+      margin-bottom: 20px;
+      color: #64748b;
+    }
+
+    .print-instructions h1 {
+      font-size: 1.5rem;
+      color: #1e293b;
+      margin-bottom: 8px;
+    }
+
+    .print-instructions p {
+      margin-bottom: 12px;
+    }
+
+    .print-btn {
+      background: linear-gradient(135deg, #6b21a8 0%, #9333ea 100%);
+      color: white;
+      border: none;
+      padding: 12px 32px;
+      border-radius: 8px;
+      font-size: 1rem;
+      cursor: pointer;
+      font-family: inherit;
+      font-weight: 500;
+      transition: all 0.2s ease;
+    }
+
+    .print-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(107, 33, 168, 0.3);
+    }
+
+    /* Certificate Design */
+    .certificate {
+      background: linear-gradient(to bottom right, #faf5ff, #f0e6ff);
+      border: 3px solid #6b21a8;
+      box-shadow:
+        0 0 0 1px #a855f7,
+        0 0 0 8px #ffffff,
+        0 0 0 11px #6b21a8;
+      border-radius: 8px;
+      padding: 48px;
+      position: relative;
+      overflow: hidden;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      max-width: 900px;
+      width: 100%;
+    }
+
+    .certificate-watermark {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: 40%;
+      background-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 300"><path d="M0 300 L100 180 L200 220 L350 80 L480 160 L600 40 L750 120 L800 80 L800 300 Z" fill="%239380e5" opacity="0.35"/><path d="M0 300 L150 200 L280 240 L400 120 L520 180 L680 60 L800 140 L800 300 Z" fill="%237c6dd8" opacity="0.25"/></svg>');
+      background-size: cover;
+      background-position: bottom;
+      pointer-events: none;
+      opacity: 0.8;
+    }
+
+    .certificate-content {
+      position: relative;
+      z-index: 1;
+    }
+
+    .certificate-logo {
+      text-align: center;
+      margin-bottom: 24px;
+    }
+
+    .certificate-logo img {
+      max-width: 180px;
+      height: auto;
+      width: 120px;
+      height: 120px;
+      object-fit: contain;
+    }
+
+    .certificate-title {
+      font-family: 'Georgia', serif;
+      font-size: 2.5rem;
+      font-weight: 700;
+      text-align: center;
+      color: #1e293b;
+      margin-bottom: 16px;
+    }
+
+    .certificate-divider {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 20px 0;
+    }
+
+    .certificate-divider-line {
+      height: 1px;
+      width: 80px;
+      background: linear-gradient(to right, transparent, #a855f7);
+    }
+
+    .certificate-divider-line.right {
+      background: linear-gradient(to left, transparent, #a855f7);
+    }
+
+    .certificate-divider-dot {
+      width: 8px;
+      height: 8px;
+      background: #6b21a8;
+      border-radius: 50%;
+      margin: 0 16px;
+    }
+
+    .certificate-body {
+      text-align: center;
+      margin: 24px 0;
+    }
+
+    .certificate-certifies {
+      font-size: 1rem;
+      color: #64748b;
+      margin-bottom: 8px;
+    }
+
+    .certificate-recipient {
+      font-family: 'Georgia', serif;
+      font-size: 2rem;
+      font-weight: 600;
+      color: #6b21a8;
+      margin: 16px 0;
+      min-height: 48px;
+    }
+
+    .certificate-achievement {
+      font-size: 1rem;
+      color: #64748b;
+      line-height: 1.6;
+      margin: 16px 0;
+    }
+
+    .certificate-course {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-top: 16px;
+      letter-spacing: 1px;
+    }
+
+    .certificate-footer {
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      margin-top: 48px;
+      padding-top: 24px;
+      border-top: 1px solid #e2e8f0;
+    }
+
+    .certificate-seal {
+      width: 120px;
+      height: 120px;
+    }
+
+    .certificate-signature {
+      text-align: center;
+      flex: 1;
+      margin-left: 32px;
+    }
+
+    .certificate-date {
+      font-size: 0.9rem;
+      color: #64748b;
+      margin-bottom: 16px;
+    }
+
+    .certificate-signer {
+      border-top: 2px solid #1e293b;
+      padding-top: 8px;
+      display: inline-block;
+      min-width: 250px;
+    }
+
+    .certificate-signer-name {
+      font-weight: 600;
+      color: #1e293b;
+      font-size: 1rem;
+    }
+
+    .certificate-signer-title {
+      font-size: 0.85rem;
+      color: #64748b;
+      margin-top: 4px;
+    }
+
+    .certificate-id {
+      text-align: center;
+      margin-top: 24px;
+      font-size: 0.75rem;
+      color: #94a3b8;
+      font-family: monospace;
+    }
+
+    /* Print styles */
+    @media print {
+      @page {
+        size: landscape;
+        margin: 0.5in;
+      }
+
+      body {
+        background: white;
+        padding: 0;
+      }
+
+      .print-instructions {
+        display: none;
+      }
+
+      .certificate {
+        box-shadow: none;
+        border: 3px solid #6b21a8;
+        max-width: none;
+        width: 100%;
+        padding: 32px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="print-instructions">
+    <h1>Your AI Fluency Certificate</h1>
+    <p>Click the button below or press Ctrl+P (Cmd+P on Mac) to print or save as PDF.</p>
+    <button class="print-btn" onclick="window.print()">Print Certificate</button>
+  </div>
+
+  <div class="certificate" id="certificate">
+    <div class="certificate-watermark"></div>
+    <div class="certificate-content">
+      <!-- Logo -->
+      <div class="certificate-logo">
+        <img src="PB Logo Circle.png" alt="Practically Beta">
+      </div>
+
+      <!-- Title -->
+      <h1 class="certificate-title">Certificate of Completion</h1>
+
+      <!-- Divider -->
+      <div class="certificate-divider">
+        <div class="certificate-divider-line"></div>
+        <div class="certificate-divider-dot"></div>
+        <div class="certificate-divider-line right"></div>
+      </div>
+
+      <!-- Body -->
+      <div class="certificate-body">
+        <p class="certificate-certifies">This certifies that</p>
+        <p class="certificate-recipient" id="recipient-name"></p>
+        <p class="certificate-achievement">has successfully completed Practically Beta's "Before the..." learning series, demonstrating</p>
+        <p class="certificate-course">AI FLUENCY FOR PROFESSIONALS</p>
+      </div>
+
+      <!-- Footer -->
+      <div class="certificate-footer">
+        <!-- Seal -->
+        <div class="certificate-seal">
+          <svg viewBox="0 0 120 120">
+            <!-- Outer circle -->
+            <circle cx="60" cy="60" r="55" fill="url(#sealGradient)" stroke="#a855f7" stroke-width="2"/>
+            <!-- Inner decorative ring -->
+            <circle cx="60" cy="60" r="48" fill="none" stroke="rgba(255,255,255,0.3)" stroke-width="1"/>
+            <!-- Mountain -->
+            <path d="M30 75 L60 35 L90 75 Z" fill="#fff" opacity="0.9"/>
+            <path d="M45 75 L60 50 L75 75 Z" fill="#c4b5fd" opacity="0.5"/>
+            <!-- Snow cap -->
+            <path d="M60 35 L52 50 L60 47 L68 50 Z" fill="#fff"/>
+            <!-- Stars -->
+            <circle cx="35" cy="45" r="2" fill="#fff" opacity="0.8"/>
+            <circle cx="85" cy="45" r="2" fill="#fff" opacity="0.8"/>
+            <circle cx="60" cy="25" r="2" fill="#fff" opacity="0.8"/>
+            <!-- Text band -->
+            <rect x="15" y="78" width="90" height="18" rx="2" fill="#9380e5"/>
+            <text x="60" y="90" font-family="Arial, sans-serif" font-size="8" font-weight="bold" fill="#fff" text-anchor="middle">BETA MINDSET</text>
+            <!-- Ribbon -->
+            <path d="M25 96 L25 115 L35 108 L45 115 L45 96" fill="#87CEEB"/>
+            <path d="M75 96 L75 115 L85 108 L95 115 L95 96" fill="#87CEEB"/>
+            <rect x="20" y="93" width="80" height="12" rx="2" fill="#87CEEB"/>
+            <text x="60" y="102" font-family="Arial, sans-serif" font-size="9" font-weight="bold" fill="#fff" text-anchor="middle">CERTIFIED</text>
+            <!-- Gradient definition -->
+            <defs>
+              <linearGradient id="sealGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" style="stop-color:#9380e5"/>
+                <stop offset="100%" style="stop-color:#c4b5fd"/>
+              </linearGradient>
+            </defs>
+          </svg>
+        </div>
+
+        <!-- Signature -->
+        <div class="certificate-signature">
+          <p class="certificate-date" id="cert-date"></p>
+          <div class="certificate-signer">
+            <p class="certificate-signer-name">Karida Palmer, MBA, SPHR</p>
+            <p class="certificate-signer-title">Founder and Principal Strategist</p>
+            <p class="certificate-signer-title">Practically Beta</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Certificate ID -->
+      <p class="certificate-id">Certificate ID: AI-FC-2026-<span id="cert-unique-id"></span></p>
+    </div>
+  </div>
+
+  <script>
+    // Get name from URL parameter
+    const urlParams = new URLSearchParams(window.location.search);
+    const name = urlParams.get('name') || 'Certificate Recipient';
+
+    // Set the recipient name
+    document.getElementById('recipient-name').textContent = name;
+
+    // Set the date
+    const today = new Date();
+    const options = { year: 'numeric', month: 'long', day: 'numeric' };
+    document.getElementById('cert-date').textContent = today.toLocaleDateString('en-US', options);
+
+    // Generate certificate ID
+    const uniqueId = Math.random().toString(36).substring(2, 8).toUpperCase();
+    document.getElementById('cert-unique-id').textContent = uniqueId;
+  </script>
+</body>
+</html>
