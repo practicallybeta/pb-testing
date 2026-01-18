@@ -801,17 +801,6 @@
       transition: all 0.2s ease;
     }
 
-    .cert-download-btn {
-      background: linear-gradient(135deg, #004aad 0%, #3366bb 100%);
-      color: white;
-      border: none;
-    }
-
-    .cert-download-btn:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 4px 12px rgba(0, 74, 173, 0.3);
-    }
-
     .cert-close-btn {
       background: #f0f0f0;
       color: #333;
@@ -1033,55 +1022,6 @@
         font-size: 0.5rem;
       }
     }
-
-    /* Print styles - clean certificate only */
-    @media print {
-      @page {
-        size: landscape;
-        margin: 0.25in;
-      }
-
-      /* Hide everything */
-      body > * {
-        display: none !important;
-      }
-
-      /* Show only certificate overlay */
-      .certificate-overlay {
-        display: block !important;
-        position: fixed;
-        top: 0;
-        left: 0;
-        right: 0;
-        bottom: 0;
-        background: white;
-        z-index: 9999;
-      }
-
-      /* Hide the buttons */
-      .certificate-actions {
-        display: none !important;
-      }
-
-      .certificate-container {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        width: 100%;
-        height: 100vh;
-        padding: 0;
-        margin: 0;
-      }
-
-      .certificate {
-        width: 9.5in;
-        height: auto;
-        max-height: 7in;
-        box-shadow: none;
-        border: 2px solid #6b46c1;
-        page-break-inside: avoid;
-      }
-    }
   </style>
 </head>
 <body>
@@ -1214,7 +1154,6 @@
   <div class="certificate-overlay" id="certificate-overlay">
     <div class="certificate-container">
       <div class="certificate-actions">
-        <button class="cert-download-btn" onclick="downloadCertificate()">🖨️ Print Certificate</button>
         <button class="cert-close-btn" onclick="closeCertificate()">✕ Close</button>
       </div>
 
@@ -2310,27 +2249,6 @@
 
     window.closeCertificate = function() {
       document.getElementById('certificate-overlay').classList.remove('show');
-    }
-
-    window.downloadCertificate = function() {
-      const inputEl = document.getElementById('cert-recipient-input');
-      const displayEl = document.getElementById('cert-recipient-display');
-
-      // Ensure name is set before printing
-      const name = inputEl.value.trim() || displayEl.textContent.trim();
-      if (!name) {
-        alert('Please enter your name before printing.');
-        inputEl.focus();
-        return;
-      }
-
-      // Make sure display version is showing for print
-      displayEl.textContent = name;
-      displayEl.style.display = 'block';
-      inputEl.style.display = 'none';
-
-      // Open print dialog
-      window.print();
     }
 
     // ============================================
