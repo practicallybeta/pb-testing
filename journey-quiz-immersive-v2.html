@@ -801,15 +801,15 @@
       transition: all 0.2s ease;
     }
 
-    .cert-download-btn {
-      background: linear-gradient(135deg, #004aad 0%, #3366bb 100%);
+    .cert-print-btn {
+      background: linear-gradient(135deg, #6b21a8 0%, #9333ea 100%);
       color: white;
       border: none;
     }
 
-    .cert-download-btn:hover {
+    .cert-print-btn:hover {
       transform: translateY(-2px);
-      box-shadow: 0 4px 12px rgba(0, 74, 173, 0.3);
+      box-shadow: 0 4px 12px rgba(107, 33, 168, 0.3);
     }
 
     .cert-close-btn {
@@ -1165,7 +1165,7 @@
   <div class="certificate-overlay" id="certificate-overlay">
     <div class="certificate-container">
       <div class="certificate-actions">
-        <button class="cert-download-btn" onclick="downloadCertificate()">🖨️ Print Certificate</button>
+        <button class="cert-print-btn" onclick="openCertificateForPrint()">Print Certificate</button>
         <button class="cert-close-btn" onclick="closeCertificate()">✕ Close</button>
       </div>
 
@@ -2095,11 +2095,11 @@
           <div class="result-container">
             <div class="summit-celebration" id="summit-celebration"></div>
             <h2>🎉 You Reached the Summit!</h2>
-            <p class="result-message">You've completed the full journey — and you're officially fluent. Download your certificate and celebrate the climb.</p>
+            <p class="result-message">You've completed the full journey — and you're officially fluent. Get your certificate and celebrate the climb.</p>
             <p class="result-score">${correctAnswers} of ${currentQuestions.length} correct answers</p>
 
             <div class="result-buttons" style="display: flex; gap: 12px; justify-content: center; margin: 24px 0; flex-wrap: wrap;">
-              <button class="next-btn" onclick="showCertificate()">🎓 Download Certificate</button>
+              <button class="next-btn" onclick="showCertificate()">🎓 Get Your Certificate</button>
               <a href="${roadmapUrl}" target="_blank" class="retake-btn" style="text-decoration: none; display: inline-block;">Return to Interactive Roadmap</a>
             </div>
 
@@ -2263,26 +2263,20 @@
       document.getElementById('certificate-overlay').classList.remove('show');
     }
 
-    window.downloadCertificate = function() {
-     
+    window.openCertificateForPrint = function() {
       const inputEl = document.getElementById('cert-recipient-input');
       const displayEl = document.getElementById('cert-recipient-display');
-
-      // Ensure name is set before printing
       const name = inputEl.value.trim() || displayEl.textContent.trim();
+
       if (!name) {
-        alert('Please enter your name before printing.');
+        alert('Please enter your name first.');
         inputEl.focus();
         return;
       }
 
-      // Make sure display version is showing for print
-      displayEl.textContent = name;
-      displayEl.style.display = 'block';
-      inputEl.style.display = 'none';
-
-      // Open print dialog
-      window.print();
+      // Open certificate page in new tab with name parameter
+      const certUrl = 'certificate.html?name=' + encodeURIComponent(name);
+      window.open(certUrl, '_blank');
     }
 
     // ============================================
