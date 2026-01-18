@@ -1165,7 +1165,7 @@
   <div class="certificate-overlay" id="certificate-overlay">
     <div class="certificate-container">
       <div class="certificate-actions">
-        <button class="cert-download-btn" onclick="downloadCertificate()">📥 Download as PDF</button>
+        <button class="cert-download-btn" onclick="downloadCertificate()">🖨️ Print Certificate</button>
         <button class="cert-close-btn" onclick="closeCertificate()">✕ Close</button>
       </div>
 
@@ -1254,10 +1254,6 @@
   <div class="pb-logo">
     <a href="https://practicallybeta.com" target="_blank">Practically Beta</a>
   </div>
-
-  <!-- PDF Generation Libraries -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 
   <script>
     // ============================================
@@ -2270,78 +2266,22 @@
     window.downloadCertificate = function() {
       const inputEl = document.getElementById('cert-recipient-input');
       const displayEl = document.getElementById('cert-recipient-display');
-      const certificate = document.getElementById('certificate');
 
-      // Ensure name is set before download
+      // Ensure name is set before printing
       const name = inputEl.value.trim() || displayEl.textContent.trim();
       if (!name) {
-        alert('Please enter your name before downloading.');
+        alert('Please enter your name before printing.');
         inputEl.focus();
         return;
       }
 
-      // Make sure display version is showing for the screenshot
+      // Make sure display version is showing for print
       displayEl.textContent = name;
       displayEl.style.display = 'block';
       inputEl.style.display = 'none';
 
-      // Show loading state
-      const downloadBtn = document.querySelector('.cert-download-btn');
-      const originalText = downloadBtn.textContent;
-      downloadBtn.textContent = '⏳ Generating PDF...';
-      downloadBtn.disabled = true;
-
-      // Use html2canvas to capture the certificate
-      html2canvas(certificate, {
-        scale: 2,
-        useCORS: true,
-        backgroundColor: '#faf5ff',
-        logging: false
-      }).then(canvas => {
-        const { jsPDF } = window.jspdf;
-        const pdf = new jsPDF({
-          orientation: 'landscape',
-          unit: 'mm',
-          format: 'a4'
-        });
-
-        const imgData = canvas.toDataURL('image/png');
-        const pdfWidth = pdf.internal.pageSize.getWidth();
-        const pdfHeight = pdf.internal.pageSize.getHeight();
-
-        // Calculate dimensions to fit the certificate
-        const canvasRatio = canvas.width / canvas.height;
-        const pdfRatio = pdfWidth / pdfHeight;
-
-        let imgWidth, imgHeight, xOffset, yOffset;
-
-        if (canvasRatio > pdfRatio) {
-          imgWidth = pdfWidth - 20;
-          imgHeight = imgWidth / canvasRatio;
-          xOffset = 10;
-          yOffset = (pdfHeight - imgHeight) / 2;
-        } else {
-          imgHeight = pdfHeight - 20;
-          imgWidth = imgHeight * canvasRatio;
-          xOffset = (pdfWidth - imgWidth) / 2;
-          yOffset = 10;
-        }
-
-        pdf.addImage(imgData, 'PNG', xOffset, yOffset, imgWidth, imgHeight);
-
-        // Generate filename with recipient name
-        const safeName = name.replace(/[^a-zA-Z0-9]/g, '_');
-        pdf.save(`AI_Fluency_Certificate_${safeName}.pdf`);
-
-        // Reset button
-        downloadBtn.textContent = originalText;
-        downloadBtn.disabled = false;
-      }).catch(err => {
-        console.error('PDF generation error:', err);
-        alert('There was an error generating the PDF. Please try again.');
-        downloadBtn.textContent = originalText;
-        downloadBtn.disabled = false;
-      });
+      // Open print dialog
+      window.print();
     }
 
     // ============================================
